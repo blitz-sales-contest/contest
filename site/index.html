@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Sales Contest · Blitz</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --side: #111111; --side-fg: #d4d4d4; --side-muted: #7a7a7a; --side-line: #262626;
+    --page: #ffffff; --work: #f2f2f2; --panel: #ffffff; --fg: #1a1a1a; --muted: #7c7c86; --line: #e7e7ea;
+    --black: #1c1c1c;
+    --lav: #e6dcfb; --sky: #d4e2fd; --mint: #d6f3e4; --peach: #fde4cf; --rose: #fbdde6;
+    --warn-bg: #f7ecdc; --warn-line: #e7c08a; --warn-fg: #c98a2b;
+    --ok-bg: #d9f2e3; --ok-fg: #1f7a4a; --pend-bg: #fbeed3; --pend-fg: #9a6512; --bad-bg: #fbe0dc; --bad-fg: #b23a2a; --off-bg: #ececef;
+    --s0: #e4dcfa; --s1: #c4b3f3; --s2: #9b83ea; --s3: #6a4fd4; --s4: #2f9e64; --s5: #d4d4d8;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body { font-family: Poppins, -apple-system, "Segoe UI", Roboto, sans-serif; color: var(--fg); background: var(--page); font-size: 14px; }
+  .app { display: grid; grid-template-columns: 270px minmax(0, 1fr); min-height: 100vh; background: linear-gradient(to right, var(--side) 270px, var(--page) 270px); }
+
+  /* sidebar */
+  .side { background: var(--side); color: var(--side-fg); display: flex; flex-direction: column; padding: 18px 10px; position: sticky; top: 0; height: 100vh; }
+  .brand { display: flex; align-items: center; gap: 12px; padding: 4px 10px 20px; }
+  .logo { width: 36px; height: 36px; border-radius: 9px; background: #fff; display: grid; place-items: center; }
+  .brand b { color: #fff; font-size: 17px; font-weight: 600; }
+  .grp { font-size: 11px; letter-spacing: 1.6px; color: var(--side-muted); padding: 18px 12px 8px; font-weight: 500; }
+  .nav { display: flex; flex-direction: column; gap: 2px; }
+  .nav a { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px; color: var(--side-fg); text-decoration: none; font-size: 14.5px; }
+  .nav a svg { width: 19px; height: 19px; flex: none; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  .nav a:hover { background: #1d1d1d; }
+  .nav a.active { background: #fff; color: #111; font-weight: 600; }
+  .side-foot { margin-top: auto; border-top: 1px solid var(--side-line); padding: 14px 12px 2px; display: flex; align-items: center; gap: 12px; }
+  .avatar { width: 38px; height: 38px; border-radius: 50%; background: #c9c3f5; color: #3b2fa0; display: grid; place-items: center; font-weight: 600; font-size: 13px; flex: none; }
+  .side-foot b { display: block; color: #fff; font-size: 13.5px; font-weight: 500; }
+  .side-foot span { font-size: 12px; color: var(--side-muted); }
+
+  /* main */
+  .main { min-width: 0; display: flex; flex-direction: column; }
+  .topbar { display: flex; align-items: center; gap: 16px; padding: 18px 36px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+  .topbar h1 { font-size: 30px; font-weight: 500; margin: 0; letter-spacing: -.4px; }
+  .topbar .ctl { margin-left: auto; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .live { display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px; color: var(--muted); }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: #22a861; flex: none; }
+  select { font: inherit; font-size: 13.5px; padding: 9px 14px; border: 1px solid var(--line); border-radius: 10px; background: #fff; color: var(--fg); min-width: 240px; cursor: pointer; }
+  .work { background: var(--work); margin: 24px 36px 36px; border-radius: 22px; padding: 40px 44px 44px; flex: 1; }
+  .view { display: none; flex-direction: column; gap: 26px; }
+  .view.on { display: flex; }
+  .hello h2 { font-size: 46px; font-weight: 600; letter-spacing: -1.6px; margin: 0; line-height: 1.1; }
+  .hello p { font-size: 19px; color: #8a8a94; margin: 10px 0 0; letter-spacing: -.3px; }
+  .vh { font-size: 26px; font-weight: 600; letter-spacing: -.6px; margin: 0; }
+
+  .banner { display: flex; align-items: center; gap: 20px; background: var(--warn-bg); border: 1.5px solid var(--warn-line); border-radius: 14px; padding: 18px 22px; }
+  .banner.good { background: var(--ok-bg); border-color: #9fd8b6; }
+  .banner .ib { width: 52px; height: 52px; border-radius: 12px; background: #fff; display: grid; place-items: center; flex: none; }
+  .banner .ib svg { width: 26px; height: 26px; stroke: #222; fill: none; stroke-width: 1.7; }
+  .banner b { display: block; font-size: 17px; font-weight: 500; }
+  .banner span { color: var(--warn-fg); font-size: 15px; }
+  .banner.good span { color: var(--ok-fg); }
+  .btn { margin-left: auto; background: var(--black); color: #fff; border: 0; border-radius: 9px; padding: 11px 22px; font: inherit; font-size: 14px; font-weight: 500; cursor: pointer; white-space: nowrap; text-decoration: none; }
+  .btn:hover { background: #000; }
+
+  .cards { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
+  @media (max-width: 1250px) { .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 560px) { .cards { grid-template-columns: 1fr; } }
+  .sc { background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 1px 2px rgba(0,0,0,.04); display: flex; flex-direction: column; }
+  .sc .top { position: relative; padding: 20px 22px 18px; background: var(--c); overflow: hidden; }
+  .sc .top::after { content: ""; position: absolute; right: -60px; top: -40px; width: 260px; height: 220px; border-radius: 50%; border: 1px solid rgba(255,255,255,.55); box-shadow: 0 0 0 22px rgba(255,255,255,.12), 0 0 0 46px rgba(255,255,255,.08); pointer-events: none; }
+  .sc .ic { width: 46px; height: 46px; border-radius: 11px; background: #fff; display: grid; place-items: center; }
+  .sc .ic svg { width: 23px; height: 23px; stroke: #222; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .tag { position: absolute; top: 22px; right: 20px; background: #fff; border-radius: 999px; padding: 4px 11px; font-size: 11.5px; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; z-index: 1; }
+  .sc .num { font-size: 46px; font-weight: 600; letter-spacing: -2px; line-height: 1; margin: 18px 0 6px; font-variant-numeric: tabular-nums; }
+  .sc .lbl { font-size: 16px; letter-spacing: -.2px; }
+  .sc .bot { padding: 14px 22px; font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 10px; min-height: 52px; }
+  .sc .bot b { color: var(--fg); font-weight: 600; }
+  .bar { flex: 1; height: 6px; background: #eeeef1; border-radius: 99px; overflow: hidden; }
+  .bar i { display: block; height: 100%; background: var(--black); border-radius: 99px; }
+
+  .panel { background: #fff; border-radius: 16px; padding: 24px 26px; box-shadow: 0 1px 2px rgba(0,0,0,.04); min-width: 0; position: relative; }
+  .panel h3 { font-size: 17px; font-weight: 600; margin: 0 0 18px; display: flex; align-items: center; gap: 10px; }
+  .panel h3 a { margin-left: auto; font-size: 13px; font-weight: 500; color: var(--fg); text-decoration: none; border: 1px solid var(--line); padding: 6px 12px; border-radius: 8px; }
+  .two { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: 22px; }
+
+  .today-list { display: flex; flex-direction: column; gap: 14px; }
+  .trow { display: grid; grid-template-columns: 38px 1fr auto; align-items: center; gap: 12px; }
+  .trow .avatar { width: 36px; height: 36px; font-size: 12px; }
+  .trow b { font-weight: 500; display: block; }
+  .pips { display: flex; gap: 5px; margin-top: 5px; }
+  .pips i { width: 26px; height: 6px; border-radius: 99px; background: #ececef; }
+  .pips i.on { background: #2f9e64; }
+  .chip { font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px; white-space: nowrap; }
+  .chip.ok { background: var(--ok-bg); color: var(--ok-fg); } .chip.pend { background: var(--pend-bg); color: var(--pend-fg); }
+  .chip.bad { background: var(--bad-bg); color: var(--bad-fg); } .chip.off { background: var(--off-bg); color: var(--muted); }
+
+  .awards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 14px; }
+  .aw { border-radius: 14px; padding: 16px 18px; background: var(--c); }
+  .aw small { font-size: 11px; letter-spacing: 1.4px; text-transform: uppercase; color: #555; font-weight: 500; }
+  .aw b { display: block; font-size: 16px; font-weight: 600; margin: 4px 0 2px; }
+  .aw span { font-size: 13px; color: #444; }
+
+  .grid { display: grid; gap: 6px; font-variant-numeric: tabular-nums; overflow-x: auto; }
+  .c { padding: 11px 4px; text-align: center; border-radius: 9px; white-space: nowrap; font-weight: 500; font-size: 13.5px; }
+  .c.hd { color: var(--muted); font-weight: 500; font-size: 12.5px; line-height: 1.35; }
+  .c.hd.now { color: var(--fg); font-weight: 700; }
+  .c.nm { text-align: left; padding-left: 0; font-weight: 500; }
+  .c.tot { font-weight: 700; }
+  .hit { background: var(--ok-bg); color: var(--ok-fg); } .pend { background: var(--pend-bg); color: var(--pend-fg); }
+  .miss { background: var(--bad-bg); color: var(--bad-fg); } .off { background: var(--off-bg); color: #a3a3ab; font-weight: 400; }
+  .c.now:not(.hd) { box-shadow: inset 0 0 0 2px var(--black); }
+  .key, .legend { display: flex; flex-wrap: wrap; gap: 16px; font-size: 12.5px; color: var(--muted); }
+  .key { margin-top: 18px; }
+  .legend { margin-bottom: 18px; }
+  .key span, .legend span { display: inline-flex; align-items: center; gap: 7px; }
+  .key i, .legend i { width: 12px; height: 12px; border-radius: 4px; display: inline-block; }
+
+  .stack { display: flex; flex-direction: column; gap: 12px; }
+  .srow { display: grid; grid-template-columns: minmax(110px, 160px) 1fr 40px; align-items: center; gap: 12px; }
+  .track { display: flex; height: 30px; border-radius: 8px; overflow: hidden; background: #f3f3f5; gap: 2px; }
+  .seg { height: 100%; }
+  .seg:hover { filter: brightness(.95); }
+  .snum { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .tip { position: absolute; pointer-events: none; background: #111; color: #fff; border-radius: 8px; padding: 7px 11px; font-size: 12px; white-space: nowrap; z-index: 5; }
+  .tip .t1 { color: #aaa; }
+
+  .tw { overflow-x: auto; }
+  .scroll { max-height: 520px; overflow: auto; }
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: 13.5px; }
+  th { text-align: right; font-weight: 500; color: var(--muted); padding: 10px; border-bottom: 1px solid var(--line); position: sticky; top: 0; background: #fff; white-space: nowrap; font-size: 12.5px; }
+  td { text-align: right; padding: 12px 10px; border-bottom: 1px solid #f0f0f2; white-space: nowrap; }
+  th:first-child, td:first-child, .l { text-align: left; }
+  th:first-child, td:first-child { padding-left: 0; }
+  tbody tr:hover td { background: #fafafa; }
+  tr.team td { font-weight: 600; border-bottom: none; background: #f6f6f8; }
+  tr.team td:first-child { padding-left: 10px; border-radius: 10px 0 0 10px; } tr.team td:last-child { border-radius: 0 10px 10px 0; }
+  .rank { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: #f0f0f2; font-weight: 600; font-size: 12.5px; }
+  .rank.r1 { background: #f8e3a8; } .rank.r2 { background: #e3e3ea; } .rank.r3 { background: #f3d2bd; }
+  .who { display: inline-flex; align-items: center; gap: 10px; }
+  .who .avatar { width: 30px; height: 30px; font-size: 11px; }
+  .empty { color: var(--muted); font-size: 13.5px; margin: 0; }
+  .err { background: var(--bad-bg); color: var(--bad-fg); padding: 14px 18px; border-radius: 12px; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chipbtn { font: inherit; font-size: 13.5px; padding: 8px 16px; border-radius: 999px; border: 1px solid #dcdce2; background: #fff; color: var(--fg); cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+  .chipbtn .avatar { width: 22px; height: 22px; font-size: 9.5px; }
+  .chipbtn.on { background: var(--black); color: #fff; border-color: var(--black); }
+  .cmp-sub { color: var(--muted); font-size: 14px; margin: -14px 0 0; }
+  .cc { background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 1px 2px rgba(0,0,0,.04); }
+  .cc .top { background: var(--c); padding: 18px 20px; }
+  .cc .lbl { font-size: 14px; font-weight: 500; }
+  .cc .row { display: flex; align-items: baseline; gap: 10px; margin-top: 10px; }
+  .cc .big { font-size: 40px; font-weight: 600; letter-spacing: -1.5px; line-height: 1; }
+  .cc .bot { padding: 12px 20px; font-size: 13px; color: var(--muted); display: flex; justify-content: space-between; gap: 8px; }
+  .cc .bot b { color: var(--fg); }
+  .delta { font-size: 12.5px; font-weight: 600; padding: 3px 9px; border-radius: 999px; white-space: nowrap; }
+  .delta.up { background: var(--ok-bg); color: var(--ok-fg); } .delta.down { background: var(--bad-bg); color: var(--bad-fg); } .delta.flat { background: var(--off-bg); color: var(--muted); }
+  .bars2 { display: flex; flex-direction: column; gap: 16px; }
+  .b2row { display: grid; grid-template-columns: minmax(120px, 170px) 1fr; gap: 14px; align-items: center; }
+  .b2row.sel .who span { font-weight: 600; }
+  .b2 { display: flex; flex-direction: column; gap: 5px; }
+  .b2 .ln { display: flex; align-items: center; gap: 10px; font-size: 12.5px; color: var(--muted); }
+  .b2 .ln i { display: block; height: 14px; border-radius: 5px; min-width: 3px; }
+  .b2 .ln.last i { background: #d6d6dc; } .b2 .ln.this i { background: var(--black); }
+  .b2row.sel .b2 .ln.this i { background: #6a4fd4; }
+  .b2 .ln b { color: var(--fg); font-weight: 600; }
+  tr.sel td { background: #f4f0ff; }
+  .mv { font-size: 12.5px; font-weight: 600; }
+  .mv.up { color: var(--ok-fg); } .mv.down { color: var(--bad-fg); } .mv.flat { color: var(--muted); }
+  .fold { margin-left: auto; background: none; border: 0; color: var(--side-muted); cursor: pointer; padding: 6px; border-radius: 8px; display: grid; place-items: center; }
+  .fold:hover { color: #fff; background: #1d1d1d; }
+  .fold svg, .expand svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  .expand { display: none; place-items: center; width: 40px; height: 40px; border-radius: 10px; border: 1px solid var(--line); background: #111; color: #fff; cursor: pointer; }
+  .expand:hover { background: #000; }
+  .homebtn { display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 14px; border-radius: 10px; border: 1px solid var(--line); background: #fff; color: var(--fg); font: inherit; font-size: 14px; font-weight: 500; cursor: pointer; }
+  .homebtn:hover { background: #f4f4f6; }
+  .homebtn svg { width: 19px; height: 19px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .app.folded { grid-template-columns: minmax(0, 1fr); background: var(--page); }
+  .app.folded .side { display: none; }
+  .app.folded .expand { display: grid; }
+  @media (max-width: 900px) {
+    .fold, .expand { display: none !important; }
+    .app.folded .side { display: flex; }
+    .app { grid-template-columns: minmax(0, 1fr); background: var(--page); }
+    .side { position: static; height: auto; padding: 12px; min-width: 0; }
+    .brand { padding: 4px 6px 10px; }
+    .grp, .side-foot { display: none; }
+    .nav { flex-direction: row; overflow-x: auto; gap: 4px; }
+    .nav a { white-space: nowrap; padding: 8px 12px; font-size: 13.5px; }
+    .topbar { padding: 14px 18px; } .topbar h1 { font-size: 22px; }
+    .topbar .ctl { margin-left: 0; width: 100%; } select { flex: 1; min-width: 0; }
+    .work { margin: 12px; padding: 22px 16px; border-radius: 16px; }
+    .hello h2 { font-size: 32px; } .hello p { font-size: 15px; }
+    .banner { flex-wrap: wrap; } .btn { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand">
+      <div class="logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="#111"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></svg></div>
+      <b>Blitz Sales</b>
+      <button class="fold" id="fold" type="button" title="Hide sidebar" aria-label="Hide sidebar"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M9 4v16M15.5 10l-2 2 2 2"/></svg></button>
+    </div>
+    <div class="grp">SALES CONTEST</div>
+    <nav class="nav" id="nav">
+      <a href="#overview" data-v="overview"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Overview</a>
+      <a href="#tracker" data-v="tracker"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>Daily Lead Tracker</a>
+      <a href="#pipeline" data-v="pipeline"><svg viewBox="0 0 24 24"><path d="M3 4h18l-7 8v6l-4 2v-8z"/></svg>Pipeline Progress</a>
+      <a href="#leaderboard" data-v="leaderboard"><svg viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg>Closures Leaderboard</a>
+      <a href="#compare" data-v="compare"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Weekly Comparison</a>
+      <a href="#deals" data-v="deals"><svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>Qualified Deals</a>
+    </nav>
+    <div class="side-foot">
+      <div class="avatar">NA</div>
+      <div><b>New Acquisitions</b><span id="side-sync">Syncing…</span></div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <button class="homebtn" id="home" type="button" title="Home" aria-label="Home"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg><span>Home</span></button>
+      <button class="expand" id="expand" type="button" title="Show sidebar" aria-label="Show sidebar"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M9 4v16M13.5 10l2 2-2 2"/></svg></button>
+      <h1 id="title">Sales Contest</h1>
+      <div class="ctl">
+        <span class="live"><i class="dot"></i><span id="updated">Syncing with HubSpot…</span></span>
+        <select id="period" aria-label="Period"></select>
+      </div>
+    </div>
+    <div class="work">
+      <div id="error" class="err" hidden></div>
+
+      <section class="view" id="v-overview">
+        <div class="hello">
+          <h2>November Sales Contest</h2>
+          <p>Here's how the team is tracking today.</p>
+        </div>
+        <div class="banner" id="banner">
+          <div class="ib"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/></svg></div>
+          <div><b id="banner-t">—</b><span id="banner-s">—</span></div>
+          <a class="btn" href="#tracker">View tracker</a>
+        </div>
+        <div class="cards">
+          <div class="sc" style="--c: var(--lav)"><div class="top"><div class="ic"><svg viewBox="0 0 24 24"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg></div><span class="tag"><i class="dot"></i>LIVE</span>
+            <div class="num" id="c-added">—</div><div class="lbl">Leads qualified</div></div>
+            <div class="bot"><div class="bar"><i id="c-added-bar" style="width:0"></i></div><span>Goal <b id="c-target">—</b></span></div></div>
+          <div class="sc" style="--c: var(--peach)"><div class="top"><div class="ic"><svg viewBox="0 0 24 24"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg></div><span class="tag"><i class="dot"></i>LIVE</span>
+            <div class="num" id="c-star">—</div><div class="lbl">Weekly Star achievers</div></div>
+            <div class="bot">Reps who hit 3 a day and 15 a week</div></div>
+          <div class="sc" style="--c: var(--sky)"><div class="top"><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></svg></div><span class="tag"><i class="dot"></i>LIVE</span>
+            <div class="num" id="c-moved">—</div><div class="lbl">Progressed past LQ</div></div>
+            <div class="bot">Converted to won: <b id="c-won">—</b></div></div>
+          <div class="sc" style="--c: var(--mint)"><div class="top"><div class="ic"><svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg></div><span class="tag"><i class="dot"></i>LIVE</span>
+            <div class="num" id="c-nov">—</div><div class="lbl">Deals won in November</div></div>
+            <div class="bot"><span>Quarter to date <b id="c-qtd">—</b></span></div></div>
+        </div>
+        <div class="two">
+          <div class="panel"><h3>Today's lead count<a href="#tracker">Open tracker</a></h3><div class="today-list" id="today-list"></div></div>
+          <div class="panel"><h3>Awards</h3>
+            <div class="awards">
+              <div class="aw" style="--c: var(--peach)"><small>Weekly</small><b>Weekly Star</b><span>3 qualified leads every weekday, 15 a week</span></div>
+              <div class="aw" style="--c: var(--sky)"><small>Monthly</small><b>Monthly Star</b><span>12 deals won in November</span></div>
+              <div class="aw" style="--c: var(--lav)"><small>Quarterly</small><b>Quarterly Champion</b><span>Most deals won, Oct–Dec</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="v-tracker">
+        <h2 class="vh">Daily Lead Tracker</h2>
+        <div class="panel">
+          <div class="grid" id="grid"></div>
+          <div class="key"><span><i class="hit"></i>Goal met</span><span><i class="pend"></i>In progress</span><span><i class="miss"></i>Missed</span><span><i class="off"></i>Weekend or upcoming</span></div>
+        </div>
+      </section>
+
+      <section class="view" id="v-pipeline">
+        <h2 class="vh">Pipeline Progress</h2>
+        <div class="panel">
+          <div class="legend" id="legend"></div>
+          <p class="empty" id="stage-empty" hidden>No deals qualified in this period yet.</p>
+          <div class="stack" id="bars"></div>
+        </div>
+        <div class="panel tw">
+          <table>
+            <thead><tr><th>Rep</th><th>Qualified</th><th>Still in LQ</th><th>Nurture</th><th>Negotiation</th><th>Agreement</th><th>Won</th><th>Lost / other</th><th>Progressed</th><th>Converted</th><th class="l">Weekly Star</th></tr></thead>
+            <tbody id="stage-rows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="view" id="v-leaderboard">
+        <h2 class="vh">Closures Leaderboard</h2>
+        <div class="panel tw">
+          <table>
+            <thead><tr><th class="l">Rank</th><th class="l">Rep</th><th>Quarter wins</th><th>Nov wins</th><th>Still needed</th><th class="l">Monthly Star</th></tr></thead>
+            <tbody id="won-rows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="view" id="v-compare">
+        <h2 class="vh">Weekly Comparison</h2>
+        <p class="cmp-sub" id="cmp-sub">—</p>
+        <div class="chips" id="cmp-chips"></div>
+        <div class="cards" id="cmp-cards"></div>
+        <div style="display:flex;flex-direction:column;gap:22px">
+          <div class="panel"><h3>Leads qualified: last week vs this week</h3>
+            <div class="legend"><span><i style="background:#d6d6dc"></i>Last week</span><span><i style="background:var(--black)"></i>This week</span></div>
+            <div class="bars2" id="cmp-bars"></div></div>
+          <div class="panel tw"><h3>Rep standings</h3>
+            <table>
+              <thead><tr><th class="l">Rep</th><th>Last week</th><th>This week</th><th>Change</th><th class="l">Rank this week</th><th>Wins last week</th><th>Wins this week</th></tr></thead>
+              <tbody id="cmp-rows"></tbody>
+            </table></div>
+        </div>
+      </section>
+
+      <section class="view" id="v-deals">
+        <h2 class="vh">Qualified Deals</h2>
+        <div class="panel">
+          <p class="empty" id="deal-empty" hidden>No deals qualified in this period yet.</p>
+          <div class="scroll tw">
+            <table>
+              <thead><tr><th class="l">Deal</th><th class="l">Rep</th><th class="l">Current stage</th><th>Qualified (IST)</th></tr></thead>
+              <tbody id="deal-rows"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<script>
+
+const REPS = ['Krutika Pawar', 'Noor Mohammed', 'Prathush Nair', 'Pritam Mazumdar'];
+const DAY = 3, WEEK = 15, MONTH = 12, START = '2026-11-02';
+const FIRST_WEEK = Date.UTC(2026, 9, 5), LAST_DAY = Date.UTC(2026, 11, 27);
+const STAGE_KEY = { qualifiedtobuy: 'lq', '48215108': 'nurture', decisionmakerboughtin: 'negotiation', '1014542596': 'agreement', closedwon: 'won' };
+const STAGE_LABEL = { qualifiedtobuy: 'Lead Qualified', '48215108': 'Nurture & Follow-up', decisionmakerboughtin: 'Negotiation & Review', '1014542596': 'Agreement & Activation', closedwon: 'Closed Won', closedlost: 'Closed Lost' };
+const STAGES = [['lq', 'Still in Lead Qualified'], ['nurture', 'Nurture & Follow-up'], ['negotiation', 'Negotiation & Review'], ['agreement', 'Agreement & Activation'], ['won', 'Closed Won'], ['lost_other', 'Lost / other']];
+const M = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const DOW = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const D = 86400000;
+
+const $ = (id) => document.getElementById(id);
+const istDay = (iso) => new Date(Date.parse(iso) + 19800000).toISOString().slice(0, 10);
+const today = () => new Date(Date.now() + 19800000).toISOString().slice(0, 10);
+const weekOf = (day) => { const t = Date.parse(day + 'T00:00:00Z'); return new Date(t - ((new Date(t).getUTCDay() + 6) % 7) * D).toISOString().slice(0, 10); };
+const fmtD = (t) => M[new Date(t).getUTCMonth()] + ' ' + new Date(t).getUTCDate();
+const pct = (x) => x == null ? '' : Math.round(x * 100) + '%';
+const el = (tag, text, cls) => { const e = document.createElement(tag); if (text != null) e.textContent = text; if (cls) e.className = cls; return e; };
+const pillTd = (text, cls) => { const td = el('td', null, 'l'); if (text) td.append(el('span', text, 'pill ' + cls)); return td; };
+const color = (i) => getComputedStyle(document.documentElement).getPropertyValue('--s' + i);
+
+let DATA = null, WEEKLY = null, DAILY = null, WON = null;
+let period = weekOf(today());
+
+function compute() {
+  const lq = DATA.lq.map(([id, deal, owner, stage, at]) => ({ id, deal, owner, stage, at })).filter((d) => REPS.includes(d.owner) && d.at);
+  const won = DATA.won.map(([id, deal, owner, at]) => ({ id, deal, owner, at })).filter((d) => REPS.includes(d.owner) && d.at);
+  // daily
+  const counts = {};
+  for (const d of lq) { const k = istDay(d.at) + '|' + d.owner; counts[k] = (counts[k] || 0) + 1; }
+  DAILY = [];
+  for (let t = FIRST_WEEK; t <= LAST_DAY; t += D) {
+    const day = new Date(t).toISOString().slice(0, 10);
+    for (const owner of REPS) DAILY.push({ week: weekOf(day), day, owner, n: counts[day + '|' + owner] || 0 });
+  }
+  // weekly
+  const weeks = [...new Set(DAILY.map((r) => r.week))].sort();
+  const periods = ['contest', ...weeks.slice().reverse()];
+  const acc = {};
+  for (const p of periods) for (const o of [...REPS, 'Team']) acc[p + '|' + o] = { added: 0, lq: 0, nurture: 0, negotiation: 0, agreement: 0, won: 0, lost_other: 0, days_hit: 0 };
+  for (const d of lq) {
+    const day = istDay(d.at), keys = [weekOf(day)];
+    if (day >= START) keys.push('contest');
+    const s = STAGE_KEY[d.stage] || 'lost_other';
+    for (const p of keys) for (const o of [d.owner, 'Team']) { const a = acc[p + '|' + o]; if (a) { a.added++; a[s]++; } }
+  }
+  for (const r of DAILY) {
+    const dow = new Date(r.day + 'T00:00:00Z').getUTCDay();
+    if (dow === 0 || dow === 6 || r.n < DAY) continue;
+    acc[r.week + '|' + r.owner].days_hit++;
+    if (r.day >= START) acc['contest|' + r.owner].days_hit++;
+  }
+  WEEKLY = [];
+  for (const p of periods) {
+    const t = Date.parse(p + 'T00:00:00Z');
+    const label = p === 'contest' ? 'Contest to date' : (p >= START ? (p === weekOf(today()) ? 'This week' : 'Week ' + (Math.round((t - Date.parse(START + 'T00:00:00Z')) / (7 * D)) + 1)) + ' · ' : 'Before contest · ') + fmtD(t) + ' – ' + fmtD(t + 6 * D);
+    let stars = 0;
+    for (const o of [...REPS, 'Team']) {
+      const a = acc[p + '|' + o];
+      const moved = a.nurture + a.negotiation + a.agreement + a.won;
+      const star = p === 'contest' || p < START || o === 'Team' ? null : (a.added >= WEEK && a.days_hit >= 5 ? 'Achieved' : p >= weekOf(today()) ? 'In progress' : 'Missed');
+      if (star === 'Achieved') stars++;
+      WEEKLY.push({ period: p, label, owner: o, ...a, moved_pct: a.added ? moved / a.added : null, won_pct: a.added ? a.won / a.added : null, star, reps_star: o === 'Team' && p !== 'contest' ? stars : null });
+    }
+  }
+  // won board
+  WON = REPS.map((owner) => {
+    const days = won.filter((d) => d.owner === owner).map((d) => istDay(d.at));
+    const nov = days.filter((x) => x >= '2026-11-01' && x <= '2026-11-30').length;
+    const qtd = days.filter((x) => x >= '2026-10-01' && x <= '2026-12-31').length;
+    return { owner, nov, togo: Math.max(0, MONTH - nov), mstar: nov >= MONTH ? 'Achieved' : 'In progress', qtd };
+  });
+  WON.forEach((r) => { r.rank = 1 + WON.filter((o) => o.qtd > r.qtd).length; });
+  WON.sort((a, b) => a.rank - b.rank);
+  WON.push({ owner: 'Team', nov: WON.reduce((s, r) => s + r.nov, 0), togo: null, mstar: null, qtd: WON.reduce((s, r) => s + r.qtd, 0), rank: null });
+  DATA._lq = lq;
+  DATA._won = won;
+}
+
+
+const initials = (n) => n.split(' ').map((x) => x[0]).join('').slice(0, 2).toUpperCase();
+const AV = ['#c9c3f5', '#bcd3fb', '#bfe8d2', '#f9d3b5'];
+const avatar = (name) => { const a = el('div', initials(name), 'avatar'); const i = REPS.indexOf(name); a.style.background = AV[i % AV.length]; a.style.color = '#222'; return a; };
+const VIEWS = ['overview', 'tracker', 'pipeline', 'leaderboard', 'compare', 'deals'];
+let cmpRep = 'Team';
+
+function show() {
+  const v = VIEWS.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'overview';
+  VIEWS.forEach((x) => $('v-' + x).classList.toggle('on', x === v));
+  document.querySelectorAll('#nav a').forEach((a) => a.classList.toggle('active', a.dataset.v === v));
+  window.scrollTo(0, 0);
+}
+
+function render() {
+  const thisWeek = weekOf(today()), tday = today();
+  const sel = $('period');
+  const opts = WEEKLY.filter((r) => r.owner === 'Team' && (r.period === 'contest' || r.period <= thisWeek));
+  if (!opts.some((o) => o.period === period)) period = 'contest';
+  sel.replaceChildren(...opts.map((r) => new Option(r.label, r.period)));
+  sel.value = period;
+  const rows = WEEKLY.filter((r) => r.period === period);
+  const team = rows.find((r) => r.owner === 'Team');
+  const goal = WEEK * REPS.length * (period === 'contest' ? Math.max(1, WEEKLY.filter((r) => r.owner === 'Team' && r.period !== 'contest' && r.period >= START && r.period <= thisWeek).length) : 1);
+
+  // overview cards
+  $('c-added').textContent = team.added;
+  $('c-target').textContent = goal;
+  $('c-added-bar').style.width = Math.min(100, (team.added / goal) * 100) + '%';
+  $('c-star').textContent = team.reps_star == null ? '—' : team.reps_star + '/' + REPS.length;
+  $('c-moved').textContent = team.moved_pct == null ? '—' : pct(team.moved_pct);
+  $('c-won').textContent = team.won_pct == null ? '—' : pct(team.won_pct);
+  const wt = WON[WON.length - 1];
+  $('c-nov').textContent = wt.nov;
+  $('c-qtd').textContent = wt.qtd;
+
+  // today
+  const dow = new Date(tday + 'T00:00:00Z').getUTCDay();
+  const weekend = dow === 0 || dow === 6;
+  const tmap = new Map(DAILY.filter((r) => r.day === tday).map((r) => [r.owner, r.n]));
+  const behind = REPS.filter((o) => (tmap.get(o) || 0) < DAY);
+  $('today-list').replaceChildren(...REPS.map((o) => {
+    const n = tmap.get(o) || 0;
+    const row = el('div', null, 'trow');
+    const mid = el('div'); mid.append(el('b', o));
+    const pips = el('div', null, 'pips');
+    for (let i = 0; i < DAY; i++) pips.append(el('i', null, i < n ? 'on' : ''));
+    mid.append(pips);
+    const chip = weekend ? el('span', n + ' today', 'chip off') : n >= DAY ? el('span', n + ' / ' + DAY + ' · Done', 'chip ok') : el('span', n + ' / ' + DAY, 'chip pend');
+    row.append(avatar(o), mid, chip);
+    return row;
+  }));
+  const b = $('banner');
+  if (weekend) { b.classList.add('good'); $('banner-t').textContent = "It's the weekend"; $('banner-s').textContent = 'Daily lead goals apply Monday to Friday'; }
+  else if (behind.length === 0) { b.classList.add('good'); $('banner-t').textContent = 'Every rep has hit today’s lead goal'; $('banner-s').textContent = 'Great work, team. Keep the momentum going'; }
+  else { b.classList.remove('good'); $('banner-t').textContent = behind.length + (behind.length === 1 ? ' rep needs' : ' reps need') + ' more qualified leads today'; $('banner-s').textContent = 'Goal: ' + DAY + ' qualified leads per rep before end of day'; }
+
+  // tracker grid
+  const out = [];
+  let cols;
+  const wk = new Map(WEEKLY.map((r) => [r.period + '|' + r.owner, r]));
+  if (period !== 'contest') {
+    const days = [...new Set(DAILY.filter((r) => r.week === period).map((r) => r.day))].sort();
+    const dmap = new Map(DAILY.filter((r) => r.week === period).map((r) => [r.day + '|' + r.owner, r.n]));
+    cols = days.length;
+    out.push(el('div', 'Rep', 'c hd nm'));
+    for (const d of days) { const h = el('div', DOW[new Date(d + 'T00:00:00Z').getUTCDay()], 'c hd' + (d === tday ? ' now' : '')); h.append(el('br'), fmtD(Date.parse(d + 'T00:00:00Z'))); out.push(h); }
+    out.push(el('div', 'Week', 'c hd tot'));
+    for (const o of REPS) {
+      out.push(el('div', o, 'c nm'));
+      for (const d of days) {
+        const n = dmap.get(d + '|' + o) || 0, dw = new Date(d + 'T00:00:00Z').getUTCDay(), we = dw === 0 || dw === 6;
+        const cls = n >= DAY ? 'hit' : d > tday || we ? 'off' : d === tday ? 'pend' : 'miss';
+        out.push(el('div', d > tday ? '' : String(n), 'c ' + cls + (d === tday ? ' now' : '')));
+      }
+      const a = wk.get(period + '|' + o).added;
+      out.push(el('div', a + ' / ' + WEEK, 'c tot ' + (a >= WEEK ? 'hit' : period >= thisWeek ? 'pend' : 'miss')));
+    }
+  } else {
+    const weeks = WEEKLY.filter((r) => r.owner === 'Team' && r.period !== 'contest' && r.period >= START && r.period <= thisWeek).map((r) => r.period).sort();
+    cols = weeks.length;
+    out.push(el('div', 'Rep', 'c hd nm'));
+    weeks.forEach((w, i) => { const h = el('div', 'Week ' + (i + 1), 'c hd' + (w === thisWeek ? ' now' : '')); h.append(el('br'), fmtD(Date.parse(w + 'T00:00:00Z'))); out.push(h); });
+    out.push(el('div', 'Total', 'c hd tot'));
+    for (const o of REPS) {
+      out.push(el('div', o, 'c nm'));
+      for (const w of weeks) { const n = wk.get(w + '|' + o).added; out.push(el('div', String(n), 'c ' + (n >= WEEK ? 'hit' : w === thisWeek ? 'pend' : 'miss') + (w === thisWeek ? ' now' : ''))); }
+      out.push(el('div', String(wk.get('contest|' + o).added), 'c tot'));
+    }
+  }
+  $('grid').style.gridTemplateColumns = 'minmax(130px, 1.6fr) repeat(' + cols + ', minmax(48px, 1fr)) minmax(64px, 1fr)';
+  $('grid').replaceChildren(...out);
+
+  // pipeline
+  const reps = rows.filter((r) => r.owner !== 'Team');
+  const max = Math.max(1, ...reps.map((r) => r.added));
+  const bars = $('bars');
+  const tip = el('div', null, 'tip'); tip.hidden = true;
+  const panel = bars.parentElement;
+  bars.replaceChildren(...reps.map((r) => {
+    const row = el('div', null, 'srow');
+    const who = el('div', null, 'who'); who.append(avatar(r.owner), el('span', r.owner));
+    const track = el('div', null, 'track');
+    STAGES.forEach(([k, name], i) => {
+      if (!r[k]) return;
+      const seg = el('div', null, 'seg');
+      seg.style.width = (r[k] / max) * 100 + '%';
+      seg.style.background = color(i);
+      seg.addEventListener('mousemove', (ev) => {
+        tip.replaceChildren(el('div', r.owner, 't1'), el('div', name + ': ' + r[k] + ' of ' + r.added + ' (' + pct(r[k] / r.added) + ')'));
+        tip.hidden = false;
+        const box = panel.getBoundingClientRect(), w = tip.offsetWidth;
+        let x = ev.clientX - box.left + 12; if (x + w > box.width) x = Math.max(0, ev.clientX - box.left - w - 12);
+        tip.style.left = x + 'px'; tip.style.top = ev.clientY - box.top + 14 + 'px';
+      });
+      seg.addEventListener('mouseleave', () => { tip.hidden = true; });
+      track.append(seg);
+    });
+    row.append(who, track, el('div', String(r.added), 'snum'));
+    return row;
+  }));
+  panel.querySelectorAll('.tip').forEach((t) => t.remove());
+  panel.append(tip);
+  $('stage-empty').hidden = team.added > 0;
+  $('stage-rows').replaceChildren(...rows.map((r) => {
+    const tr = el('tr', null, r.owner === 'Team' ? 'team' : '');
+    tr.append(el('td', r.owner));
+    for (const k of ['added', 'lq', 'nurture', 'negotiation', 'agreement', 'won', 'lost_other']) tr.append(el('td', String(r[k])));
+    tr.append(el('td', pct(r.moved_pct)), el('td', pct(r.won_pct)));
+    const td = el('td', null, 'l');
+    if (r.star) td.append(el('span', r.star, 'chip ' + (r.star === 'Achieved' ? 'ok' : r.star === 'Missed' ? 'bad' : 'pend')));
+    tr.append(td);
+    return tr;
+  }));
+
+  // leaderboard
+  $('won-rows').replaceChildren(...WON.map((r) => {
+    const tr = el('tr', null, r.owner === 'Team' ? 'team' : '');
+    const rk = el('td', null, 'l');
+    if (r.rank != null) rk.append(el('span', String(r.rank), 'rank r' + r.rank));
+    const nm = el('td', null, 'l');
+    if (r.owner === 'Team') nm.textContent = 'Team'; else { const w = el('span', null, 'who'); w.append(avatar(r.owner), el('span', r.owner)); nm.append(w); }
+    const ms = el('td', null, 'l');
+    if (r.mstar) ms.append(el('span', r.mstar, 'chip ' + (r.mstar === 'Achieved' ? 'ok' : 'pend')));
+    tr.append(rk, nm, el('td', String(r.qtd)), el('td', String(r.nov)), el('td', r.togo == null ? '' : r.togo === 0 ? '—' : String(r.togo)), ms);
+    return tr;
+  }));
+
+  renderCompare();
+
+  // deals
+  const list = DATA._lq.filter((d) => { const day = istDay(d.at); return period === 'contest' ? day >= START : weekOf(day) === period; }).sort((a, b) => (a.at < b.at ? 1 : -1));
+  $('deal-empty').hidden = list.length > 0;
+  $('deal-rows').replaceChildren(...list.map((d) => {
+    const t = new Date(Date.parse(d.at) + 19800000);
+    const h = t.getUTCHours(), mm = String(t.getUTCMinutes()).padStart(2, '0');
+    const tr = el('tr');
+    tr.append(el('td', d.deal, 'l'), el('td', d.owner, 'l'), el('td', STAGE_LABEL[d.stage] || d.stage, 'l'), el('td', fmtD(t.getTime()) + ', ' + ((h % 12) || 12) + ':' + mm + (h < 12 ? ' AM' : ' PM')));
+    return tr;
+  }));
+}
+
+function renderCompare() {
+  const thisWeek = weekOf(today()), tday = today();
+  const cur = period !== 'contest' ? period : thisWeek;
+  const prev = new Date(Date.parse(cur + 'T00:00:00Z') - 7 * D).toISOString().slice(0, 10);
+  const isCurrent = cur === thisWeek;
+  // days elapsed in the current week, for a like-for-like comparison
+  const daysIn = isCurrent ? Math.round((Date.parse(tday + 'T00:00:00Z') - Date.parse(cur + 'T00:00:00Z')) / D) + 1 : 7;
+  const cutoff = new Date(Date.parse(prev + 'T00:00:00Z') + (daysIn - 1) * D).toISOString().slice(0, 10);
+  const label = (w) => fmtD(Date.parse(w + 'T00:00:00Z')) + ' – ' + fmtD(Date.parse(w + 'T00:00:00Z') + 6 * D);
+  $('cmp-sub').textContent = (isCurrent ? 'This week' : 'Selected week') + ' (' + label(cur) + ') vs the week before (' + label(prev) + ')' + (isCurrent ? '. "Same point last week" counts last week up to ' + DOW[new Date(cutoff + 'T00:00:00Z').getUTCDay()] + '.' : '.');
+
+  const stat = (o, w) => {
+    const r = WEEKLY.find((x) => x.period === w && x.owner === o) || { added: 0, days_hit: 0, moved_pct: null, won_pct: null };
+    const wins = DATA._won.filter((d) => (o === 'Team' || d.owner === o) && weekOf(istDay(d.at)) === w).length;
+    return { added: r.added, days: o === 'Team' ? null : r.days_hit, moved: r.moved_pct, wins };
+  };
+  const sameDay = (o) => DAILY.filter((r) => r.week === prev && r.day <= cutoff && (o === 'Team' || r.owner === o)).reduce((s, r) => s + r.n, 0);
+  const delta = (a, b, pctMode) => {
+    if (a == null || b == null) return el('span', '—', 'delta flat');
+    const d = a - b;
+    const txt = pctMode ? (d > 0 ? '+' : '') + Math.round(d * 100) + ' pts' : (d > 0 ? '▲ +' : d < 0 ? '▼ ' : '') + d + (b > 0 && !pctMode ? ' (' + (d > 0 ? '+' : '') + Math.round((d / b) * 100) + '%)' : '');
+    return el('span', d === 0 ? 'No change' : txt, 'delta ' + (d > 0 ? 'up' : d < 0 ? 'down' : 'flat'));
+  };
+
+  // chips
+  $('cmp-chips').replaceChildren(...['Team', ...REPS].map((o) => {
+    const bt = el('button', null, 'chipbtn' + (o === cmpRep ? ' on' : ''));
+    if (o !== 'Team') bt.append(avatar(o));
+    bt.append(o === 'Team' ? 'Whole team' : o.split(' ')[0]);
+    bt.onclick = () => { cmpRep = o; renderCompare(); };
+    return bt;
+  }));
+
+  const a = stat(cmpRep, cur), b = stat(cmpRep, prev), sd = sameDay(cmpRep);
+  const goalWk = WEEK * (cmpRep === 'Team' ? REPS.length : 1);
+  const card = (c, lbl, val, last, dl, extra) => {
+    const cc = el('div', null, 'cc'); cc.style.setProperty('--c', c);
+    const top = el('div', null, 'top'); top.append(el('div', lbl, 'lbl'));
+    const row = el('div', null, 'row'); row.append(el('span', val, 'big'), dl); top.append(row);
+    const bot = el('div', null, 'bot'); const l = el('span'); l.append('Last week ', el('b', last)); bot.append(l); if (extra) bot.append(extra);
+    cc.append(top, bot); return cc;
+  };
+  const ex1 = el('span'); ex1.append('Goal ', el('b', String(goalWk)));
+  const ex2 = isCurrent ? (() => { const e = el('span'); e.append('Same point last week ', el('b', String(sd))); return e; })() : null;
+  const cards = [card('var(--lav)', 'Leads qualified', String(a.added), String(b.added), delta(a.added, isCurrent ? sd : b.added), isCurrent ? ex2 : ex1)];
+  if (cmpRep !== 'Team') cards.push(card('var(--peach)', 'Days goal met (of 5)', String(a.days), String(b.days), delta(a.days, b.days)));
+  else cards.push(card('var(--peach)', 'Weekly goal', String(goalWk), String(goalWk), el('span', Math.round((a.added / goalWk) * 100) + '% reached', 'delta flat'), null));
+  cards.push(card('var(--sky)', 'Progressed past LQ', a.moved == null ? '—' : pct(a.moved), b.moved == null ? '—' : pct(b.moved), delta(a.moved, b.moved, true)));
+  cards.push(card('var(--mint)', 'Deals won', String(a.wins), String(b.wins), delta(a.wins, b.wins)));
+  $('cmp-cards').replaceChildren(...cards);
+
+  // bars
+  const all = REPS.map((o) => ({ o, t: stat(o, cur).added, l: stat(o, prev).added }));
+  const mx = Math.max(1, ...all.flatMap((r) => [r.t, r.l]));
+  $('cmp-bars').replaceChildren(...all.map((r) => {
+    const row = el('div', null, 'b2row' + (r.o === cmpRep ? ' sel' : ''));
+    const who = el('div', null, 'who'); who.append(avatar(r.o), el('span', r.o));
+    const b2 = el('div', null, 'b2');
+    for (const [cls, v] of [['last', r.l], ['this', r.t]]) {
+      const ln = el('div', null, 'ln ' + cls); const bar = el('i'); bar.style.width = (v / mx) * 85 + '%'; ln.append(bar, el('b', String(v))); b2.append(ln);
+    }
+    row.append(who, b2); return row;
+  }));
+
+  // standings
+  const rank = (key) => { const m = {}; all.forEach((r) => { m[r.o] = 1 + all.filter((x) => x[key] > r[key]).length; }); return m; };
+  const rt = rank('t'), rl = rank('l');
+  const sorted = all.slice().sort((x, y) => rt[x.o] - rt[y.o]);
+  $('cmp-rows').replaceChildren(...sorted.map((r) => {
+    const tr = el('tr', null, r.o === cmpRep ? 'sel' : '');
+    const nm = el('td', null, 'l'); const w = el('span', null, 'who'); w.append(avatar(r.o), el('span', r.o)); nm.append(w);
+    const d = r.t - r.l;
+    const mv = rl[r.o] - rt[r.o];
+    const rk = el('td', null, 'l'); rk.append(el('span', '#' + rt[r.o], 'rank r' + rt[r.o]), ' ', el('span', mv > 0 ? '▲ ' + mv : mv < 0 ? '▼ ' + -mv : '–', 'mv ' + (mv > 0 ? 'up' : mv < 0 ? 'down' : 'flat')));
+    tr.append(nm, el('td', String(r.l)), el('td', String(r.t)), el('td', (d > 0 ? '+' : '') + d), rk, el('td', String(stat(r.o, prev).wins)), el('td', String(stat(r.o, cur).wins)));
+    tr.style.cursor = 'pointer'; tr.onclick = () => { cmpRep = r.o; renderCompare(); };
+    return tr;
+  }));
+}
+
+async function load() {
+  try {
+    const res = await fetch('data.json?t=' + Date.now(), { cache: 'no-store' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    DATA = await res.json();
+    if (DATA.error) throw new Error(DATA.error);
+    compute();
+    render();
+    const u = new Date(Date.parse(DATA.updated_at) + 19800000);
+    const h = u.getUTCHours(), mm = String(u.getUTCMinutes()).padStart(2, '0');
+    const at = fmtD(u.getTime()) + ', ' + ((h % 12) || 12) + ':' + mm + (h < 12 ? ' AM' : ' PM') + ' IST';
+    $('updated').textContent = 'Live · synced ' + at;
+    $('side-sync').textContent = 'Synced ' + at;
+    $('error').hidden = true;
+  } catch (e) {
+    $('error').textContent = "Couldn't load the latest numbers. Refresh the page to try again.";
+    $('error').hidden = false;
+  }
+}
+
+$('legend').append(...STAGES.map(([, name], i) => { const s = el('span'); const sw = el('i'); sw.style.background = color(i); s.append(sw, name); return s; }));
+$('period').addEventListener('change', (e) => { period = e.target.value; render(); });
+const setFold = (f) => { document.querySelector('.app').classList.toggle('folded', f); try { localStorage.setItem('nc-folded', f ? '1' : '0'); } catch (e) {} };
+$('fold').addEventListener('click', () => setFold(true));
+$('expand').addEventListener('click', () => setFold(false));
+$('home').addEventListener('click', () => {
+  if (window.matchMedia('(min-width: 901px)').matches) setFold(true);
+  if (location.hash === '#overview') show(); else location.hash = 'overview';
+});
+try { if (localStorage.getItem('nc-folded') === '1') setFold(true); } catch (e) {}
+window.addEventListener('hashchange', show);
+show();
+load();
+setInterval(load, 5 * 60 * 1000);
+</script>
+</body>
+</html>
