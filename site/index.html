@@ -325,7 +325,7 @@
           <p class="empty" id="deal-empty" hidden>No deals qualified in this period yet.</p>
           <div class="scroll tw">
             <table>
-              <thead><tr><th class="l">Deal</th><th class="l">Rep</th><th class="l">Current stage</th><th>Qualified (IST)</th></tr></thead>
+              <thead><tr><th class="l">Deal</th><th class="l">Rep</th><th class="l">Current stage</th><th>DRR</th><th>Qualified (IST)</th></tr></thead>
               <tbody id="deal-rows"></tbody>
             </table>
           </div>
@@ -352,6 +352,7 @@ const istDay = (iso) => new Date(Date.parse(iso) + 19800000).toISOString().slice
 const today = () => new Date(Date.now() + 19800000).toISOString().slice(0, 10);
 const weekOf = (day) => { const t = Date.parse(day + 'T00:00:00Z'); return new Date(t - ((new Date(t).getUTCDay() + 6) % 7) * D).toISOString().slice(0, 10); };
 const fmtD = (t) => M[new Date(t).getUTCMonth()] + ' ' + new Date(t).getUTCDate();
+const fmtN = (x) => Math.round(x).toLocaleString('en-IN');
 const pct = (x) => x == null ? '' : Math.round(x * 100) + '%';
 const el = (tag, text, cls) => { const e = document.createElement(tag); if (text != null) e.textContent = text; if (cls) e.className = cls; return e; };
 const pillTd = (text, cls) => { const td = el('td', null, 'l'); if (text) td.append(el('span', text, 'pill ' + cls)); return td; };
@@ -361,7 +362,7 @@ let DATA = null, WEEKLY = null, DAILY = null, WON = null;
 let period = weekOf(today());
 
 function compute() {
-  const lq = DATA.lq.map(([id, deal, owner, stage, at]) => ({ id, deal, owner, stage, at })).filter((d) => REPS.includes(d.owner) && d.at);
+  const lq = DATA.lq.map(([id, deal, owner, stage, at, drr]) => ({ id, deal, owner, stage, at, drr: drr == null || Number.isNaN(Number(drr)) ? null : Number(drr) })).filter((d) => REPS.includes(d.owner) && d.at);
   const won = DATA.won.map(([id, deal, owner, at]) => ({ id, deal, owner, at })).filter((d) => REPS.includes(d.owner) && d.at);
   // daily
   const counts = {};
@@ -568,13 +569,14 @@ function render() {
   // deals
   const list = DATA._lq.filter((d) => { const day = istDay(d.at); return period === 'contest' ? day >= START : weekOf(day) === period; }).sort((a, b) => (a.at < b.at ? 1 : -1));
   $('deal-empty').hidden = list.length > 0;
+  const drrTotal = list.reduce((t, d) => t + (d.drr || 0), 0);
   $('deal-rows').replaceChildren(...list.map((d) => {
     const t = new Date(Date.parse(d.at) + 19800000);
     const h = t.getUTCHours(), mm = String(t.getUTCMinutes()).padStart(2, '0');
     const tr = el('tr');
-    tr.append(el('td', d.deal, 'l'), el('td', d.owner, 'l'), el('td', STAGE_LABEL[d.stage] || d.stage, 'l'), el('td', fmtD(t.getTime()) + ', ' + ((h % 12) || 12) + ':' + mm + (h < 12 ? ' AM' : ' PM')));
+    tr.append(el('td', d.deal, 'l'), el('td', d.owner, 'l'), el('td', STAGE_LABEL[d.stage] || d.stage, 'l'), el('td', d.drr == null ? '—' : fmtN(d.drr)), el('td', fmtD(t.getTime()) + ', ' + ((h % 12) || 12) + ':' + mm + (h < 12 ? ' AM' : ' PM')));
     return tr;
-  }));
+  }), ...(list.length ? [(() => { const tr = el('tr', null, 'team'); tr.append(el('td', 'Total', 'l'), el('td', list.length + ' deals', 'l'), el('td', '', 'l'), el('td', fmtN(drrTotal)), el('td', '')); return tr; })()] : []));
 }
 
 function renderCompare() {

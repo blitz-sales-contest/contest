@@ -48,13 +48,13 @@ const base = [
   { propertyName: 'hubspot_owner_id', operator: 'IN', values: OWNER_IDS },
 ];
 const lq = await search([...base, { propertyName: 'hs_v2_date_entered_qualifiedtobuy', operator: 'GTE', value: String(LQ_FROM) }],
-  ['dealname', 'hubspot_owner_id', 'dealstage', 'hs_v2_date_entered_qualifiedtobuy']);
+  ['dealname', 'hubspot_owner_id', 'dealstage', 'hs_v2_date_entered_qualifiedtobuy', 'drr']);
 const won = await search([...base, { propertyName: 'dealstage', operator: 'EQ', value: 'closedwon' }, { propertyName: 'hs_v2_date_entered_closedwon', operator: 'GTE', value: String(WON_FROM) }],
   ['dealname', 'hubspot_owner_id', 'hs_v2_date_entered_closedwon']);
 
 const data = {
   updated_at: new Date().toISOString(),
-  lq: lq.map((d) => [d.id, d.properties.dealname || '', OWNERS[d.properties.hubspot_owner_id] || d.properties.hubspot_owner_id, d.properties.dealstage || '', iso(d.properties.hs_v2_date_entered_qualifiedtobuy)]),
+  lq: lq.map((d) => [d.id, d.properties.dealname || '', OWNERS[d.properties.hubspot_owner_id] || d.properties.hubspot_owner_id, d.properties.dealstage || '', iso(d.properties.hs_v2_date_entered_qualifiedtobuy), d.properties.drr == null || d.properties.drr === '' ? null : Number(d.properties.drr)]),
   won: won.map((d) => [d.id, d.properties.dealname || '', OWNERS[d.properties.hubspot_owner_id] || d.properties.hubspot_owner_id, iso(d.properties.hs_v2_date_entered_closedwon)]),
 };
 writeFileSync('site/data.json', JSON.stringify(data));
