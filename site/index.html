@@ -750,7 +750,7 @@ function renderCompare() {
   };
   const ex1 = el('span'); ex1.append('Goal ', el('b', String(goalWk)));
   const ex2 = isCurrent ? (() => { const e = el('span'); e.append('Same point last week ', el('b', String(sd))); return e; })() : null;
-  const cards = [card('var(--lav)', 'Leads qualified', String(a.added), String(b.added), delta(a.added, isCurrent ? sd : b.added), isCurrent ? ex2 : ex1)];
+  const cards = [card('var(--lav)', 'Leads qualified', String(a.added), String(b.added), delta(a.added, isCurrent ? sd : b.added), isCurrent ? ex2 : (cmpRep === 'Team' ? null : ex1))];
   if (cmpRep !== 'Team') cards.push(card('var(--peach)', 'Days goal met (of 5)', String(a.days), String(b.days), delta(a.days, b.days)));
 
   cards.push(card('var(--sky)', 'Progressed past LQ', a.moved == null ? '—' : pct(a.moved), b.moved == null ? '—' : pct(b.moved), delta(a.moved, b.moved, true)));
