@@ -74,6 +74,27 @@
     @keyframes glow { 0%, 100% { box-shadow: 0 0 0 6px rgba(245,179,1,.18), 0 0 22px rgba(245,179,1,.35); transform: scale(1); } 50% { box-shadow: 0 0 0 10px rgba(245,179,1,.12), 0 0 40px rgba(245,179,1,.6); transform: scale(1.05); } }
   }
   @media (max-width: 600px) { .leader .lnum { margin-left: 0; text-align: left; } .leader .ln { font-size: 24px; } }
+  /* --- flash version --- */
+  .ticker { background: #0d0d0d; color: #ffd45c; overflow: hidden; white-space: nowrap; border-bottom: 1px solid #2a2a2a; font-size: 14px; font-weight: 500; height: 38px; display: flex; align-items: center; }
+  .ticker .tk { display: inline-flex; gap: 48px; padding-left: 100%; }
+  .ticker .tk span b { color: #fff; }
+  .leader.flash { border: 0; isolation: isolate; }
+  .leader.flash::before { content: ""; position: absolute; inset: 0; border-radius: 18px; padding: 2px; padding: 3px; background: conic-gradient(from var(--ang, 0deg), #f5b301, #fff2b8, #f5b301, #7a5200, #f5b301); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; z-index: 1; pointer-events: none; }
+  .leader .ln.pop { display: inline-block; }
+  .confetti { position: absolute; top: -12px; width: 8px; height: 14px; border-radius: 2px; z-index: 2; pointer-events: none; }
+  @property --ang { syntax: "<angle>"; initial-value: 0deg; inherits: false; }
+  @media (prefers-reduced-motion: no-preference) {
+    .ticker .tk { animation: tick 28s linear infinite; }
+    @keyframes tick { to { transform: translateX(-100%); } }
+    .leader.flash::before { animation: spin 3s linear infinite; }
+    @keyframes spin { to { --ang: 360deg; } }
+    .leader.flash .lnum b { animation: flashnum 1.6s ease-in-out infinite; }
+    @keyframes flashnum { 0%, 100% { text-shadow: 0 0 0 rgba(255,212,92,0); } 50% { text-shadow: 0 0 18px rgba(255,212,92,.9), 0 0 36px rgba(245,179,1,.6); } }
+    .leader .ln.pop { animation: pop .7s cubic-bezier(.2,1.6,.4,1) both; }
+    @keyframes pop { from { transform: scale(.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .confetti { animation: fall var(--d, 2.4s) cubic-bezier(.25,.6,.4,1) forwards; }
+    @keyframes fall { to { transform: translate(var(--x, 0), 260px) rotate(var(--r, 540deg)); opacity: 0; } }
+  }
   .banner { display: flex; align-items: center; gap: 20px; background: var(--warn-bg); border: 1.5px solid var(--warn-line); border-radius: 14px; padding: 18px 22px; }
   .banner.good { background: var(--ok-bg); border-color: #9fd8b6; }
   .banner .ib { width: 52px; height: 52px; border-radius: 12px; background: #fff; display: grid; place-items: center; flex: none; }
@@ -242,6 +263,7 @@
   </aside>
 
   <main class="main">
+    <div class="ticker" id="ticker" hidden><div class="tk" id="tk"></div></div>
     <div class="topbar">
       <button class="homebtn" id="home" type="button" title="Home" aria-label="Home"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg><span>Home</span></button>
       <button class="expand" id="expand" type="button" title="Show sidebar" aria-label="Show sidebar"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M9 4v16M13.5 10l2 2-2 2"/></svg></button>
@@ -259,11 +281,10 @@
           <h2>November Sales Contest</h2>
           <p>Here's how the team is tracking today.</p>
         </div>
-        <div class="leader" id="leader">
+        <div class="leader flash" id="leader">
           <div class="crown">👑</div>
           <div><div class="lt" id="ld-t">LQ leader</div><div class="ln" id="ld-name">—</div><div class="ls" id="ld-sub">—</div></div>
           <div class="lnum"><b id="ld-n">—</b><span>qualified leads</span></div>
-          <div class="ltoday" id="ld-today"></div>
         </div>
         <div class="banner" id="banner">
           <div class="ib"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/></svg></div>
@@ -504,13 +525,44 @@ function render() {
       if (second && second.added > 0) sub.append(el('b', (top - second.added) + ' ahead'), ' of ' + second.owner.split(' ')[0] + ' (' + second.added + ')');
       else sub.append('Only rep on the board so far');
     }
-    const t = $('ld-today'); t.replaceChildren();
-    if (period === thisWeek || period === 'contest') {
-      const tm = REPS.map((o) => ({ o, n: (DAILY.find((r) => r.day === tday && r.owner === o) || { n: 0 }).n })).sort((x, y) => y.n - x.n);
-      t.append(el('span', 'Today:'));
-      tm.forEach((r, i) => t.append(el('span', r.o.split(' ')[0] + ' ' + r.n, 'pill' + (i === 0 && r.n > 0 && r.n > (tm[1] ? tm[1].n : 0) ? ' top' : ''))));
-      t.hidden = false;
-    } else t.hidden = true;
+  }
+
+  // flash: ticker + confetti when the leader is shown
+  {
+    const reps = rows.filter((r) => r.owner !== 'Team').slice().sort((x, y) => y.added - x.added);
+    const top = reps[0] ? reps[0].added : 0;
+    const plabel = period === 'contest' ? 'contest to date' : period === thisWeek ? 'this week' : 'that week';
+    const items = [];
+    if (top > 0) {
+      const leaders = reps.filter((r) => r.added === top);
+      items.push(['👑 ', leaders.map((r) => r.owner).join(' & '), (leaders.length > 1 ? ' are tied for the LQ lead ' : ' leads LQ ') + plabel + ' with ' + top]);
+      reps.slice(leaders.length).forEach((r) => items.push(['', r.owner.split(' ')[0], ' is ' + (top - r.added) + ' behind (' + r.added + ')']));
+    } else items.push(['👑 ', 'No leads qualified yet', '. The first qualified lead takes the crown']);
+    items.push(['🎯 ', 'Weekly Star', ': 3 a day, 15 a week']);
+    const tk = $('tk');
+    tk.replaceChildren(...items.concat(items).map(([e, b, t]) => { const sp = el('span'); sp.append(e, el('b', b), t); return sp; }));
+    $('ticker').hidden = false;
+    const key = period + '|' + reps.filter((r) => r.added === top && top > 0).map((r) => r.owner).join(',');
+    if (window.__lastLeader !== key) {
+      window.__lastLeader = key;
+      const nm = $('ld-name'); nm.classList.remove('pop'); void nm.offsetWidth; nm.classList.add('pop');
+      if (top > 0 && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const card = $('leader');
+        card.querySelectorAll('.confetti').forEach((c) => c.remove());
+        const cols = ['#f5b301', '#ffe08a', '#ffffff', '#c4b3f3', '#7fd6a8', '#f9a8c0'];
+        for (let i = 0; i < 46; i++) {
+          const c = el('i', null, 'confetti');
+          c.style.left = Math.random() * 100 + '%';
+          c.style.background = cols[i % cols.length];
+          c.style.setProperty('--x', (Math.random() * 160 - 80) + 'px');
+          c.style.setProperty('--r', (Math.random() * 900 - 450) + 'deg');
+          c.style.setProperty('--d', (1.8 + Math.random() * 1.6) + 's');
+          c.style.animationDelay = (Math.random() * 0.4) + 's';
+          card.append(c);
+        }
+        setTimeout(() => card.querySelectorAll('.confetti').forEach((c) => c.remove()), 4200);
+      }
+    }
   }
 
   // today
