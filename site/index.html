@@ -752,7 +752,11 @@ function renderCompare() {
   const ex2 = isCurrent ? (() => { const e = el('span'); e.append('Same point last week ', el('b', String(sd))); return e; })() : null;
   const cards = [card('var(--lav)', 'Leads qualified', String(a.added), String(b.added), delta(a.added, isCurrent ? sd : b.added), isCurrent ? ex2 : ex1)];
   if (cmpRep !== 'Team') cards.push(card('var(--peach)', 'Days goal met (of 5)', String(a.days), String(b.days), delta(a.days, b.days)));
-  else cards.push(card('var(--peach)', 'Weekly goal', String(goalWk), String(goalWk), el('span', Math.round((a.added / goalWk) * 100) + '% reached', 'delta flat'), null));
+  else {
+    const ra = a.added / goalWk, rb = b.added / goalWk;
+    const g = el('span'); g.append('Goal ', el('b', goalWk + ' a week'));
+    cards.push(card('var(--peach)', 'Weekly goal reached', pct(ra), pct(rb), delta(ra, rb, true), g));
+  }
   cards.push(card('var(--sky)', 'Progressed past LQ', a.moved == null ? '—' : pct(a.moved), b.moved == null ? '—' : pct(b.moved), delta(a.moved, b.moved, true)));
   cards.push(card('var(--mint)', 'Deals won', String(a.wins), String(b.wins), delta(a.wins, b.wins)));
   $('cmp-cards').replaceChildren(...cards);
