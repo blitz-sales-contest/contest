@@ -87,6 +87,7 @@ for (const d of lq) {
   const before = h.filter((x) => x.t < lqAt && SALES_STAGES.has(x.v));
   const cameFromLater = before.some((x) => !ALLOWED_BEFORE_LQ.has(x.v));
   const row = [d.id, d.properties.dealname || '', OWNERS[d.properties.hubspot_owner_id] || d.properties.hubspot_owner_id, d.properties.dealstage || '', new Date(lqAt).toISOString(), d.properties.drr == null || d.properties.drr === '' ? null : Number(d.properties.drr)];
+  if (cameFromLater) console.log(`Prior stages for deal ${d.id}: ${before.map((x) => x.v + '@' + new Date(x.t).toISOString().slice(0, 16)).join(', ')} -> first LQ ${new Date(lqAt).toISOString().slice(0, 16)}`);
   if (cameFromLater) notCounted.push([...row.slice(0, 4), iso(d.properties.hs_v2_date_entered_qualifiedtobuy), 'Was already further in the pipeline before Lead Qualified']);
   else if (lqAt < LQ_FROM) {
     // First qualified before the tracking window; a recent re-entry into Lead Qualified.
