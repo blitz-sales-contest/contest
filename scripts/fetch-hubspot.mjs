@@ -48,7 +48,7 @@ const base = [
   { propertyName: 'hubspot_owner_id', operator: 'IN', values: OWNER_IDS },
 ];
 const lq = await search([...base, { propertyName: 'hs_v2_date_entered_qualifiedtobuy', operator: 'GTE', value: String(LQ_FROM) }],
-  ['dealname', 'hubspot_owner_id', 'dealstage', 'hs_v2_date_entered_qualifiedtobuy', 'drr']);
+  ['dealname', 'hubspot_owner_id', 'dealstage', 'hs_v2_date_entered_qualifiedtobuy', 'drr', 'createdate']);
 const won = await search([...base, { propertyName: 'dealstage', operator: 'EQ', value: 'closedwon' }, { propertyName: 'closedate', operator: 'GTE', value: String(WON_FROM) }],
   ['dealname', 'hubspot_owner_id', 'closedate']);
 
@@ -57,7 +57,8 @@ const won = await search([...base, { propertyName: 'dealstage', operator: 'EQ', 
 // into the stage (e.g. to fill in DRR), so we read the full stage history instead.
 // A deal counts only if, before that first Lead Qualified entry, it had been in no
 // Sales Pipeline stage other than "Appointment to be scheduled" (i.e. it is new, or
-// it came up from Appointment to be scheduled).
+// it came up from Appointment to be scheduled). A deal created in a later stage and
+// moved to Lead Qualified on the same day (IST) also counts. Reopened Closed Lost deals don't.
 const ALLOWED_BEFORE_LQ = new Set(['appointmentscheduled']);
 const SALES_STAGES = new Set(['appointmentscheduled', 'qualifiedtobuy', '48215108', 'decisionmakerboughtin', '1014542596', 'closedwon', 'contractsent', 'closedlost', '1016858950', '49708155', 'presentationscheduled']);
 
@@ -85,10 +86,15 @@ for (const d of lq) {
   const firstLq = h.find((x) => x.v === 'qualifiedtobuy');
   const lqAt = firstLq ? firstLq.t : Date.parse(iso(d.properties.hs_v2_date_entered_qualifiedtobuy));
   const before = h.filter((x) => x.t < lqAt && SALES_STAGES.has(x.v));
-  const cameFromLater = before.some((x) => !ALLOWED_BEFORE_LQ.has(x.v));
+  const istDay = (t) => new Date(t + 19800000).toISOString().slice(0, 10);
+  const createdAt = Date.parse(iso(d.properties.createdate));
+  const wasLost = before.some((x) => x.v === 'closedlost');
+  // Created in a later stage by mistake and moved to Lead Qualified the same day (IST): counts as new.
+  const sameDayFix = !wasLost && createdAt && istDay(createdAt) === istDay(lqAt) && before.every((x) => istDay(x.t) === istDay(lqAt));
+  const cameFromLater = !sameDayFix && before.some((x) => !ALLOWED_BEFORE_LQ.has(x.v));
   const row = [d.id, d.properties.dealname || '', OWNERS[d.properties.hubspot_owner_id] || d.properties.hubspot_owner_id, d.properties.dealstage || '', new Date(lqAt).toISOString(), d.properties.drr == null || d.properties.drr === '' ? null : Number(d.properties.drr)];
   if (cameFromLater) console.log(`Prior stages for deal ${d.id}: ${before.map((x) => x.v + '@' + new Date(x.t).toISOString().slice(0, 16)).join(', ')} -> first LQ ${new Date(lqAt).toISOString().slice(0, 16)}`);
-  if (cameFromLater) notCounted.push([...row.slice(0, 4), iso(d.properties.hs_v2_date_entered_qualifiedtobuy), 'Was already further in the pipeline before Lead Qualified']);
+  if (cameFromLater) notCounted.push([...row.slice(0, 4), iso(d.properties.hs_v2_date_entered_qualifiedtobuy), wasLost ? 'Reopened from Closed Lost' : 'Was already further in the pipeline before Lead Qualified']);
   else if (lqAt < LQ_FROM) {
     // First qualified before the tracking window; a recent re-entry into Lead Qualified.
     notCounted.push([...row.slice(0, 4), iso(d.properties.hs_v2_date_entered_qualifiedtobuy), 'Already qualified on ' + new Date(lqAt + 19800000).toISOString().slice(0, 10)]);
