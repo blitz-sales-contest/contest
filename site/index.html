@@ -141,6 +141,7 @@
   .who { display: inline-flex; align-items: center; gap: 10px; }
   .who .avatar { width: 30px; height: 30px; font-size: 11px; }
   .empty { color: var(--muted); font-size: 13.5px; margin: 0; }
+  #nc-rows td:last-child { white-space: normal; color: var(--muted); }
   .err { background: var(--bad-bg); color: var(--bad-fg); padding: 14px 18px; border-radius: 12px; }
 
   .chips { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -329,6 +330,14 @@
               <tbody id="deal-rows"></tbody>
             </table>
           </div>
+        </div>
+              <div class="panel" id="nc-panel" hidden>
+          <h3>Not counted as new leads</h3>
+          <p class="empty" style="margin:-8px 0 14px">Deals moved back into Lead Qualified in this period (for example to add DRR). Each deal counts only once, on the day it first became a qualified lead from a new deal or from Appointment to be scheduled.</p>
+          <div class="tw"><table>
+            <thead><tr><th class="l">Deal</th><th class="l">Rep</th><th class="l">Current stage</th><th>Moved to LQ (IST)</th><th class="l">Why it's not counted again</th></tr></thead>
+            <tbody id="nc-rows"></tbody>
+          </table></div>
         </div>
       </section>
     </div>
@@ -565,6 +574,7 @@ function render() {
   }));
 
   renderCompare();
+  renderNotCounted();
 
   // deals
   const list = DATA._lq.filter((d) => { const day = istDay(d.at); return period === 'contest' ? day >= START : weekOf(day) === period; }).sort((a, b) => (a.at < b.at ? 1 : -1));
@@ -577,6 +587,19 @@ function render() {
     tr.append(el('td', d.deal, 'l'), el('td', d.owner, 'l'), el('td', STAGE_LABEL[d.stage] || d.stage, 'l'), el('td', d.drr == null ? '—' : fmtN(d.drr)), el('td', fmtD(t.getTime()) + ', ' + ((h % 12) || 12) + ':' + mm + (h < 12 ? ' AM' : ' PM')));
     return tr;
   }), ...(list.length ? [(() => { const tr = el('tr', null, 'team'); tr.append(el('td', 'Total', 'l'), el('td', list.length + ' deals', 'l'), el('td', '', 'l'), el('td', fmtN(drrTotal)), el('td', '')); return tr; })()] : []));
+}
+
+function renderNotCounted() {
+  const rows = (DATA.not_counted || []).filter((d) => REPS.includes(d[2]) && d[4]).filter((d) => { const day = istDay(d[4]); return period === 'contest' ? day >= START : weekOf(day) === period; });
+  $('nc-panel').hidden = rows.length === 0;
+  $('nc-rows').replaceChildren(...rows.map((d) => {
+    const t = new Date(Date.parse(d[4]) + 19800000);
+    const h = t.getUTCHours(), mm = String(t.getUTCMinutes()).padStart(2, '0');
+    const why = d[5].replace(/(\d{4})-(\d{2})-(\d{2})/, (m, y, mo, dd) => fmtD(Date.UTC(+y, +mo - 1, +dd)));
+    const tr = el('tr');
+    tr.append(el('td', d[1], 'l'), el('td', d[2], 'l'), el('td', STAGE_LABEL[d[3]] || d[3], 'l'), el('td', fmtD(t.getTime()) + ', ' + ((h % 12) || 12) + ':' + mm + (h < 12 ? ' AM' : ' PM')), el('td', why, 'l'));
+    return tr;
+  }));
 }
 
 function renderCompare() {
