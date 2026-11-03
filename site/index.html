@@ -54,6 +54,26 @@
   .hello p { font-size: 19px; color: #8a8a94; margin: 10px 0 0; letter-spacing: -.3px; }
   .vh { font-size: 26px; font-weight: 600; letter-spacing: -.6px; margin: 0; }
 
+  .leader { position: relative; overflow: hidden; display: flex; align-items: center; gap: 22px; flex-wrap: wrap; background: linear-gradient(115deg, #111 0%, #1f1a10 55%, #3a2a08 100%); color: #fff; border-radius: 18px; padding: 22px 26px; box-shadow: 0 8px 30px rgba(0,0,0,.18); }
+  .leader::after { content: ""; position: absolute; inset: 0; background: linear-gradient(100deg, transparent 30%, rgba(255,214,102,.18) 50%, transparent 70%); transform: translateX(-100%); pointer-events: none; }
+  .leader .crown { width: 64px; height: 64px; border-radius: 50%; display: grid; place-items: center; font-size: 30px; background: radial-gradient(circle at 35% 30%, #ffe08a, #f5b301 60%, #b77b00); box-shadow: 0 0 0 6px rgba(245,179,1,.18), 0 0 28px rgba(245,179,1,.45); flex: none; }
+  .leader .lt { font-size: 11.5px; letter-spacing: 1.6px; text-transform: uppercase; color: #f5c84b; font-weight: 600; }
+  .leader .ln { font-size: 30px; font-weight: 600; letter-spacing: -.8px; line-height: 1.15; margin: 4px 0 2px; }
+  .leader .ls { font-size: 14px; color: rgba(255,255,255,.72); }
+  .leader .ls b { color: #fff; }
+  .leader .lnum { margin-left: auto; text-align: right; }
+  .leader .lnum b { display: block; font-size: 52px; font-weight: 700; letter-spacing: -2px; line-height: 1; color: #ffd45c; font-variant-numeric: tabular-nums; }
+  .leader .lnum span { font-size: 13px; color: rgba(255,255,255,.7); }
+  .leader .ltoday { flex-basis: 100%; display: flex; flex-wrap: wrap; gap: 8px; border-top: 1px solid rgba(255,255,255,.12); padding-top: 14px; margin-top: 2px; font-size: 13px; color: rgba(255,255,255,.75); align-items: center; }
+  .leader .ltoday .pill { background: rgba(255,255,255,.1); border-radius: 999px; padding: 4px 11px; color: #fff; }
+  .leader .ltoday .pill.top { background: #f5b301; color: #1a1300; font-weight: 600; }
+  @media (prefers-reduced-motion: no-preference) {
+    .leader::after { animation: shine 3.6s ease-in-out infinite; }
+    .leader .crown { animation: glow 2.4s ease-in-out infinite; }
+    @keyframes shine { 0% { transform: translateX(-100%); } 55%, 100% { transform: translateX(100%); } }
+    @keyframes glow { 0%, 100% { box-shadow: 0 0 0 6px rgba(245,179,1,.18), 0 0 22px rgba(245,179,1,.35); transform: scale(1); } 50% { box-shadow: 0 0 0 10px rgba(245,179,1,.12), 0 0 40px rgba(245,179,1,.6); transform: scale(1.05); } }
+  }
+  @media (max-width: 600px) { .leader .lnum { margin-left: 0; text-align: left; } .leader .ln { font-size: 24px; } }
   .banner { display: flex; align-items: center; gap: 20px; background: var(--warn-bg); border: 1.5px solid var(--warn-line); border-radius: 14px; padding: 18px 22px; }
   .banner.good { background: var(--ok-bg); border-color: #9fd8b6; }
   .banner .ib { width: 52px; height: 52px; border-radius: 12px; background: #fff; display: grid; place-items: center; flex: none; }
@@ -238,6 +258,12 @@
         <div class="hello">
           <h2>November Sales Contest</h2>
           <p>Here's how the team is tracking today.</p>
+        </div>
+        <div class="leader" id="leader">
+          <div class="crown">👑</div>
+          <div><div class="lt" id="ld-t">LQ leader</div><div class="ln" id="ld-name">—</div><div class="ls" id="ld-sub">—</div></div>
+          <div class="lnum"><b id="ld-n">—</b><span>qualified leads</span></div>
+          <div class="ltoday" id="ld-today"></div>
         </div>
         <div class="banner" id="banner">
           <div class="ib"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/></svg></div>
@@ -460,6 +486,32 @@ function render() {
   const wt = WON[WON.length - 1];
   $('c-nov').textContent = wt.nov;
   $('c-qtd').textContent = wt.qtd;
+
+  // leader spotlight
+  {
+    const reps = rows.filter((r) => r.owner !== 'Team').slice().sort((x, y) => y.added - x.added);
+    const top = reps[0] ? reps[0].added : 0;
+    const leaders = reps.filter((r) => r.added === top && top > 0);
+    const plabel = period === 'contest' ? 'contest to date' : period === thisWeek ? 'this week' : (WEEKLY.find((r) => r.period === period && r.owner === 'Team') || {}).label;
+    $('ld-t').textContent = 'LQ leader · ' + plabel;
+    $('ld-n').textContent = top;
+    if (!leaders.length) { $('ld-name').textContent = 'No leads qualified yet'; $('ld-sub').textContent = 'The first qualified lead takes the crown'; }
+    else if (leaders.length > 1) { $('ld-name').textContent = 'Tied: ' + leaders.map((r) => r.owner.split(' ')[0]).join(' & '); $('ld-sub').textContent = leaders.length + ' reps level on ' + top + '. Next lead breaks the tie'; }
+    else {
+      const second = reps[1];
+      $('ld-name').textContent = leaders[0].owner;
+      const sub = $('ld-sub'); sub.replaceChildren();
+      if (second && second.added > 0) sub.append(el('b', (top - second.added) + ' ahead'), ' of ' + second.owner.split(' ')[0] + ' (' + second.added + ')');
+      else sub.append('Only rep on the board so far');
+    }
+    const t = $('ld-today'); t.replaceChildren();
+    if (period === thisWeek || period === 'contest') {
+      const tm = REPS.map((o) => ({ o, n: (DAILY.find((r) => r.day === tday && r.owner === o) || { n: 0 }).n })).sort((x, y) => y.n - x.n);
+      t.append(el('span', 'Today:'));
+      tm.forEach((r, i) => t.append(el('span', r.o.split(' ')[0] + ' ' + r.n, 'pill' + (i === 0 && r.n > 0 && r.n > (tm[1] ? tm[1].n : 0) ? ' top' : ''))));
+      t.hidden = false;
+    } else t.hidden = true;
+  }
 
   // today
   const dow = new Date(tday + 'T00:00:00Z').getUTCDay();
