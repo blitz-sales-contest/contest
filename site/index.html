@@ -118,6 +118,9 @@
   .sc .lbl { font-size: 16px; letter-spacing: -.2px; }
   .sc .bot { padding: 14px 22px; font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 10px; min-height: 52px; }
   .sc .bot b { color: var(--fg); font-weight: 600; }
+  .barwrap { flex: 1; position: relative; padding-top: 20px; min-width: 0; }
+  .barpct { position: absolute; top: 0; transform: translateX(-50%); font-size: 12.5px; font-weight: 700; color: var(--fg); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .barwrap .bar { display: block; }
   .bar { flex: 1; height: 6px; background: #eeeef1; border-radius: 99px; overflow: hidden; }
   .bar i { display: block; height: 100%; background: var(--black); border-radius: 99px; }
 
@@ -294,7 +297,7 @@
         <div class="cards">
           <div class="sc" style="--c: var(--lav)"><div class="top"><div class="ic"><svg viewBox="0 0 24 24"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg></div><span class="tag"><i class="dot"></i>LIVE</span>
             <div class="num" id="c-added">—</div><div class="lbl">Leads qualified</div></div>
-            <div class="bot"><div class="bar"><i id="c-added-bar" style="width:0"></i></div><span>Goal <b id="c-target">—</b></span></div></div>
+            <div class="bot"><div class="barwrap"><span class="barpct" id="c-added-pct">—</span><div class="bar"><i id="c-added-bar" style="width:0"></i></div></div><span>Goal <b id="c-target">—</b></span></div></div>
           <div class="sc" style="--c: var(--peach)"><div class="top"><div class="ic"><svg viewBox="0 0 24 24"><path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg></div><span class="tag"><i class="dot"></i>LIVE</span>
             <div class="num" id="c-star">—</div><div class="lbl">Weekly Star achievers</div></div>
             <div class="bot">Reps who hit 3 a day and 15 a week</div></div>
@@ -501,6 +504,13 @@ function render() {
   $('c-added').textContent = team.added;
   $('c-target').textContent = goal;
   $('c-added-bar').style.width = Math.min(100, (team.added / goal) * 100) + '%';
+  {
+    const r = team.added / goal, lp = $('c-added-pct');
+    lp.textContent = Math.round(r * 100) + '% reached';
+    const pos = Math.min(100, r * 100);
+    lp.style.left = pos + '%';
+    lp.style.transform = pos < 18 ? 'translateX(0)' : pos > 82 ? 'translateX(-100%)' : 'translateX(-50%)';
+  }
   $('c-star').textContent = team.reps_star == null ? '—' : team.reps_star + '/' + REPS.length;
   $('c-moved').textContent = team.moved_pct == null ? '—' : pct(team.moved_pct);
   $('c-won').textContent = team.won_pct == null ? '—' : pct(team.won_pct);
