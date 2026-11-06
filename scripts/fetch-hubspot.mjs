@@ -9,8 +9,8 @@ const OWNERS = {
   '167774851': 'Pritam Mazumdar',
 };
 const OWNER_IDS = Object.keys(OWNERS);
-const LQ_FROM = Date.UTC(2026, 9, 4);   // 2026-10-04
-const WON_FROM = Date.UTC(2026, 8, 30); // 2026-09-30
+const LQ_FROM = Date.UTC(2026, 8, 30, 18, 30); // 2026-10-01 00:00 IST (start of OND quarter)
+const WON_FROM = Date.UTC(2026, 8, 30, 18, 30); // 2026-10-01 00:00 IST
 
 const token = process.env.HUBSPOT_TOKEN;
 if (!token) { console.error('HUBSPOT_TOKEN secret is not set'); process.exit(1); }
@@ -50,7 +50,7 @@ const base = [
 const lq = await search([...base, { propertyName: 'hs_v2_date_entered_qualifiedtobuy', operator: 'GTE', value: String(LQ_FROM) }],
   ['dealname', 'hubspot_owner_id', 'dealstage', 'hs_v2_date_entered_qualifiedtobuy', 'drr', 'createdate']);
 const won = await search([...base, { propertyName: 'dealstage', operator: 'EQ', value: 'closedwon' }, { propertyName: 'closedate', operator: 'GTE', value: String(WON_FROM) }],
-  ['dealname', 'hubspot_owner_id', 'closedate']);
+  ['dealname', 'hubspot_owner_id', 'closedate', 'drr', 'service_type', 'createdate']);
 
 // ---- Count each deal once: on the FIRST day it ever entered Lead Qualified ----
 // HubSpot's "date entered Lead Qualified" is overwritten when a deal is moved back
@@ -78,7 +78,7 @@ async function stageHistory(ids) {
   return out;
 }
 
-const hist = await stageHistory(lq.map((d) => d.id));
+const hist = await stageHistory([...new Set([...lq.map((d) => d.id), ...won.map((d) => d.id)])]);
 const counted = [];
 const notCounted = [];
 for (const d of lq) {
@@ -115,7 +115,14 @@ const data = {
   updated_at: new Date().toISOString(),
   lq: counted,
   not_counted: notCounted,
-  won: won.map((d) => [d.id, d.properties.dealname || '', OWNERS[d.properties.hubspot_owner_id] || d.properties.hubspot_owner_id, iso(d.properties.closedate)]),
+  // [id, name, rep, close date, DRR, service type, first Lead Qualified (or created) time for TAT]
+  won: won.map((d) => {
+    const h = (hist[d.id] || []).slice().sort((a, b) => a.t - b.t);
+    const f = h.find((x) => x.v === 'qualifiedtobuy');
+    const start = f ? f.t : Date.parse(iso(d.properties.createdate));
+    return [d.id, d.properties.dealname || '', OWNERS[d.properties.hubspot_owner_id] || d.properties.hubspot_owner_id, iso(d.properties.closedate),
+      d.properties.drr == null || d.properties.drr === '' ? null : Number(d.properties.drr), d.properties.service_type || '', Number.isNaN(start) ? null : new Date(start).toISOString()];
+  }),
 };
 writeFileSync('site/data.json', JSON.stringify(data));
 for (const n of notCounted) console.log(`Not re-counted: deal ${n[0]} (${n[5]})`);

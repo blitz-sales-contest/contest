@@ -95,6 +95,48 @@
     .confetti { animation: fall var(--d, 2.4s) cubic-bezier(.25,.6,.4,1) forwards; }
     @keyframes fall { to { transform: translate(var(--x, 0), 260px) rotate(var(--r, 540deg)); opacity: 0; } }
   }
+  /* --- OKR view --- */
+  .okr-team { background: #111; color: #fff; border-radius: 18px; padding: 26px 28px; }
+  .okr-team .oh { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-bottom: 20px; }
+  .okr-team .oh .avatar { width: 44px; height: 44px; font-size: 14px; background: #f5c84b; color: #111; }
+  .okr-team .oh b { font-size: 19px; font-weight: 600; display: block; }
+  .okr-team .oh span { color: rgba(255,255,255,.65); font-size: 13.5px; }
+  .okr-team .obj { margin-left: auto; text-align: right; font-size: 13px; color: rgba(255,255,255,.65); }
+  .okr-team .obj b { color: #ffd45c; font-size: 15px; }
+  .krs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+  @media (max-width: 1250px) { .krs { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 560px) { .krs { grid-template-columns: 1fr; } }
+  .kr { border-radius: 14px; padding: 16px 18px; background: #1c1c1c; display: flex; flex-direction: column; gap: 8px; }
+  .kr small { font-size: 11.5px; letter-spacing: 1.2px; text-transform: uppercase; color: rgba(255,255,255,.55); font-weight: 500; }
+  .kr .kv { font-size: 30px; font-weight: 600; letter-spacing: -1px; line-height: 1; }
+  .kr .kv span { font-size: 15px; font-weight: 500; color: rgba(255,255,255,.55); letter-spacing: 0; }
+  .kr .kn { font-size: 12.5px; color: rgba(255,255,255,.6); }
+  .kbar { height: 7px; background: rgba(255,255,255,.12); border-radius: 99px; overflow: hidden; position: relative; }
+  .kbar i { display: block; height: 100%; border-radius: 99px; background: #f5c84b; }
+  .kbar u { position: absolute; top: -3px; bottom: -3px; width: 2px; background: #fff; opacity: .8; }
+  .st { align-self: flex-start; font-size: 11.5px; font-weight: 600; padding: 3px 9px; border-radius: 999px; }
+  .st.ok { background: #1f4d34; color: #7fe3ad; } .st.warn { background: #4d3a12; color: #ffd27a; } .st.bad { background: #4d1f1a; color: #ff9b8a; } .st.na { background: #2a2a2a; color: #aaa; }
+  .okr-reps { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr)); gap: 20px; }
+  .rc { background: #fff; border-radius: 16px; padding: 22px 24px; box-shadow: 0 1px 2px rgba(0,0,0,.04); display: flex; flex-direction: column; gap: 16px; }
+  .rc .rh { display: flex; align-items: center; gap: 12px; }
+  .rc .rh .avatar { width: 42px; height: 42px; font-size: 13px; }
+  .rc .rh b { font-size: 17px; font-weight: 600; display: block; } .rc .rh span { font-size: 12.5px; color: var(--muted); }
+  .rc .objbox { background: var(--c, #f4f4f6); border-radius: 12px; padding: 14px 16px; }
+  .rc .objbox small { font-size: 11px; letter-spacing: 1.2px; text-transform: uppercase; color: #555; font-weight: 600; }
+  .rc .objbox .row { display: flex; align-items: baseline; gap: 8px; margin: 6px 0 8px; flex-wrap: wrap; }
+  .rc .objbox .big { font-size: 30px; font-weight: 600; letter-spacing: -1px; }
+  .rc .objbox .of { color: #555; font-size: 14px; }
+  .lbar { height: 8px; background: rgba(0,0,0,.08); border-radius: 99px; overflow: hidden; position: relative; }
+  .lbar i { display: block; height: 100%; background: var(--black); border-radius: 99px; }
+  .lbar u { position: absolute; top: -3px; bottom: -3px; width: 2px; background: #b23a2a; opacity: .7; }
+  .rk { display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; align-items: center; padding: 12px 0; border-top: 1px solid #f0f0f2; }
+  .rk .t { font-size: 13.5px; font-weight: 500; }
+  .rk .t span { display: block; font-size: 12px; color: var(--muted); font-weight: 400; margin-top: 2px; }
+  .rk .v { font-size: 20px; font-weight: 600; text-align: right; font-variant-numeric: tabular-nums; }
+  .rk .v small { font-size: 13px; color: var(--muted); font-weight: 500; }
+  .rk .lbar { grid-column: 1 / -1; height: 6px; }
+  .chip.na { background: var(--off-bg); color: var(--muted); }
+  .okr-note { font-size: 12.5px; color: var(--muted); line-height: 1.6; margin: 0; }
   .banner { display: flex; align-items: center; gap: 20px; background: var(--warn-bg); border: 1.5px solid var(--warn-line); border-radius: 14px; padding: 18px 22px; }
   .banner.good { background: var(--ok-bg); border-color: #9fd8b6; }
   .banner .ib { width: 52px; height: 52px; border-radius: 12px; background: #fff; display: grid; place-items: center; flex: none; }
@@ -258,6 +300,8 @@
       <a href="#leaderboard" data-v="leaderboard"><svg viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg>Closures Leaderboard</a>
       <a href="#compare" data-v="compare"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Weekly Comparison</a>
       <a href="#deals" data-v="deals"><svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>Qualified Deals</a>
+          <div class="grp" style="padding-left:12px">OKRS · OND 2026</div>
+      <a href="#okr" data-v="okr"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></svg>OKR View</a>
     </nav>
     <div class="side-foot">
       <div class="avatar">NA</div>
@@ -370,6 +414,18 @@
         </div>
       </section>
 
+      <section class="view" id="v-okr">
+        <h2 class="vh">OKR View · OND 2026</h2>
+        <p class="cmp-sub" id="okr-sub">—</p>
+        <div class="okr-team">
+          <div class="oh"><div class="avatar">SM</div><div><b>Sumanth MN</b><span>Team OKR · New Acquisitions</span></div>
+            <div class="obj">Objective<br><b>Increase New Brand Revenue for SDD and Quick Commerce</b></div></div>
+          <div class="krs" id="okr-team-krs"></div>
+        </div>
+        <div class="okr-reps" id="okr-reps"></div>
+        <p class="okr-note" id="okr-note"></p>
+      </section>
+
       <section class="view" id="v-deals">
         <h2 class="vh">Qualified Deals</h2>
         <div class="panel">
@@ -422,7 +478,7 @@ let period = weekOf(today());
 
 function compute() {
   const lq = DATA.lq.map(([id, deal, owner, stage, at, drr]) => ({ id, deal, owner, stage, at, drr: drr == null || Number.isNaN(Number(drr)) ? null : Number(drr) })).filter((d) => REPS.includes(d.owner) && d.at);
-  const won = DATA.won.map(([id, deal, owner, at]) => ({ id, deal, owner, at })).filter((d) => REPS.includes(d.owner) && d.at);
+  const won = DATA.won.map(([id, deal, owner, at, drr, svc, lqAt]) => ({ id, deal, owner, at, drr: drr == null ? null : Number(drr), svc: svc || '', lqAt: lqAt || null })).filter((d) => REPS.includes(d.owner) && d.at && istDay(d.at) >= '2026-10-01');
   // daily
   const counts = {};
   for (const d of lq) { const k = istDay(d.at) + '|' + d.owner; counts[k] = (counts[k] || 0) + 1; }
@@ -479,7 +535,7 @@ function compute() {
 const initials = (n) => n.split(' ').map((x) => x[0]).join('').slice(0, 2).toUpperCase();
 const AV = ['#c9c3f5', '#bcd3fb', '#bfe8d2', '#f9d3b5'];
 const avatar = (name) => { const a = el('div', initials(name), 'avatar'); const i = REPS.indexOf(name); a.style.background = AV[i % AV.length]; a.style.color = '#222'; return a; };
-const VIEWS = ['overview', 'tracker', 'pipeline', 'leaderboard', 'compare', 'deals'];
+const VIEWS = ['overview', 'tracker', 'pipeline', 'leaderboard', 'compare', 'deals', 'okr'];
 let cmpRep = 'Team';
 
 function show() {
@@ -689,6 +745,7 @@ function render() {
 
   renderCompare();
   renderNotCounted();
+  renderOKR();
 
   // deals
   const list = DATA._lq.filter((d) => { const day = istDay(d.at); return period === 'contest' ? day >= START : weekOf(day) === period; }).sort((a, b) => (a.at < b.at ? 1 : -1));
@@ -794,6 +851,97 @@ function renderCompare() {
     tr.style.cursor = 'pointer'; tr.onclick = () => { cmpRep = r.o; renderCompare(); };
     return tr;
   }));
+}
+
+
+// ---------------- OKR view ----------------
+const OKR = {
+  Q_START: '2026-10-01', Q_END: '2026-12-31',
+  REP_DRR_MONTH: 3600, LQ_WEEK: 15, CLOSE_WEEK: 3, TAT: 21,
+  TEAM_LQ: 720, TEAM_WON: 144, TEAM_DRR_DEC: 18500,
+  QCOM_REP: 'Noor Mohammed', QCOM: ['Quick commerce', 'Quick DS', 'Quick Retail'],
+};
+function renderOKR() {
+  const tday = today(), thisWeek = weekOf(tday), month = tday.slice(0, 7);
+  const qDays = (Date.parse(OKR.Q_END) - Date.parse(OKR.Q_START)) / D + 1;
+  const elapsed = Math.min(qDays, Math.max(1, (Date.parse(tday) - Date.parse(OKR.Q_START)) / D + 1));
+  const weeksQ = elapsed / 7;
+  const qShare = elapsed / qDays;
+  const dim = new Date(Date.UTC(+month.slice(0, 4), +month.slice(5, 7), 0)).getUTCDate();
+  const dayOfMonth = +tday.slice(8, 10);
+  const lqQ = DATA._lq.filter((d) => istDay(d.at) >= OKR.Q_START && istDay(d.at) <= OKR.Q_END);
+  const wonQ = DATA._won;
+  const isQcom = (d) => OKR.QCOM.includes(d.svc);
+  const closures = (o) => wonQ.filter((d) => d.owner === o && (o !== OKR.QCOM_REP || isQcom(d)));
+  const tatOf = (list) => { const v = list.filter((d) => d.lqAt).map((d) => Math.max(0, (Date.parse(d.at) - Date.parse(d.lqAt)) / D)); return v.length ? v.reduce((a, b) => a + b, 0) / v.length : null; };
+  const st = (ratio, pace) => ratio == null ? ['No data yet', 'na'] : ratio >= pace ? ['On track', 'ok'] : ratio >= pace * 0.7 ? ['Slightly behind', 'warn'] : ['Behind', 'bad'];
+  const fmtD1 = (x) => x == null ? '—' : (Math.round(x * 10) / 10).toString();
+  const MLBL = M[+month.slice(5, 7) - 1];
+
+  $('okr-sub').textContent = 'Quarter: Oct 1 – Dec 31 · day ' + Math.round(elapsed) + ' of ' + qDays + ' (' + Math.round(qShare * 100) + '% of the quarter gone). Weekly key results use this week (' + fmtD(Date.parse(thisWeek)) + ' – ' + fmtD(Date.parse(thisWeek) + 6 * D) + ').';
+
+  // ---- team KRs (Sumanth) ----
+  const kr = (label, valNode, ratio, pace, note, status) => {
+    const k = el('div', null, 'kr');
+    k.append(el('small', label));
+    k.append(valNode);
+    const bar = el('div', null, 'kbar'); const fill = el('i'); fill.style.width = Math.min(100, (ratio || 0) * 100) + '%'; bar.append(fill);
+    if (pace != null && pace < 1) { const mk = el('u'); mk.style.left = Math.min(100, pace * 100) + '%'; bar.append(mk); }
+    k.append(bar, el('div', note, 'kn'));
+    const s2 = status || st(ratio, pace); k.append(el('span', s2[0], 'st ' + s2[1]));
+    return k;
+  };
+  const vv = (a, b) => { const n = el('div', null, 'kv'); n.append(String(a), el('span', ' / ' + b)); return n; };
+  const teamLq = lqQ.length, teamWon = wonQ.length;
+  const teamTat = tatOf(wonQ);
+  const drrQ = wonQ.reduce((t, d) => t + (d.drr || 0), 0);
+  const drrM = wonQ.filter((d) => istDay(d.at).slice(0, 7) === month).reduce((t, d) => t + (d.drr || 0), 0);
+  const tatNode = el('div', null, 'kv'); tatNode.append(fmtD1(teamTat), el('span', ' days avg'));
+  const drrNode = el('div', null, 'kv'); drrNode.append(fmtN(drrQ), el('span', ' / ' + fmtN(OKR.TEAM_DRR_DEC)));
+  $('okr-team-krs').replaceChildren(
+    kr('KR · New qualified leads', vv(teamLq, OKR.TEAM_LQ), teamLq / OKR.TEAM_LQ, qShare, 'White line = where you should be today (' + Math.round(OKR.TEAM_LQ * qShare) + ')'),
+    kr('KR · Closed won', vv(teamWon, OKR.TEAM_WON), teamWon / OKR.TEAM_WON, qShare, 'Expected by today: ' + Math.round(OKR.TEAM_WON * qShare)),
+    kr('KR · Lead Qualified → closure', tatNode, teamTat == null ? 0 : Math.min(1, OKR.TAT / Math.max(teamTat, 0.01)), null, 'Target ≤ ' + OKR.TAT + ' days · ' + wonQ.filter((d) => d.lqAt).length + ' closed deals this quarter',
+      teamTat == null ? ['No data yet', 'na'] : teamTat <= OKR.TAT ? ['On target', 'ok'] : ['Over target', 'bad']),
+    kr('KR · New client DRR (Dec target)', drrNode, drrQ / OKR.TEAM_DRR_DEC, null, 'Signed DRR from deals won this quarter · ' + MLBL + ': ' + fmtN(drrM), drrQ >= OKR.TEAM_DRR_DEC ? ['Target reached', 'ok'] : ['In progress', 'warn']),
+  );
+
+  // ---- reps ----
+  const COLS = { 'Krutika Pawar': 'var(--lav)', 'Noor Mohammed': 'var(--sky)', 'Prathush Nair': 'var(--mint)', 'Pritam Mazumdar': 'var(--peach)' };
+  $('okr-reps').replaceChildren(...REPS.map((o) => {
+    const c = el('div', null, 'rc');
+    const h = el('div', null, 'rh'); const hh = el('div'); hh.append(el('b', o), el('span', 'ESM'));
+    h.append(avatar(o), hh); c.append(h);
+    // objective: DRR signed this month
+    const cl = closures(o), all = wonQ.filter((d) => d.owner === o);
+    const drr = all.filter((d) => istDay(d.at).slice(0, 7) === month).reduce((t, d) => t + (d.drr || 0), 0);
+    const ob = el('div', null, 'objbox'); ob.style.setProperty('--c', COLS[o]);
+    ob.append(el('small', 'Objective · Signing ' + fmtN(OKR.REP_DRR_MONTH) + ' DRR every month'));
+    const row = el('div', null, 'row'); row.append(el('span', fmtN(drr), 'big'), el('span', 'of ' + fmtN(OKR.REP_DRR_MONTH) + ' signed in ' + MLBL, 'of'));
+    const s1 = st(drr / OKR.REP_DRR_MONTH, dayOfMonth / dim); row.append(el('span', s1[0], 'chip ' + (s1[1] === 'warn' ? 'pend' : s1[1])));
+    ob.append(row);
+    const b1 = el('div', null, 'lbar'); const f1 = el('i'); f1.style.width = Math.min(100, drr / OKR.REP_DRR_MONTH * 100) + '%'; const m1 = el('u'); m1.style.left = (dayOfMonth / dim * 100) + '%'; b1.append(f1, m1); ob.append(b1);
+    c.append(ob);
+    // KR rows
+    const krRow = (title, sub, v, target, ratio, chip) => {
+      const r = el('div', null, 'rk'); const t = el('div', null, 't'); t.append(title, el('span', sub));
+      const vv2 = el('div', null, 'v'); vv2.append(v, el('small', target)); r.append(t, vv2);
+      if (ratio != null) { const b = el('div', null, 'lbar'); const f = el('i'); f.style.width = Math.min(100, ratio * 100) + '%'; b.append(f); r.append(b); }
+      return r;
+    };
+    const lqW = DATA._lq.filter((d) => d.owner === o && weekOf(istDay(d.at)) === thisWeek).length;
+    const lqRep = lqQ.filter((d) => d.owner === o).length;
+    c.append(krRow('KR1 · 15 leads qualified every week', 'Quarter so far: ' + lqRep + ' (avg ' + fmtD1(lqRep / weeksQ) + ' a week)', String(lqW), ' / ' + OKR.LQ_WEEK + ' this week', lqW / OKR.LQ_WEEK));
+    const clW = cl.filter((d) => weekOf(istDay(d.at)) === thisWeek).length;
+    const qcom = o === OKR.QCOM_REP;
+    c.append(krRow('KR2 · ' + OKR.CLOSE_WEEK + (qcom ? ' Qcom' : '') + ' closures every week', 'Quarter so far: ' + cl.length + ' (avg ' + fmtD1(cl.length / weeksQ) + ' a week)' + (qcom ? ' · Quick commerce / Quick DS / Quick Retail deals' : ''), String(clW), ' / ' + OKR.CLOSE_WEEK + ' this week', clW / OKR.CLOSE_WEEK));
+    const tat = tatOf(all);
+    const tr = krRow('KR3 · Lead closure TAT ≤ ' + OKR.TAT + ' days', all.length ? 'Avg days from Lead Qualified to Closed Won, ' + all.length + ' deal' + (all.length > 1 ? 's' : '') + ' this quarter' : 'No closed deals this quarter yet', tat == null ? '—' : fmtD1(tat), tat == null ? '' : ' days', null);
+    if (tat != null) tr.querySelector('.v').style.color = tat <= OKR.TAT ? 'var(--ok-fg)' : 'var(--bad-fg)';
+    c.append(tr);
+    return c;
+  }));
+  $('okr-note').textContent = 'How these are counted: leads qualified use the contest rules (each deal once, on its first Lead Qualified day). Closures and DRR use the HubSpot close date of Closed Won deals; DRR is the deal’s DRR field (orders per month ÷ 30). TAT is days from a deal’s first Lead Qualified entry to its close date. Noor’s closures count Quick commerce, Quick DS and Quick Retail deals only. The team DRR card shows DRR signed this quarter; actual December activation needs pickup data, which this page does not read.';
 }
 
 async function load() {
