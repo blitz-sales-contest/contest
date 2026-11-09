@@ -256,11 +256,12 @@
   .chipbtn { font: inherit; font-size: 13.5px; padding: 8px 16px; border-radius: 999px; border: 1px solid #dcdce2; background: #fff; color: var(--fg); cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
   .chipbtn .avatar { width: 22px; height: 22px; font-size: 9.5px; }
   .chipbtn.on { background: var(--black); color: #fff; border-color: var(--black); }
+  #cmp-cards { grid-template-columns: repeat(auto-fit, minmax(min(100%, 170px), 1fr)); gap: 16px; }
   .cmp-sub { color: var(--muted); font-size: 14px; margin: -14px 0 0; }
   .cc { background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 1px 2px rgba(0,0,0,.04); }
   .cc .top { background: var(--c); padding: 18px 20px; }
   .cc .lbl { font-size: 14px; font-weight: 500; }
-  .cc .row { display: flex; align-items: baseline; gap: 10px; margin-top: 10px; }
+  .cc .row { display: flex; align-items: baseline; gap: 6px 10px; margin-top: 10px; flex-wrap: wrap; }
   .cc .big { font-size: 40px; font-weight: 600; letter-spacing: -1.5px; line-height: 1; }
   .cc .bot { padding: 12px 20px; font-size: 13px; color: var(--muted); display: flex; justify-content: space-between; gap: 8px; }
   .cc .bot b { color: var(--fg); }
@@ -432,7 +433,7 @@
             <div class="bars2" id="cmp-bars"></div></div>
           <div class="panel tw"><h3>Rep standings</h3>
             <table>
-              <thead><tr><th class="l">Rep</th><th>Last week</th><th>This week</th><th>Change</th><th class="l">Rank this week</th><th>Wins last week</th><th>Wins this week</th></tr></thead>
+              <thead><tr><th class="l">Rep</th><th>Last week</th><th>This week</th><th>Change</th><th class="l">Rank this week</th><th>DRR last week</th><th>DRR this week</th><th>Wins last week</th><th>Wins this week</th></tr></thead>
               <tbody id="cmp-rows"></tbody>
             </table></div>
         </div>
@@ -864,6 +865,7 @@ function renderCompare() {
     const wins = DATA._won.filter((d) => (o === 'Team' || d.owner === o) && weekOf(istDay(d.at)) === w).length;
     return { added: r.added, days: o === 'Team' ? null : r.days_hit, moved: r.moved_pct, wins };
   };
+  const drrQ = (o, w, upTo) => DATA._lq.filter((d) => (o === 'Team' || d.owner === o) && weekOf(istDay(d.at)) === w && (!upTo || istDay(d.at) <= upTo)).reduce((t, d) => t + (d.drr || 0), 0);
   const sameDay = (o) => DAILY.filter((r) => r.week === prev && r.day <= cutoff && (o === 'Team' || r.owner === o)).reduce((s, r) => s + r.n, 0);
   const delta = (a, b, pctMode) => {
     if (a == null || b == null) return el('span', '—', 'delta flat');
@@ -893,6 +895,11 @@ function renderCompare() {
   const ex1 = el('span'); ex1.append('Goal ', el('b', String(goalWk)));
   const ex2 = isCurrent ? (() => { const e = el('span'); e.append('Same point last week ', el('b', String(sd))); return e; })() : null;
   const cards = [card('var(--lav)', 'Leads qualified', String(a.added), String(b.added), delta(a.added, isCurrent ? sd : b.added), isCurrent ? ex2 : (cmpRep === 'Team' ? null : ex1))];
+  {
+    const dT = drrQ(cmpRep, cur), dL = drrQ(cmpRep, prev), dS = drrQ(cmpRep, prev, cutoff);
+    const ex = isCurrent ? (() => { const e = el('span'); e.append('Same point last week ', el('b', fmtN(dS))); return e; })() : null;
+    cards.push(card('var(--rose)', 'DRR qualified', fmtN(dT), fmtN(dL), delta(Math.round(dT), Math.round(isCurrent ? dS : dL)), ex));
+  }
   if (cmpRep !== 'Team') cards.push(card('var(--peach)', 'Days goal met (of 5)', String(a.days), String(b.days), delta(a.days, b.days)));
 
   cards.push(card('var(--sky)', 'Progressed past LQ', a.moved == null ? '—' : pct(a.moved), b.moved == null ? '—' : pct(b.moved), delta(a.moved, b.moved, true)));
@@ -922,7 +929,7 @@ function renderCompare() {
     const d = r.t - r.l;
     const mv = rl[r.o] - rt[r.o];
     const rk = el('td', null, 'l'); rk.append(el('span', '#' + rt[r.o], 'rank r' + rt[r.o]), ' ', el('span', mv > 0 ? '▲ ' + mv : mv < 0 ? '▼ ' + -mv : '–', 'mv ' + (mv > 0 ? 'up' : mv < 0 ? 'down' : 'flat')));
-    tr.append(nm, el('td', String(r.l)), el('td', String(r.t)), el('td', (d > 0 ? '+' : '') + d), rk, el('td', String(stat(r.o, prev).wins)), el('td', String(stat(r.o, cur).wins)));
+    tr.append(nm, el('td', String(r.l)), el('td', String(r.t)), el('td', (d > 0 ? '+' : '') + d), rk, el('td', fmtN(drrQ(r.o, prev))), el('td', fmtN(drrQ(r.o, cur))), el('td', String(stat(r.o, prev).wins)), el('td', String(stat(r.o, cur).wins)));
     tr.style.cursor = 'pointer'; tr.onclick = () => { cmpRep = r.o; renderCompare(); };
     return tr;
   }));
