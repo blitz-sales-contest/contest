@@ -154,6 +154,11 @@
   .dl-all .btn { display: inline-flex; align-items: center; gap: 8px; }
   .dl-all .btn svg { width: 16px; height: 16px; stroke: #111; fill: none; stroke-width: 2; flex: none; }
   .dl-status { font-size: 13px; color: var(--muted); min-height: 18px; }
+  .dfil { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
+  .dsel { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); font-weight: 500; }
+  .dsel select { min-width: 200px; }
+  .dsum { margin-left: auto; font-size: 13.5px; color: var(--muted); }
+  .dsum b { color: var(--fg); }
   .banner { display: flex; align-items: center; gap: 20px; background: var(--warn-bg); border: 1.5px solid var(--warn-line); border-radius: 14px; padding: 18px 22px; }
   .banner.good { background: var(--ok-bg); border-color: #9fd8b6; }
   .banner .ib { width: 52px; height: 52px; border-radius: 12px; background: #fff; display: grid; place-items: center; flex: none; }
@@ -463,6 +468,19 @@
 
       <section class="view" id="v-deals">
         <h2 class="vh">Qualified Deals</h2>
+        <div class="dfil">
+          <div class="chips" id="deal-reps"></div>
+          <label class="dsel">Month
+            <select id="deal-month" aria-label="Month">
+              <option value="period">Use period at top</option>
+              <option value="2026-10">October 2026</option>
+              <option value="2026-11">November 2026</option>
+              <option value="2026-12">December 2026</option>
+              <option value="q">Whole quarter (Oct–Dec)</option>
+            </select>
+          </label>
+          <span class="dsum" id="deal-sum"></span>
+        </div>
         <div class="panel">
           <p class="empty" id="deal-empty" hidden>No deals qualified in this period yet.</p>
           <div class="scroll tw">
@@ -784,7 +802,9 @@ function render() {
   $('dl-sub').textContent = 'Excel files built from the latest numbers on this page. Period-based sheets use: ' + periodLabel() + ' (change it with the menu at the top).';
 
   // deals
-  const list = DATA._lq.filter((d) => { const day = istDay(d.at); return period === 'contest' ? day >= START : weekOf(day) === period; }).sort((a, b) => (a.at < b.at ? 1 : -1));
+  renderDealFilters();
+  const list = DATA._lq.filter((d) => dealFilter(d.at, d.owner)).sort((a, b) => (a.at < b.at ? 1 : -1));
+  { const sm = $('deal-sum'); sm.replaceChildren(el('b', String(list.length)), ' qualified lead' + (list.length === 1 ? '' : 's') + ' · DRR ', el('b', fmtN(list.reduce((t, d) => t + (d.drr || 0), 0)))); }
   $('deal-empty').hidden = list.length > 0;
   const drrTotal = list.reduce((t, d) => t + (d.drr || 0), 0);
   $('deal-rows').replaceChildren(...list.map((d) => {
@@ -796,8 +816,27 @@ function render() {
   }), ...(list.length ? [(() => { const tr = el('tr', null, 'team'); tr.append(el('td', 'Total', 'l'), el('td', list.length + ' deals', 'l'), el('td', '', 'l'), el('td', fmtN(drrTotal)), el('td', '')); return tr; })()] : []));
 }
 
+let dealRep = 'All', dealMonth = 'period';
+const dealFilter = (iso, owner) => {
+  if (dealRep !== 'All' && owner !== dealRep) return false;
+  const day = istDay(iso);
+  if (dealMonth === 'period') return period === 'contest' ? day >= START : weekOf(day) === period;
+  if (dealMonth === 'q') return day >= '2026-10-01' && day <= '2026-12-31';
+  return day.slice(0, 7) === dealMonth;
+};
+const dealScope = () => (dealMonth === 'period' ? (WEEKLY.find((r) => r.owner === 'Team' && r.period === period) || {}).label : $('deal-month').selectedOptions[0].textContent) + (dealRep === 'All' ? ' · all reps' : ' · ' + dealRep);
+function renderDealFilters() {
+  $('deal-reps').replaceChildren(...['All', ...REPS].map((o) => {
+    const bt = el('button', null, 'chipbtn' + (o === dealRep ? ' on' : ''));
+    bt.type = 'button';
+    if (o !== 'All') bt.append(avatar(o));
+    bt.append(o === 'All' ? 'All reps' : o.split(' ')[0]);
+    bt.onclick = () => { dealRep = o; render(); };
+    return bt;
+  }));
+}
 function renderNotCounted() {
-  const rows = (DATA.not_counted || []).filter((d) => REPS.includes(d[2]) && d[4]).filter((d) => { const day = istDay(d[4]); return period === 'contest' ? day >= START : weekOf(day) === period; });
+  const rows = (DATA.not_counted || []).filter((d) => REPS.includes(d[2]) && d[4]).filter((d) => dealFilter(d[4], d[2]));
   $('nc-panel').hidden = rows.length === 0;
   $('nc-rows').replaceChildren(...rows.map((d) => {
     const t = new Date(Date.parse(d[4]) + 19800000);
@@ -1029,7 +1068,7 @@ function sheetOKR() {
 }
 function sheetLeads() {
   const rows = [['Deal', 'Rep', 'First Lead Qualified (IST)', 'Week starting', 'Current stage', 'DRR']];
-  DATA._lq.filter((d) => inPeriod(d.at)).sort((a, b) => (a.at < b.at ? 1 : -1)).forEach((d) => rows.push([d.deal, d.owner, istStr(d.at), weekOf(istDay(d.at)), STAGE_LABEL[d.stage] || d.stage, d.drr == null ? '' : r1(d.drr)]));
+  DATA._lq.filter((d) => dealFilter(d.at, d.owner)).sort((a, b) => (a.at < b.at ? 1 : -1)).forEach((d) => rows.push([d.deal, d.owner, istStr(d.at), weekOf(istDay(d.at)), STAGE_LABEL[d.stage] || d.stage, d.drr == null ? '' : r1(d.drr)]));
   return rows;
 }
 function sheetDaily() {
@@ -1084,7 +1123,7 @@ async function download(key) {
     ws['!cols'] = rows[0].map((_, i) => ({ wch: Math.min(48, Math.max(10, ...rows.map((r) => String(r[i] == null ? '' : r[i]).length + 2))) }));
     XLSX.utils.book_append_sheet(wb, ws, REPORTS[k][0].slice(0, 31));
   }
-  const info = XLSX.utils.aoa_to_sheet([['Blitz November Sales Contest & OND 2026 OKRs'], ['Data synced from HubSpot', istStr(DATA.updated_at) + ' IST'], ['Period used for period-based sheets', periodLabel()], ['Downloaded', istStr(new Date().toISOString()) + ' IST']]);
+  const info = XLSX.utils.aoa_to_sheet([['Blitz November Sales Contest & OND 2026 OKRs'], ['Data synced from HubSpot', istStr(DATA.updated_at) + ' IST'], ['Period used for period-based sheets', periodLabel()], ['Qualified leads sheet filter', dealScope()], ['Downloaded', istStr(new Date().toISOString()) + ' IST']]);
   info['!cols'] = [{ wch: 40 }, { wch: 30 }];
   XLSX.utils.book_append_sheet(wb, info, 'About');
   const name = 'Blitz_' + (key === 'all' ? 'Full_Report' : REPORTS[key][0].replace(/\W+/g, '_')) + '_' + today() + '.xlsx';
@@ -1114,6 +1153,7 @@ async function load() {
 }
 
 $('legend').append(...STAGES.map(([, name], i) => { const s = el('span'); const sw = el('i'); sw.style.background = color(i); s.append(sw, name); return s; }));
+$('deal-month').addEventListener('change', (e) => { dealMonth = e.target.value; render(); });
 $('period').addEventListener('change', (e) => { period = e.target.value; render(); });
 const setFold = (f) => { document.querySelector('.app').classList.toggle('folded', f); try { localStorage.setItem('nc-folded', f ? '1' : '0'); } catch (e) {} };
 $('fold').addEventListener('click', () => setFold(true));
