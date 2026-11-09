@@ -159,6 +159,12 @@
   .dsel select { min-width: 200px; }
   .dsum { margin-left: auto; font-size: 13.5px; color: var(--muted); }
   .dsum b { color: var(--fg); }
+  table.mt th, table.mt td { text-align: right; }
+  table.mt tr.grp2 th { text-align: center; color: var(--fg); font-weight: 600; border-bottom: 0; padding-bottom: 2px; }
+  table.mt th:first-child, table.mt td:first-child { text-align: left; }
+  table.mt td.pc { min-width: 90px; }
+  table.mt td.pc span { display: inline-block; min-width: 52px; text-align: center; font-weight: 600; font-size: 12.5px; padding: 3px 8px; border-radius: 999px; }
+  table.mt td.sep, table.mt th.sep { border-left: 1px solid var(--line); }
   .banner { display: flex; align-items: center; gap: 20px; background: var(--warn-bg); border: 1.5px solid var(--warn-line); border-radius: 14px; padding: 18px 22px; }
   .banner.good { background: var(--ok-bg); border-color: #9fd8b6; }
   .banner .ib { width: 52px; height: 52px; border-radius: 12px; background: #fff; display: grid; place-items: center; flex: none; }
@@ -448,6 +454,18 @@
           <div class="krs" id="okr-team-krs"></div>
         </div>
         <div class="okr-reps" id="okr-reps"></div>
+        <div class="panel" id="okr-month">
+          <h3>Monthly target vs achieved</h3>
+          <div class="chips" id="okr-mchips" style="margin:-4px 0 18px"></div>
+          <div class="tw"><table class="mt">
+            <thead>
+              <tr class="grp2"><th></th><th colspan="3">DRR signed</th><th colspan="3">Leads qualified</th><th colspan="3">Closures</th><th colspan="2">Lead closure TAT</th></tr>
+              <tr><th class="l">Owner</th><th>Target</th><th>Achieved</th><th>%</th><th>Target</th><th>Achieved</th><th>%</th><th>Target</th><th>Achieved</th><th>%</th><th>Target</th><th>Avg days</th></tr>
+            </thead>
+            <tbody id="okr-mrows"></tbody>
+          </table></div>
+          <p class="okr-note" id="okr-mnote" style="margin-top:14px"></p>
+        </div>
         <p class="okr-note" id="okr-note"></p>
       </section>
 
@@ -943,6 +961,48 @@ const OKR = {
   TEAM_LQ: 720, TEAM_WON: 144, TEAM_DRR_DEC: 18500,
   QCOM_REP: 'Noor Mohammed', QCOM: ['Quick commerce', 'Quick DS', 'Quick Retail'],
 };
+
+// ---- Monthly target vs achieved ----
+let okrMonth = null;
+const MONTHS = [['2026-10', 'October'], ['2026-11', 'November'], ['2026-12', 'December']];
+// Monthly targets = one third of the quarterly OKR (12 weeks): per rep 60 leads and 12 closures a month; DRR 3,600 a month.
+const MT = { LQ: OKR.LQ_WEEK * 4, CLOSE: OKR.CLOSE_WEEK * 4, DRR: OKR.REP_DRR_MONTH };
+function monthRows(m) {
+  const lq = DATA._lq.filter((d) => istDay(d.at).slice(0, 7) === m);
+  const won = DATA._won.filter((d) => istDay(d.at).slice(0, 7) === m);
+  const tat = (l) => { const v = l.filter((d) => d.lqAt).map((d) => Math.max(0, (Date.parse(d.at) - Date.parse(d.lqAt)) / D)); return v.length ? v.reduce((a, b) => a + b, 0) / v.length : null; };
+  const rows = REPS.map((o) => {
+    const w = won.filter((d) => d.owner === o);
+    const cl = w.filter((d) => o !== OKR.QCOM_REP || OKR.QCOM.includes(d.svc));
+    return { owner: o, drrT: MT.DRR, drr: w.reduce((t, d) => t + (d.drr || 0), 0), lqT: MT.LQ, lq: lq.filter((d) => d.owner === o).length, clT: MT.CLOSE, cl: cl.length, tat: tat(w) };
+  });
+  const team = { owner: 'Team (Sumanth)', drrT: MT.DRR * REPS.length, drr: rows.reduce((t, r) => t + r.drr, 0), lqT: OKR.TEAM_LQ / 3, lq: rows.reduce((t, r) => t + r.lq, 0), clT: OKR.TEAM_WON / 3, cl: won.length, tat: tat(won), team: true };
+  return [...rows, team];
+}
+function renderOKRMonth() {
+  const cur = today().slice(0, 7);
+  if (!okrMonth) okrMonth = MONTHS.some((x) => x[0] === cur) ? cur : '2026-10';
+  $('okr-mchips').replaceChildren(...MONTHS.map(([k, n]) => {
+    const b = el('button', (k === cur ? n + ' (so far)' : n), 'chipbtn' + (k === okrMonth ? ' on' : '')); b.type = 'button';
+    b.onclick = () => { okrMonth = k; renderOKRMonth(); }; return b;
+  }));
+  const pc = (a, t) => { const td = el('td', null, 'pc'); const r = t ? a / t : 0; td.append(el('span', Math.round(r * 100) + '%', 'chip ' + (r >= 1 ? 'ok' : r >= 0.7 ? 'pend' : 'bad'))); return td; };
+  const isFuture = okrMonth > cur;
+  $('okr-mrows').replaceChildren(...monthRows(okrMonth).map((r) => {
+    const tr = el('tr', null, r.team ? 'team' : '');
+    const nm = el('td', null, 'l');
+    if (r.team) nm.textContent = r.owner; else { const w = el('span', null, 'who'); w.append(avatar(r.owner), el('span', r.owner)); nm.append(w); }
+    const tatTd = el('td', r.tat == null ? '—' : (Math.round(r.tat * 10) / 10) + ''); if (r.tat != null) tatTd.style.color = r.tat <= OKR.TAT ? 'var(--ok-fg)' : 'var(--bad-fg)'; tatTd.style.fontWeight = '600';
+    const clLabel = r.owner === OKR.QCOM_REP ? ' (Qcom)' : '';
+    tr.append(nm,
+      el('td', fmtN(r.drrT), 'sep'), el('td', fmtN(r.drr)), isFuture ? el('td', '') : pc(r.drr, r.drrT),
+      el('td', fmtN(r.lqT), 'sep'), el('td', String(r.lq)), isFuture ? el('td', '') : pc(r.lq, r.lqT),
+      el('td', fmtN(r.clT) + clLabel, 'sep'), el('td', String(r.cl)), isFuture ? el('td', '') : pc(r.cl, r.clT),
+      el('td', '≤ ' + OKR.TAT, 'sep'), tatTd);
+    return tr;
+  }));
+  $('okr-mnote').textContent = 'Monthly targets are one third of the quarter: each rep 3,600 DRR signed, 60 leads qualified (15 a week) and 12 closures (3 a week); the team row adds up the reps (14,400 DRR) and uses one third of your quarterly KRs (240 leads, 48 closures). Achieved counts use the first Lead Qualified date for leads and the HubSpot close date for closures and DRR. TAT is for deals closed in that month.' + (okrMonth === cur ? ' This month is still in progress.' : '');
+}
 function renderOKR() {
   const tday = today(), thisWeek = weekOf(tday), month = tday.slice(0, 7);
   const qDays = (Date.parse(OKR.Q_END) - Date.parse(OKR.Q_START)) / D + 1;
@@ -1023,6 +1083,7 @@ function renderOKR() {
     c.append(tr);
     return c;
   }));
+  renderOKRMonth();
   $('okr-note').textContent = 'How these are counted: leads qualified use the contest rules (each deal once, on its first Lead Qualified day). Closures and DRR use the HubSpot close date of Closed Won deals; DRR is the deal’s DRR field (orders per month ÷ 30). TAT is days from a deal’s first Lead Qualified entry to its close date. Noor’s closures count Quick commerce, Quick DS and Quick Retail deals only. The team DRR card shows DRR signed this quarter; actual December activation needs pickup data, which this page does not read.';
 }
 
@@ -1113,8 +1174,14 @@ function sheetNotCounted() {
   (DATA.not_counted || []).filter((d) => REPS.includes(d[2])).forEach((d) => rows.push([d[1], d[2], STAGE_LABEL[d[3]] || d[3], istStr(d[4]), d[5]]));
   return rows;
 }
+function sheetMonthly() {
+  const rows = [['Month', 'Owner', 'DRR target', 'DRR achieved', 'DRR %', 'Leads target', 'Leads achieved', 'Leads %', 'Closures target', 'Closures achieved', 'Closures %', 'TAT target (days)', 'Avg TAT (days)']];
+  const cur = today().slice(0, 7);
+  for (const [m, n] of MONTHS) { if (m > cur) continue; for (const r of monthRows(m)) rows.push([n + ' 2026' + (m === cur ? ' (so far)' : ''), r.owner + (r.owner === OKR.QCOM_REP ? ' (Qcom closures)' : ''), r.drrT, Math.round(r.drr), Math.round(r.drr / r.drrT * 100), r.lqT, r.lq, Math.round(r.lq / r.lqT * 100), r.clT, r.cl, Math.round(r.cl / r.clT * 100), OKR.TAT, r.tat == null ? '' : Math.round(r.tat * 10) / 10]); }
+  return rows;
+}
 const REPORTS = {
-  okr: ['OKR summary', sheetOKR], leads: ['Qualified leads', sheetLeads], daily: ['Daily lead tracker', sheetDaily], pipeline: ['Pipeline progress', sheetPipeline],
+  okr: ['OKR summary', sheetOKR], monthly: ['Monthly target vs achieved', sheetMonthly], leads: ['Qualified leads', sheetLeads], daily: ['Daily lead tracker', sheetDaily], pipeline: ['Pipeline progress', sheetPipeline],
   won: ['Closed won', sheetWon], weekly: ['Weekly comparison', sheetWeekly], notcounted: ['Not counted as new', sheetNotCounted],
 };
 async function download(key) {
