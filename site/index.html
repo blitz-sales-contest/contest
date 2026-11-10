@@ -16,7 +16,7 @@
     --lav: #e6dcfb; --sky: #d4e2fd; --mint: #d6f3e4; --peach: #fde4cf; --rose: #fbdde6;
     --warn-bg: #f7ecdc; --warn-line: #e7c08a; --warn-fg: #c98a2b;
     --ok-bg: #d9f2e3; --ok-fg: #1f7a4a; --pend-bg: #fbeed3; --pend-fg: #9a6512; --bad-bg: #fbe0dc; --bad-fg: #b23a2a; --off-bg: #ececef;
-    --s0: #e4dcfa; --s1: #c4b3f3; --s2: #9b83ea; --s3: #6a4fd4; --s4: #2f9e64; --s5: #d4d4d8;
+    --s0: #8fb8ff; --s1: #f6c453; --s2: #f59e4a; --s3: #a78bfa; --s4: #2f9e64; --s5: #d4d4d8;
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; height: 100%; }
@@ -239,6 +239,11 @@
   .snum { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
   .tip { position: absolute; pointer-events: none; background: #111; color: #fff; border-radius: 8px; padding: 7px 11px; font-size: 12px; white-space: nowrap; z-index: 5; }
   .tip .t1 { color: #aaa; }
+  .tip { white-space: normal; max-width: 380px; line-height: 1.5; }
+  .tip .t1 { margin-bottom: 4px; }
+  .tip .tl b { font-weight: 600; }
+  .tip .tt { border-top: 1px solid #333; margin-top: 6px; padding-top: 6px; color: #f5c84b; font-weight: 600; }
+  td.hov { cursor: help; text-decoration: underline dotted #b9b9c2; text-underline-offset: 4px; }
 
   .tw { overflow-x: auto; }
   .scroll { max-height: 520px; overflow: auto; }
@@ -560,7 +565,7 @@ let DATA = null, WEEKLY = null, DAILY = null, WON = null;
 let period = weekOf(today());
 
 function compute() {
-  const lq = DATA.lq.map(([id, deal, owner, stage, at, drr]) => ({ id, deal, owner, stage, at, drr: drr == null || Number.isNaN(Number(drr)) ? null : Number(drr) })).filter((d) => REPS.includes(d.owner) && d.at);
+  const lq = DATA.lq.map(([id, deal, owner, stage, at, drr, amount]) => ({ id, deal, owner, stage, at, drr: drr == null || Number.isNaN(Number(drr)) ? null : Number(drr), amount: amount == null || Number.isNaN(Number(amount)) ? null : Number(amount) })).filter((d) => REPS.includes(d.owner) && d.at);
   const won = DATA.won.map(([id, deal, owner, at, drr, svc, lqAt]) => ({ id, deal, owner, at, drr: drr == null ? null : Number(drr), svc: svc || '', lqAt: lqAt || null })).filter((d) => REPS.includes(d.owner) && d.at && istDay(d.at) >= '2026-10-01');
   // daily
   const counts = {};
@@ -772,6 +777,23 @@ function render() {
   $('grid').replaceChildren(...out);
 
   // pipeline
+  const inr = (x) => '₹' + Math.round(x).toLocaleString('en-IN');
+  const dealsAt = (owner, k) => DATA._lq.filter((d) => (owner === 'Team' || d.owner === owner) && (STAGE_KEY[d.stage] || 'lost_other') === k && (period === 'contest' ? istDay(d.at) >= START : weekOf(istDay(d.at)) === period));
+  const showTip = (ev, owner, k, name) => {
+    const list = dealsAt(owner, k).sort((a, b) => (b.drr || 0) - (a.drr || 0));
+    const head = el('div', (owner === 'Team' ? 'Team' : owner) + ' · ' + name + ' (' + list.length + ')', 't1');
+    const items = list.slice(0, 12).map((d) => { const ln = el('div', null, 'tl'); ln.append(el('b', d.deal), ' (' + (d.drr == null ? 'DRR —' : 'DRR ' + fmtN(d.drr)) + ' · ' + (d.amount == null ? 'revenue —' : inr(d.amount)) + ')'); return ln; });
+    if (list.length > 12) items.push(el('div', '+' + (list.length - 12) + ' more', 't1'));
+    const tot = el('div', null, 'tt'); tot.append('Total: DRR ' + fmtN(list.reduce((t, d) => t + (d.drr || 0), 0)) + ' · ' + inr(list.reduce((t, d) => t + (d.amount || 0), 0)));
+    tip.replaceChildren(head, ...items, ...(list.length > 1 ? [tot] : []));
+    tip.hidden = false;
+    const box = panelOf(ev.target).getBoundingClientRect(), w = tip.offsetWidth, h = tip.offsetHeight;
+    let x = ev.clientX - box.left + 14; if (x + w > box.width) x = Math.max(0, ev.clientX - box.left - w - 14);
+    let y = ev.clientY - box.top + 16; if (y + h > box.height + 120) y = Math.max(0, ev.clientY - box.top - h - 10);
+    tip.style.left = x + 'px'; tip.style.top = y + 'px';
+    if (tip.parentElement !== panelOf(ev.target)) panelOf(ev.target).append(tip);
+  };
+  const panelOf = (t) => t.closest('.panel');
   const reps = rows.filter((r) => r.owner !== 'Team');
   const max = Math.max(1, ...reps.map((r) => r.added));
   const bars = $('bars');
@@ -786,13 +808,7 @@ function render() {
       const seg = el('div', null, 'seg');
       seg.style.width = (r[k] / max) * 100 + '%';
       seg.style.background = color(i);
-      seg.addEventListener('mousemove', (ev) => {
-        tip.replaceChildren(el('div', r.owner, 't1'), el('div', name + ': ' + r[k] + ' of ' + r.added + ' (' + pct(r[k] / r.added) + ')'));
-        tip.hidden = false;
-        const box = panel.getBoundingClientRect(), w = tip.offsetWidth;
-        let x = ev.clientX - box.left + 12; if (x + w > box.width) x = Math.max(0, ev.clientX - box.left - w - 12);
-        tip.style.left = x + 'px'; tip.style.top = ev.clientY - box.top + 14 + 'px';
-      });
+      seg.addEventListener('mousemove', (ev) => showTip(ev, r.owner, k, name));
       seg.addEventListener('mouseleave', () => { tip.hidden = true; });
       track.append(seg);
     });
@@ -805,7 +821,16 @@ function render() {
   $('stage-rows').replaceChildren(...rows.map((r) => {
     const tr = el('tr', null, r.owner === 'Team' ? 'team' : '');
     tr.append(el('td', r.owner));
-    for (const k of ['added', 'lq', 'nurture', 'negotiation', 'agreement', 'won', 'lost_other']) tr.append(el('td', String(r[k])));
+    for (const k of ['added', 'lq', 'nurture', 'negotiation', 'agreement', 'won', 'lost_other']) {
+      const td = el('td', String(r[k]));
+      if (k !== 'added' && r[k] > 0) {
+        const nm = (STAGES.find((x) => x[0] === k) || [k, k])[1];
+        td.className = 'hov';
+        td.addEventListener('mousemove', (ev) => showTip(ev, r.owner, k, nm));
+        td.addEventListener('mouseleave', () => { tip.hidden = true; });
+      }
+      tr.append(td);
+    }
     tr.append(el('td', pct(r.moved_pct)), el('td', pct(r.won_pct)));
     const td = el('td', null, 'l');
     if (r.star) td.append(el('span', r.star, 'chip ' + (r.star === 'Achieved' ? 'ok' : r.star === 'Missed' ? 'bad' : 'pend')));

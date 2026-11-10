@@ -48,7 +48,7 @@ const base = [
   { propertyName: 'hubspot_owner_id', operator: 'IN', values: OWNER_IDS },
 ];
 const lq = await search([...base, { propertyName: 'hs_v2_date_entered_qualifiedtobuy', operator: 'GTE', value: String(LQ_FROM) }],
-  ['dealname', 'hubspot_owner_id', 'dealstage', 'hs_v2_date_entered_qualifiedtobuy', 'drr', 'createdate']);
+  ['dealname', 'hubspot_owner_id', 'dealstage', 'hs_v2_date_entered_qualifiedtobuy', 'drr', 'createdate', 'amount']);
 const won = await search([...base, { propertyName: 'dealstage', operator: 'EQ', value: 'closedwon' }, { propertyName: 'closedate', operator: 'GTE', value: String(WON_FROM) }],
   ['dealname', 'hubspot_owner_id', 'closedate', 'drr', 'service_type', 'createdate']);
 
@@ -92,7 +92,7 @@ for (const d of lq) {
   // Created in a later stage by mistake and moved to Lead Qualified the same day (IST): counts as new.
   const sameDayFix = !wasLost && createdAt && istDay(createdAt) === istDay(lqAt) && before.every((x) => istDay(x.t) === istDay(lqAt));
   const cameFromLater = !sameDayFix && before.some((x) => !ALLOWED_BEFORE_LQ.has(x.v));
-  const row = [d.id, d.properties.dealname || '', OWNERS[d.properties.hubspot_owner_id] || d.properties.hubspot_owner_id, d.properties.dealstage || '', new Date(lqAt).toISOString(), d.properties.drr == null || d.properties.drr === '' ? null : Number(d.properties.drr)];
+  const row = [d.id, d.properties.dealname || '', OWNERS[d.properties.hubspot_owner_id] || d.properties.hubspot_owner_id, d.properties.dealstage || '', new Date(lqAt).toISOString(), d.properties.drr == null || d.properties.drr === '' ? null : Number(d.properties.drr), d.properties.amount == null || d.properties.amount === '' ? null : Number(d.properties.amount)];
   if (cameFromLater) console.log(`Prior stages for deal ${d.id}: ${before.map((x) => x.v + '@' + new Date(x.t).toISOString().slice(0, 16)).join(', ')} -> first LQ ${new Date(lqAt).toISOString().slice(0, 16)}`);
   if (cameFromLater) notCounted.push([...row.slice(0, 4), iso(d.properties.hs_v2_date_entered_qualifiedtobuy), wasLost ? 'Reopened from Closed Lost' : 'Was already further in the pipeline before Lead Qualified']);
   else if (lqAt < LQ_FROM) {
