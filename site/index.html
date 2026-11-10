@@ -156,7 +156,7 @@
   .dl-status { font-size: 13px; color: var(--muted); min-height: 18px; }
   .dfil { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
   .dsel { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); font-weight: 500; }
-  .dsel select { min-width: 200px; }
+  .dsel select { min-width: 190px; }
   .dsum { margin-left: auto; font-size: 13.5px; color: var(--muted); }
   .dsum b { color: var(--fg); }
   table.mt th, table.mt td { text-align: right; }
@@ -498,6 +498,17 @@
               <option value="q">Whole quarter (Oct–Dec)</option>
             </select>
           </label>
+          <label class="dsel">Current stage
+            <select id="deal-stage" aria-label="Current stage">
+              <option value="all">All stages</option>
+              <option value="lq">Lead Qualified</option>
+              <option value="nurture">Nurture &amp; Follow-up</option>
+              <option value="negotiation">Negotiation &amp; Review</option>
+              <option value="agreement">Agreement &amp; Activation</option>
+              <option value="won">Closed Won</option>
+              <option value="lost_other">Closed Lost / other</option>
+            </select>
+          </label>
           <span class="dsum" id="deal-sum"></span>
         </div>
         <div class="panel">
@@ -822,7 +833,7 @@ function render() {
 
   // deals
   renderDealFilters();
-  const list = DATA._lq.filter((d) => dealFilter(d.at, d.owner)).sort((a, b) => (a.at < b.at ? 1 : -1));
+  const list = DATA._lq.filter((d) => dealFilter(d.at, d.owner, d.stage)).sort((a, b) => (a.at < b.at ? 1 : -1));
   { const sm = $('deal-sum'); sm.replaceChildren(el('b', String(list.length)), ' qualified lead' + (list.length === 1 ? '' : 's') + ' · DRR ', el('b', fmtN(list.reduce((t, d) => t + (d.drr || 0), 0)))); }
   $('deal-empty').hidden = list.length > 0;
   const drrTotal = list.reduce((t, d) => t + (d.drr || 0), 0);
@@ -835,15 +846,16 @@ function render() {
   }), ...(list.length ? [(() => { const tr = el('tr', null, 'team'); tr.append(el('td', 'Total', 'l'), el('td', list.length + ' deals', 'l'), el('td', '', 'l'), el('td', fmtN(drrTotal)), el('td', '')); return tr; })()] : []));
 }
 
-let dealRep = 'All', dealMonth = 'period';
-const dealFilter = (iso, owner) => {
+let dealRep = 'All', dealMonth = 'period', dealStage = 'all';
+const dealFilter = (iso, owner, stage) => {
   if (dealRep !== 'All' && owner !== dealRep) return false;
+  if (dealStage !== 'all' && stage !== undefined && (STAGE_KEY[stage] || 'lost_other') !== dealStage) return false;
   const day = istDay(iso);
   if (dealMonth === 'period') return period === 'contest' ? day >= START : weekOf(day) === period;
   if (dealMonth === 'q') return day >= '2026-10-01' && day <= '2026-12-31';
   return day.slice(0, 7) === dealMonth;
 };
-const dealScope = () => (dealMonth === 'period' ? (WEEKLY.find((r) => r.owner === 'Team' && r.period === period) || {}).label : $('deal-month').selectedOptions[0].textContent) + (dealRep === 'All' ? ' · all reps' : ' · ' + dealRep);
+const dealScope = () => (dealMonth === 'period' ? (WEEKLY.find((r) => r.owner === 'Team' && r.period === period) || {}).label : $('deal-month').selectedOptions[0].textContent) + (dealRep === 'All' ? ' · all reps' : ' · ' + dealRep) + (dealStage === 'all' ? '' : ' · ' + $('deal-stage').selectedOptions[0].textContent);
 function renderDealFilters() {
   $('deal-reps').replaceChildren(...['All', ...REPS].map((o) => {
     const bt = el('button', null, 'chipbtn' + (o === dealRep ? ' on' : ''));
@@ -855,7 +867,7 @@ function renderDealFilters() {
   }));
 }
 function renderNotCounted() {
-  const rows = (DATA.not_counted || []).filter((d) => REPS.includes(d[2]) && d[4]).filter((d) => dealFilter(d[4], d[2]));
+  const rows = (DATA.not_counted || []).filter((d) => REPS.includes(d[2]) && d[4]).filter((d) => dealFilter(d[4], d[2], d[3]));
   $('nc-panel').hidden = rows.length === 0;
   $('nc-rows').replaceChildren(...rows.map((d) => {
     const t = new Date(Date.parse(d[4]) + 19800000);
@@ -1136,7 +1148,7 @@ function sheetOKR() {
 }
 function sheetLeads() {
   const rows = [['Deal', 'Rep', 'First Lead Qualified (IST)', 'Week starting', 'Current stage', 'DRR']];
-  DATA._lq.filter((d) => dealFilter(d.at, d.owner)).sort((a, b) => (a.at < b.at ? 1 : -1)).forEach((d) => rows.push([d.deal, d.owner, istStr(d.at), weekOf(istDay(d.at)), STAGE_LABEL[d.stage] || d.stage, d.drr == null ? '' : r1(d.drr)]));
+  DATA._lq.filter((d) => dealFilter(d.at, d.owner, d.stage)).sort((a, b) => (a.at < b.at ? 1 : -1)).forEach((d) => rows.push([d.deal, d.owner, istStr(d.at), weekOf(istDay(d.at)), STAGE_LABEL[d.stage] || d.stage, d.drr == null ? '' : r1(d.drr)]));
   return rows;
 }
 function sheetDaily() {
@@ -1228,6 +1240,7 @@ async function load() {
 
 $('legend').append(...STAGES.map(([, name], i) => { const s = el('span'); const sw = el('i'); sw.style.background = color(i); s.append(sw, name); return s; }));
 $('deal-month').addEventListener('change', (e) => { dealMonth = e.target.value; render(); });
+$('deal-stage').addEventListener('change', (e) => { dealStage = e.target.value; render(); });
 $('period').addEventListener('change', (e) => { period = e.target.value; render(); });
 const setFold = (f) => { document.querySelector('.app').classList.toggle('folded', f); try { localStorage.setItem('nc-folded', f ? '1' : '0'); } catch (e) {} };
 $('fold').addEventListener('click', () => setFold(true));
