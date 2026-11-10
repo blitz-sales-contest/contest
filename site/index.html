@@ -165,6 +165,52 @@
   table.mt td.pc { min-width: 90px; }
   table.mt td.pc span { display: inline-block; min-width: 52px; text-align: center; font-weight: 600; font-size: 12.5px; padding: 3px 8px; border-radius: 999px; }
   table.mt td.sep, table.mt th.sep { border-left: 1px solid var(--line); }
+  /* --- winners --- */
+  .hello-row { display: flex; gap: 28px; align-items: stretch; flex-wrap: wrap; }
+  .hello-row .hello { flex: 1 1 380px; align-self: center; }
+  .spot { flex: 0 1 430px; display: flex; gap: 18px; align-items: center; background: #fff; border-radius: 18px; padding: 16px 20px 16px 16px; box-shadow: 0 1px 2px rgba(0,0,0,.05); position: relative; overflow: hidden; text-decoration: none; color: inherit; }
+  .spot::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 5px; background: linear-gradient(#f5b301, #ffe08a); }
+  .spot img, .spot .ph { width: 96px; height: 96px; border-radius: 14px; object-fit: cover; flex: none; background: #f2f2f4; }
+  .spot small { font-size: 11px; letter-spacing: 1.4px; text-transform: uppercase; color: #b77b00; font-weight: 700; }
+  .spot b { display: block; font-size: 20px; font-weight: 600; letter-spacing: -.4px; margin: 2px 0; }
+  .spot .tg { font-size: 13.5px; font-weight: 600; }
+  .spot p { margin: 4px 0 0; font-size: 12.5px; color: var(--muted); line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .wall-sec h3 { font-size: 15px; letter-spacing: 1.4px; text-transform: uppercase; color: var(--muted); font-weight: 600; margin: 6px 0 14px; }
+  .wall { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); gap: 20px; }
+  .wcard { background: #fff; border-radius: 18px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,.06); display: flex; flex-direction: column; }
+  .wcard .pic { position: relative; aspect-ratio: 1 / 1; background: #ececf0; }
+  .wcard .pic img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .wcard .pic .badge { position: absolute; left: 12px; top: 12px; background: rgba(17,17,17,.82); color: #ffd45c; font-size: 11.5px; font-weight: 600; padding: 5px 10px; border-radius: 999px; letter-spacing: .3px; }
+  .wcard.monthly .pic .badge { color: #9fe0bd; } .wcard.quarterly .pic .badge { color: #d9c8ff; }
+  .wcard .body { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 4px; }
+  .wcard .ttl { font-size: 13px; font-weight: 700; color: #b77b00; letter-spacing: .2px; }
+  .wcard.monthly .ttl { color: #1f7a4a; } .wcard.quarterly .ttl { color: #6a4fd4; }
+  .wcard .nm { font-size: 19px; font-weight: 600; letter-spacing: -.4px; }
+  .wcard .ds { font-size: 13px; color: #555; line-height: 1.5; margin: 2px 0 0; }
+  .wcard .stats { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+  .wcard .stats span { font-size: 12px; background: #f4f4f6; border-radius: 999px; padding: 3px 10px; }
+  .wcard.featured { outline: 3px solid #f5c84b; }
+  .initials-ph { width: 100%; height: 100%; display: grid; place-items: center; font-size: 56px; font-weight: 600; color: #333; }
+  .adm { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 22px; align-items: start; }
+  .adm label { display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 500; color: #444; }
+  .adm .fields { display: flex; flex-direction: column; gap: 14px; }
+  .adm input[type=text], .adm input[type=password], .adm textarea, .adm select { font: inherit; font-size: 14px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: #fff; color: var(--fg); min-width: 0; width: 100%; }
+  .adm textarea { min-height: 84px; resize: vertical; }
+  .adm .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .adm .prev { display: flex; gap: 14px; align-items: center; }
+  .adm .prev img, .adm .prev .ph { width: 88px; height: 88px; border-radius: 12px; object-fit: cover; background: #f2f2f4; flex: none; }
+  .adm .msg { font-size: 13px; min-height: 18px; }
+  .adm .msg.ok { color: var(--ok-fg); } .adm .msg.bad { color: var(--bad-fg); }
+  .adm .btn { margin-left: 0; align-self: flex-start; }
+  .adm .btn.ghost { background: #fff; color: var(--fg); border: 1px solid var(--line); }
+  .adm-list { display: flex; flex-direction: column; gap: 10px; }
+  .adm-list .it { display: flex; align-items: center; gap: 12px; padding: 10px; border: 1px solid #f0f0f2; border-radius: 12px; }
+  .adm-list .it img, .adm-list .it .ph { width: 48px; height: 48px; border-radius: 10px; object-fit: cover; background: #f2f2f4; flex: none; }
+  .adm-list .it div { flex: 1; min-width: 0; font-size: 13px; } .adm-list .it b { display: block; font-size: 14px; }
+  .adm-list .it button { font: inherit; font-size: 12.5px; border: 1px solid #f1c4bd; color: var(--bad-fg); background: #fff; border-radius: 8px; padding: 6px 10px; cursor: pointer; }
+  .adm .help { font-size: 12.5px; color: var(--muted); line-height: 1.55; margin: 0; }
+  .adm .help code { background: #f4f4f6; padding: 1px 5px; border-radius: 4px; }
+  @media (max-width: 900px) { .spot { flex-basis: 100%; } }
   .banner { display: flex; align-items: center; gap: 20px; background: var(--warn-bg); border: 1.5px solid var(--warn-line); border-radius: 14px; padding: 18px 22px; }
   .banner.good { background: var(--ok-bg); border-color: #9fd8b6; }
   .banner .ib { width: 52px; height: 52px; border-radius: 12px; background: #fff; display: grid; place-items: center; flex: none; }
@@ -334,10 +380,12 @@
       <a href="#leaderboard" data-v="leaderboard"><svg viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg>Closures Leaderboard</a>
       <a href="#compare" data-v="compare"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Weekly Comparison</a>
       <a href="#deals" data-v="deals"><svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>Qualified Deals</a>
+      <a href="#winners" data-v="winners"><svg viewBox="0 0 24 24"><path d="M12 15a6 6 0 1 0 0-12 6 6 0 0 0 0 12z"/><path d="M8.2 13.9 7 22l5-3 5 3-1.2-8.1"/></svg>Wall of Fame</a>
           <div class="grp" style="padding-left:12px">OKRS · OND 2026</div>
       <a href="#okr" data-v="okr"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></svg>OKR View</a>
       <div class="grp" style="padding-left:12px">REPORTS</div>
       <a href="#download" data-v="download"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 19h16"/></svg>Download</a>
+      <a href="#admin" data-v="admin" id="nav-admin" hidden><svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Winners Admin</a>
     </nav>
     <div class="side-foot">
       <div class="avatar">NA</div>
@@ -360,9 +408,14 @@
       <div id="error" class="err" hidden></div>
 
       <section class="view" id="v-overview">
+        <div class="hello-row">
         <div class="hello">
           <h2>November Sales Contest</h2>
           <p>Here's how the team is tracking today.</p>
+        </div>
+        <a class="spot" id="spot" href="#winners" hidden>
+          <img id="spot-img" alt=""><div><small id="spot-k">Weekly Star</small><b id="spot-name">—</b><div class="tg" id="spot-title"></div><p id="spot-desc"></p></div>
+        </a>
         </div>
         <div class="leader flash" id="leader">
           <div class="crown">👑</div>
@@ -488,6 +541,49 @@
           <div class="dl"><div class="ic" style="--c: var(--peach)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></svg></div><b>Not counted as new</b><p>Deals moved back into Lead Qualified or reopened, with the reason they weren’t counted again.</p><button class="btn" type="button" data-report="notcounted"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 19h16"/></svg>Download .xlsx</button></div>
         </div>
         <p class="dl-status" id="dl-status"></p>
+      </section>
+
+      <section class="view" id="v-winners">
+        <h2 class="vh">Wall of Fame</h2>
+        <p class="cmp-sub">Celebrating the November Sales Contest winners: Weekly Stars, Monthly Stars and the Quarterly Champion.</p>
+        <p class="empty" id="wall-empty" hidden>No winners announced yet. The first Weekly Star will appear here.</p>
+        <div id="wall"></div>
+      </section>
+
+      <section class="view" id="v-admin">
+        <h2 class="vh">Winners Admin</h2>
+        <p class="cmp-sub">Only someone with the GitHub key can publish. Changes go live in about 1–2 minutes.</p>
+        <div class="panel" id="adm-connect">
+          <h3>Connect your GitHub key</h3>
+          <div class="adm"><div class="fields">
+            <p class="help">Paste the GitHub access key that has write access to <code>blitz-sales-contest/contest</code>. It is saved only in this browser on this device, and never shown on the page.</p>
+            <label>GitHub key<input type="password" id="adm-token" autocomplete="off" placeholder="github_pat_…"></label>
+            <button class="btn" type="button" id="adm-save">Connect</button>
+            <div class="msg" id="adm-cmsg"></div>
+          </div></div>
+        </div>
+        <div class="adm" id="adm-main" hidden>
+          <div class="panel"><h3>Announce a winner</h3>
+            <div class="fields">
+              <div class="two-col">
+                <label>Contest<select id="w-type"><option value="weekly">Weekly Star</option><option value="monthly">Monthly Star</option><option value="quarterly">Quarterly Champion</option></select></label>
+                <label>Period<select id="w-period"></select></label>
+              </div>
+              <label>Winner<select id="w-rep"></select></label>
+              <label>Award title<input type="text" id="w-title" maxlength="60" placeholder="e.g. Pipeline Powerhouse"></label>
+              <label>Description<textarea id="w-desc" maxlength="280" placeholder="e.g. 18 qualified leads and hit 3+ every single day of Week 1."></textarea></label>
+              <label>Photo<input type="file" id="w-photo" accept="image/*"></label>
+              <div class="prev"><img id="w-prev" alt="" hidden><div class="ph" id="w-prev-ph"></div><p class="help" id="w-stats">Pick a contest, period and winner to see their numbers.</p></div>
+              <button class="btn" type="button" id="w-publish">Publish winner</button>
+              <div class="msg" id="w-msg"></div>
+            </div>
+          </div>
+          <div class="panel"><h3>Published winners</h3>
+            <div class="adm-list" id="adm-list"></div>
+            <p class="help" style="margin-top:16px">Publishing a winner for a contest and period that already has one replaces it.</p>
+            <button class="btn ghost" type="button" id="adm-forget" style="margin-top:12px">Disconnect this browser</button>
+          </div>
+        </div>
       </section>
 
       <section class="view" id="v-deals">
@@ -623,7 +719,7 @@ function compute() {
 const initials = (n) => n.split(' ').map((x) => x[0]).join('').slice(0, 2).toUpperCase();
 const AV = ['#c9c3f5', '#bcd3fb', '#bfe8d2', '#f9d3b5'];
 const avatar = (name) => { const a = el('div', initials(name), 'avatar'); const i = REPS.indexOf(name); a.style.background = AV[i % AV.length]; a.style.color = '#222'; return a; };
-const VIEWS = ['overview', 'tracker', 'pipeline', 'leaderboard', 'compare', 'deals', 'okr', 'download'];
+const VIEWS = ['overview', 'tracker', 'pipeline', 'leaderboard', 'compare', 'deals', 'okr', 'download', 'winners', 'admin'];
 let cmpRep = 'Team';
 
 function show() {
@@ -854,6 +950,8 @@ function render() {
   renderCompare();
   renderNotCounted();
   renderOKR();
+  renderWinners();
+  if (tokenGet()) { if (!$('w-period').options.length) fillAdminSelects(); else adminStats(); }
   $('dl-sub').textContent = 'Excel files built from the latest numbers on this page. Period-based sheets use: ' + periodLabel() + ' (change it with the menu at the top).';
 
   // deals
@@ -1243,6 +1341,178 @@ async function download(key) {
 }
 document.querySelectorAll('[data-report]').forEach((b) => b.addEventListener('click', () => download(b.dataset.report)));
 
+
+// ---------------- Winners / Wall of Fame ----------------
+const GH = { owner: 'blitz-sales-contest', repo: 'contest', branch: 'main', file: 'site/winners.json', dir: 'site/winners/' };
+let WINNERS = [];
+const W_TYPES = { weekly: 'Weekly Star', monthly: 'Monthly Star', quarterly: 'Quarterly Champion' };
+const contestWeeks = () => { const out = []; for (let t = Date.parse('2026-11-02T00:00:00Z'), i = 1; t <= Date.parse('2026-12-28T00:00:00Z'); t += 7 * D, i++) out.push([new Date(t).toISOString().slice(0, 10), 'W' + i + ' · ' + fmtD(t) + ' – ' + fmtD(t + 6 * D)]); return out; };
+const periodsFor = (type) => type === 'weekly' ? contestWeeks() : type === 'monthly' ? [['2026-11', 'November 2026'], ['2026-12', 'December 2026']] : [['2026-Q4', 'OND 2026 (Oct–Dec)']];
+const periodName = (w) => (periodsFor(w.type).find((p) => p[0] === w.period) || [w.period, w.period])[1];
+const shortBadge = (w) => w.type === 'weekly' ? 'Weekly Star · ' + periodName(w).split(' · ')[0] : w.type === 'monthly' ? 'Monthly Star · ' + periodName(w).split(' ')[0] : 'Quarterly Champion';
+function winnerStats(w) {
+  if (!DATA) return [];
+  if (w.type === 'weekly') {
+    const lq = DATA._lq.filter((d) => d.owner === w.rep && weekOf(istDay(d.at)) === w.period).length;
+    const days = DAILY.filter((r) => r.week === w.period && r.owner === w.rep && r.n >= DAY && ![0, 6].includes(new Date(r.day + 'T00:00:00Z').getUTCDay())).length;
+    return [lq + ' leads qualified', days + ' of 5 days at 3+'];
+  }
+  const won = DATA._won.filter((d) => d.owner === w.rep && (w.type === 'monthly' ? istDay(d.at).slice(0, 7) === w.period : true));
+  return [won.length + ' deals won', fmtN(won.reduce((t, d) => t + (d.drr || 0), 0)) + ' DRR signed'];
+}
+const photoEl = (w, cls) => { if (w.photo) { const i = el('img', null, cls || ''); i.src = w.photo + '?v=' + (w.v || ''); i.alt = w.rep; i.loading = 'lazy'; return i; } const d = el('div', initials(w.rep), 'initials-ph'); d.style.background = AV[REPS.indexOf(w.rep) % AV.length] || '#eee'; return d; };
+const sortW = (a, b) => (a.period < b.period ? 1 : a.period > b.period ? -1 : 0);
+function renderWinners() {
+  // overview spotlight: latest weekly winner
+  const weekly = WINNERS.filter((w) => w.type === 'weekly').sort(sortW);
+  const sp = weekly[0];
+  $('spot').hidden = !sp;
+  if (sp) {
+    const img = $('spot-img');
+    if (sp.photo) { img.src = sp.photo + '?v=' + (sp.v || ''); img.hidden = false; } else img.hidden = true;
+    $('spot-k').textContent = '🏆 ' + shortBadge(sp);
+    $('spot-name').textContent = sp.rep;
+    $('spot-title').textContent = sp.title || '';
+    $('spot-desc').textContent = sp.desc || '';
+  }
+  // wall
+  const wall = $('wall');
+  $('wall-empty').hidden = WINNERS.length > 0;
+  const secs = [['quarterly', 'Quarterly Champion'], ['monthly', 'Monthly Stars'], ['weekly', 'Weekly Stars']];
+  wall.replaceChildren(...secs.filter(([t]) => WINNERS.some((w) => w.type === t)).map(([t, name]) => {
+    const sec = el('div', null, 'wall-sec'); sec.append(el('h3', name));
+    const g = el('div', null, 'wall');
+    WINNERS.filter((w) => w.type === t).sort(sortW).forEach((w, i) => {
+      const c = el('div', null, 'wcard ' + t + (t === 'weekly' && i === 0 ? ' featured' : ''));
+      const pic = el('div', null, 'pic'); pic.append(photoEl(w), el('span', shortBadge(w) + (t === 'weekly' ? ' · ' + periodName(w).split(' · ')[1] : ''), 'badge'));
+      const body = el('div', null, 'body');
+      if (w.title) body.append(el('div', w.title, 'ttl'));
+      body.append(el('div', w.rep, 'nm'));
+      if (w.desc) body.append(el('p', w.desc, 'ds'));
+      const st = el('div', null, 'stats'); winnerStats(w).forEach((x) => st.append(el('span', x))); body.append(st);
+      c.append(pic, body); g.append(c);
+    });
+    sec.append(g); return sec;
+  }));
+  renderAdminList();
+}
+async function loadWinners() {
+  try { const r = await fetch('winners.json?t=' + Date.now(), { cache: 'no-store' }); WINNERS = r.ok ? await r.json() : []; } catch (e) { WINNERS = []; }
+  if (!Array.isArray(WINNERS)) WINNERS = [];
+  renderWinners();
+}
+
+// ---- admin (writes to GitHub with the owner's key, kept only in this browser) ----
+const tokenGet = () => { try { return localStorage.getItem('nc-gh-token') || ''; } catch (e) { return ''; } };
+const tokenSet = (t) => { try { t ? localStorage.setItem('nc-gh-token', t) : localStorage.removeItem('nc-gh-token'); } catch (e) {} };
+const gh = async (path, opts = {}) => {
+  const r = await fetch('https://api.github.com/repos/' + GH.owner + '/' + GH.repo + '/' + path, { ...opts, headers: { Authorization: 'Bearer ' + tokenGet(), Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28', ...(opts.headers || {}) } });
+  if (!r.ok && r.status !== 404) { const t = await r.text(); throw new Error(r.status + ' ' + (JSON.parse(t || '{}').message || t).slice(0, 160)); }
+  return r.status === 404 ? null : r.json();
+};
+const b64 = (str) => btoa(unescape(encodeURIComponent(str)));
+function adminShow() {
+  const has = !!tokenGet();
+  $('nav-admin').hidden = !has;
+  $('adm-connect').hidden = has;
+  $('adm-main').hidden = !has;
+}
+function fillAdminSelects() {
+  const t = $('w-type').value;
+  $('w-period').replaceChildren(...periodsFor(t).map(([v, n]) => new Option(n, v)));
+  if (t === 'weekly') { const cw = weekOf(today()); const prev = new Date(Date.parse(cw) - 7 * D).toISOString().slice(0, 10); const opt = periodsFor(t).find((p) => p[0] === prev) || periodsFor(t).find((p) => p[0] === cw); if (opt) $('w-period').value = opt[0]; }
+  if (t === 'monthly') { const m = today().slice(0, 7); if (periodsFor(t).some((p) => p[0] === m)) $('w-period').value = m; }
+  if (!$('w-rep').options.length) $('w-rep').replaceChildren(...REPS.map((r) => new Option(r, r)));
+  adminStats();
+}
+function adminStats() {
+  const w = { type: $('w-type').value, period: $('w-period').value, rep: $('w-rep').value };
+  if (!w.rep) return;
+  $('w-stats').textContent = w.rep + ', ' + periodName(w) + ': ' + winnerStats(w).join(' · ');
+}
+function renderAdminList() {
+  const box = $('adm-list'); if (!box) return;
+  box.replaceChildren(...(WINNERS.length ? WINNERS.slice().sort((a, b) => (a.type + a.period < b.type + b.period ? 1 : -1)).map((w) => {
+    const it = el('div', null, 'it');
+    const im = w.photo ? (() => { const i = el('img'); i.src = w.photo + '?v=' + (w.v || ''); return i; })() : el('div', null, 'ph');
+    const tx = el('div'); tx.append(el('b', w.rep), shortBadge(w) + (w.title ? ' · ' + w.title : ''));
+    const del = el('button', 'Remove'); del.type = 'button';
+    del.onclick = () => removeWinner(w.id);
+    it.append(im, tx, del); return it;
+  }) : [el('p', 'Nothing published yet.', 'help')]));
+}
+let photoData = null;
+$('w-photo').addEventListener('change', (e) => {
+  const f = e.target.files[0]; photoData = null; if (!f) return;
+  const img = new Image(); const url = URL.createObjectURL(f);
+  img.onload = () => {
+    const S = 900, sc = Math.min(1, S / Math.max(img.width, img.height));
+    const cv = document.createElement('canvas'); cv.width = Math.round(img.width * sc); cv.height = Math.round(img.height * sc);
+    cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height);
+    photoData = cv.toDataURL('image/jpeg', 0.86);
+    $('w-prev').src = photoData; $('w-prev').hidden = false; $('w-prev-ph').hidden = true; URL.revokeObjectURL(url);
+  };
+  img.src = url;
+});
+async function saveWinners(list, message) {
+  const cur = await gh('contents/' + GH.file + '?ref=' + GH.branch);
+  await gh('contents/' + GH.file, { method: 'PUT', body: JSON.stringify({ message, content: b64(JSON.stringify(list, null, 2) + '\n'), branch: GH.branch, ...(cur ? { sha: cur.sha } : {}) }) });
+}
+async function currentWinners() {
+  const cur = await gh('contents/' + GH.file + '?ref=' + GH.branch);
+  if (!cur) return [];
+  try { return JSON.parse(decodeURIComponent(escape(atob(cur.content.replace(/\n/g, ''))))); } catch (e) { return []; }
+}
+$('w-publish').addEventListener('click', async () => {
+  const msg = $('w-msg'); msg.className = 'msg';
+  const w = { type: $('w-type').value, period: $('w-period').value, rep: $('w-rep').value, title: $('w-title').value.trim(), desc: $('w-desc').value.trim() };
+  if (!w.rep || !w.period) { msg.textContent = 'Pick a contest, period and winner.'; msg.className = 'msg bad'; return; }
+  const btn = $('w-publish'); btn.disabled = true; msg.textContent = 'Publishing…';
+  try {
+    w.id = w.type + '-' + w.period;
+    w.v = Date.now();
+    if (photoData) {
+      const path = GH.dir + w.id + '.jpg';
+      const ex = await gh('contents/' + path + '?ref=' + GH.branch);
+      await gh('contents/' + path, { method: 'PUT', body: JSON.stringify({ message: 'Winner photo: ' + w.rep + ' (' + w.id + ') [skip ci]', content: photoData.split(',')[1], branch: GH.branch, ...(ex ? { sha: ex.sha } : {}) }) });
+      w.photo = 'winners/' + w.id + '.jpg';
+    }
+    const list = (await currentWinners()).filter((x) => x.id !== w.id);
+    const old = WINNERS.find((x) => x.id === w.id);
+    if (!w.photo && old && old.photo) w.photo = old.photo;
+    list.push(w);
+    await saveWinners(list, 'Announce ' + W_TYPES[w.type] + ' ' + periodName(w) + ': ' + w.rep);
+    WINNERS = list; renderWinners();
+    msg.textContent = 'Published! It will be live for everyone in about 1–2 minutes.'; msg.className = 'msg ok';
+    $('w-title').value = ''; $('w-desc').value = ''; $('w-photo').value = ''; photoData = null; $('w-prev').hidden = true; $('w-prev-ph').hidden = false;
+  } catch (e) {
+    msg.textContent = (/401|403|Bad credentials|Resource not accessible/.test(e.message) ? "GitHub didn't accept the key. Check it has Contents: Read and write on blitz-sales-contest/contest. " : "Couldn't publish: ") + e.message; msg.className = 'msg bad';
+  } finally { btn.disabled = false; }
+});
+async function removeWinner(id) {
+  if (!confirm('Remove this winner from the Wall of Fame?')) return;
+  const msg = $('w-msg');
+  try {
+    const list = (await currentWinners()).filter((x) => x.id !== id);
+    await saveWinners(list, 'Remove winner ' + id);
+    WINNERS = list; renderWinners();
+    msg.textContent = 'Removed. The live page updates in about 1–2 minutes.'; msg.className = 'msg ok';
+  } catch (e) { msg.textContent = "Couldn't remove: " + e.message; msg.className = 'msg bad'; }
+}
+$('adm-save').addEventListener('click', async () => {
+  const t = $('adm-token').value.trim(); const m = $('adm-cmsg');
+  if (!t) return;
+  tokenSet(t); m.textContent = 'Checking…'; m.className = 'msg';
+  try {
+    const r = await gh(''); if (!r || !(r.permissions && r.permissions.push)) throw new Error('This key cannot write to the repository.');
+    $('adm-token').value = ''; m.textContent = ''; adminShow(); fillAdminSelects();
+  } catch (e) { tokenSet(''); m.textContent = "That key didn't work: " + e.message; m.className = 'msg bad'; }
+});
+$('adm-forget').addEventListener('click', () => { tokenSet(''); adminShow(); location.hash = 'winners'; });
+['w-type'].forEach((id) => $(id).addEventListener('change', fillAdminSelects));
+['w-period', 'w-rep'].forEach((id) => $(id).addEventListener('change', adminStats));
+adminShow();
+
 async function load() {
   try {
     const res = await fetch('data.json?t=' + Date.now(), { cache: 'no-store' });
@@ -1277,6 +1547,7 @@ $('home').addEventListener('click', () => {
 try { if (localStorage.getItem('nc-folded') === '1') setFold(true); } catch (e) {}
 window.addEventListener('hashchange', show);
 show();
+loadWinners();
 load();
 setInterval(load, 5 * 60 * 1000);
 </script>
