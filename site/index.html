@@ -1406,7 +1406,7 @@ async function loadWinners() {
 const tokenGet = () => { try { return localStorage.getItem('nc-gh-token') || ''; } catch (e) { return ''; } };
 const tokenSet = (t) => { try { t ? localStorage.setItem('nc-gh-token', t) : localStorage.removeItem('nc-gh-token'); } catch (e) {} };
 const gh = async (path, opts = {}) => {
-  const r = await fetch('https://api.github.com/repos/' + GH.owner + '/' + GH.repo + '/' + path, { ...opts, headers: { Authorization: 'Bearer ' + tokenGet(), Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28', ...(opts.headers || {}) } });
+  const r = await fetch('https://api.github.com/repos/' + GH.owner + '/' + GH.repo + (path ? '/' + path : ''), { ...opts, headers: { Authorization: 'Bearer ' + tokenGet(), Accept: 'application/vnd.github+json', ...(opts.headers || {}) } });
   if (!r.ok && r.status !== 404) { const t = await r.text(); throw new Error(r.status + ' ' + (JSON.parse(t || '{}').message || t).slice(0, 160)); }
   return r.status === 404 ? null : r.json();
 };
