@@ -275,6 +275,40 @@
   .plaque .ps { font-size: 10.5px; margin-top: 3px; opacity: .85; }
   @media (max-width: 700px) { .room-wall { padding: 34px 14px 40px; } .wall { gap: 44px 24px; } .hang { width: 200px; } }
   @media (prefers-reduced-motion: reduce) { .frame { transition: none; } }
+  /* --- YoY & QoQ --- */
+  #v-growth .panel { margin-top: 22px; }
+  .gov { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+  @media (max-width: 1000px) { .gov { grid-template-columns: 1fr; } }
+  .gcard { background: #fff; border-radius: 16px; padding: 20px 22px; box-shadow: 0 1px 2px rgba(0,0,0,.04); }
+  .gcard .gk { font-size: 13px; color: var(--muted); font-weight: 500; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .gcard .gv { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+  .gcard .gv div { background: #f6f6f8; border-radius: 12px; padding: 10px 12px; }
+  .gcard .gv div.after { background: var(--mint); }
+  .gcard .gv small { display: block; font-size: 11px; color: var(--muted); letter-spacing: .3px; }
+  .gcard .gv b { font-size: 22px; font-weight: 600; letter-spacing: -.5px; }
+  .gcard .gs { font-size: 12px; color: var(--muted); margin-top: 10px; }
+  .gnote { font-size: 13px; color: var(--muted); margin: -6px 0 14px; }
+  .gt { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  .gt th { font-size: 11.5px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; padding: 8px 10px; text-align: right; border-bottom: 1px solid var(--line); white-space: nowrap; }
+  .gt th.l, .gt td.l { text-align: left; }
+  .gt td { padding: 10px; text-align: right; border-bottom: 1px solid #f2f2f4; white-space: nowrap; }
+  .gt tr.post td { background: #f3fbf6; }
+  .gt tr.gline td { padding: 0; border-bottom: 2px dashed #2f9e64; }
+  .gt .grp th { text-align: center; border-bottom: 0; padding-bottom: 0; color: #444; }
+  .gt td .delta { font-size: 11.5px; padding: 2px 7px; }
+  .gt td.dim { color: #b0b0b8; }
+  .gtag { font-size: 10.5px; font-weight: 600; background: #111; color: #9fe0bd; border-radius: 999px; padding: 2px 7px; margin-left: 6px; }
+  .gtag.p { background: var(--pend-bg); color: var(--pend-fg); }
+  .ychart { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 10px; align-items: end; height: 200px; margin-bottom: 8px; padding: 0 4px; }
+  .ychart .m { display: flex; flex-direction: column; align-items: center; height: 100%; justify-content: flex-end; gap: 6px; }
+  .ychart .bars { display: flex; gap: 4px; align-items: flex-end; height: 160px; width: 100%; justify-content: center; }
+  .ychart .bars i { display: block; width: 42%; max-width: 26px; border-radius: 5px 5px 0 0; background: #d4d4d8; min-height: 2px; position: relative; }
+  .ychart .bars i.y2 { background: #2f9e64; }
+  .ychart .bars i.y2.gov0 { background: #8fb8ff; }
+  .ychart .m span { font-size: 11.5px; color: var(--muted); }
+  .ychart .bars i:hover::after { content: attr(data-t); position: absolute; bottom: 100%; left: 50%; transform: translate(-50%, -6px); background: #111; color: #fff; font-size: 11px; padding: 4px 8px; border-radius: 6px; white-space: nowrap; z-index: 3; }
+  .ylegend { display: flex; gap: 16px; font-size: 12px; color: var(--muted); margin: 0 0 16px 4px; flex-wrap: wrap; }
+  .ylegend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
   .banner { display: flex; align-items: center; gap: 20px; background: var(--warn-bg); border: 1.5px solid var(--warn-line); border-radius: 14px; padding: 18px 22px; }
   .banner.good { background: var(--ok-bg); border-color: #9fd8b6; }
   .banner .ib { width: 52px; height: 52px; border-radius: 12px; background: #fff; display: grid; place-items: center; flex: none; }
@@ -447,6 +481,7 @@
       <a href="#winners" data-v="winners"><svg viewBox="0 0 24 24"><path d="M12 15a6 6 0 1 0 0-12 6 6 0 0 0 0 12z"/><path d="M8.2 13.9 7 22l5-3 5 3-1.2-8.1"/></svg>Wall of Fame</a>
           <div class="grp" style="padding-left:12px">OKRS · OND 2026</div>
       <a href="#okr" data-v="okr"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></svg>OKR View</a>
+      <a href="#growth" data-v="growth"><svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>YoY &amp; QoQ</a>
       <div class="grp" style="padding-left:12px">REPORTS</div>
       <a href="#download" data-v="download"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 19h16"/></svg>Download</a>
       <a href="#admin" data-v="admin" id="nav-admin" hidden><svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Winners Admin</a>
@@ -591,6 +626,23 @@
         <p class="okr-note" id="okr-note"></p>
       </section>
 
+      <section class="view" id="v-growth">
+        <h2 class="vh">YoY &amp; QoQ growth</h2>
+        <p class="cmp-sub">Every Closed Won deal in the HubSpot Sales Pipeline (all owners), by close date. Team governance started in <b>October 2026</b>.</p>
+        <div class="gov" id="gov"></div>
+        <div class="panel">
+          <h3>Quarter on quarter</h3>
+          <p class="gnote" id="qoq-note"></p>
+          <div class="tw"><table class="gt" id="qoq"></table></div>
+        </div>
+        <div class="panel">
+          <h3>Year on year, month by month</h3>
+          <div class="chips" id="yoy-chips" style="margin:-4px 0 14px"></div>
+          <div class="ychart" id="ychart"></div>
+          <div class="tw"><table class="gt" id="yoy"></table></div>
+        </div>
+      </section>
+
       <section class="view" id="v-download">
         <h2 class="vh">Download Reports</h2>
         <p class="cmp-sub" id="dl-sub">Excel files built from the latest numbers on this page.</p>
@@ -603,6 +655,7 @@
           <div class="dl"><div class="ic" style="--c: var(--rose)"><svg viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/></svg></div><b>Closed won deals</b><p>All Closed Won deals this quarter: rep, close date, DRR, service type and days from Lead Qualified to close.</p><button class="btn" type="button" data-report="won"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 19h16"/></svg>Download .xlsx</button></div>
           <div class="dl"><div class="ic" style="--c: var(--lav)"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div><b>Weekly comparison</b><p>Week-by-week leads, closures and DRR per rep for the whole quarter.</p><button class="btn" type="button" data-report="weekly"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 19h16"/></svg>Download .xlsx</button></div>
           <div class="dl"><div class="ic" style="--c: var(--peach)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></svg></div><b>Not counted as new</b><p>Deals moved back into Lead Qualified or reopened, with the reason they weren’t counted again.</p><button class="btn" type="button" data-report="notcounted"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 19h16"/></svg>Download .xlsx</button></div>
+          <div class="dl"><div class="ic" style="--c: var(--mint)"><svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></div><b>YoY &amp; QoQ growth</b><p>Closed Won deals, revenue and DRR for the Sales Pipeline by month and quarter since Jan 2025, marked before and after governance.</p><button class="btn" type="button" data-report="growth"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 19h16"/></svg>Download .xlsx</button></div>
         </div>
         <p class="dl-status" id="dl-status"></p>
       </section>
@@ -792,7 +845,7 @@ function compute() {
 const initials = (n) => n.split(' ').map((x) => x[0]).join('').slice(0, 2).toUpperCase();
 const AV = ['#c9c3f5', '#bcd3fb', '#bfe8d2', '#f9d3b5'];
 const avatar = (name) => { const a = el('div', initials(name), 'avatar'); const i = REPS.indexOf(name); a.style.background = AV[i % AV.length]; a.style.color = '#222'; return a; };
-const VIEWS = ['overview', 'tracker', 'pipeline', 'leaderboard', 'compare', 'deals', 'okr', 'download', 'winners', 'admin'];
+const VIEWS = ['overview', 'tracker', 'pipeline', 'leaderboard', 'compare', 'deals', 'okr', 'growth', 'download', 'winners', 'admin'];
 let cmpRep = 'Team';
 
 function show() {
@@ -1024,6 +1077,7 @@ function render() {
   renderNotCounted();
   renderOKR();
   renderWinners();
+  renderGrowth();
   if (tokenGet()) { if (!$('w-period').options.length) fillAdminSelects(); else adminStats(); }
   $('dl-sub').textContent = 'Excel files built from the latest numbers on this page. Period-based sheets use: ' + periodLabel() + ' (change it with the menu at the top).';
 
@@ -1393,7 +1447,7 @@ function sheetMonthly() {
 }
 const REPORTS = {
   okr: ['OKR summary', sheetOKR], monthly: ['Monthly target vs achieved', sheetMonthly], leads: ['Qualified leads', sheetLeads], daily: ['Daily lead tracker', sheetDaily], pipeline: ['Pipeline progress', sheetPipeline],
-  won: ['Closed won', sheetWon], weekly: ['Weekly comparison', sheetWeekly], notcounted: ['Not counted as new', sheetNotCounted],
+  won: ['Closed won', sheetWon], weekly: ['Weekly comparison', sheetWeekly], notcounted: ['Not counted as new', sheetNotCounted], growth: ['YoY and QoQ', sheetGrowth],
 };
 async function download(key) {
   const status = $('dl-status');
@@ -1608,6 +1662,125 @@ $('adm-forget').addEventListener('click', () => { tokenSet(''); adminShow(); loc
 ['w-type'].forEach((id) => $(id).addEventListener('change', fillAdminSelects));
 ['w-period', 'w-rep'].forEach((id) => $(id).addEventListener('change', adminStats));
 adminShow();
+
+
+// ---------------- YoY & QoQ ----------------
+const GOV_START = '2026-10';
+let yoyMetric = 'rev';
+const fmtINR = (x) => { x = x || 0; if (x >= 1e7) return '₹' + (x / 1e7).toFixed(2) + ' Cr'; if (x >= 1e5) return '₹' + (x / 1e5).toFixed(1) + ' L'; return '₹' + fmtN(x); };
+const G_MET = { deals: ['Deals closed', (v) => fmtN(v)], rev: ['Revenue', fmtINR], drr: ['DRR', (v) => fmtN(v)] };
+const gDelta = (cur, prev) => {
+  if (prev == null) return null;
+  if (!prev) return cur ? el('span', 'new', 'delta up') : el('span', '–', 'delta flat');
+  const d = (cur - prev) / prev; const r = Math.round(d * 100);
+  return el('span', (r > 0 ? '▲ ' : r < 0 ? '▼ ' : '') + Math.abs(r) + '%', 'delta ' + (r > 0 ? 'up' : r < 0 ? 'down' : 'flat'));
+};
+function histAgg() {
+  const by = {};
+  for (const [at, , amt, drr] of DATA.hist || []) {
+    const m = istDay(at).slice(0, 7);
+    const o = by[m] || (by[m] = { deals: 0, rev: 0, drr: 0 });
+    o.deals++; o.rev += amt || 0; o.drr += drr || 0;
+  }
+  return by;
+}
+const sumM = (by, months) => months.reduce((t, m) => { const o = by[m]; if (o) { t.deals += o.deals; t.rev += o.rev; t.drr += o.drr; } return t; }, { deals: 0, rev: 0, drr: 0 });
+const monthsBetween = (a, b) => { const out = []; let [y, m] = a.split('-').map(Number); const [by_, bm] = b.split('-').map(Number); while (y < by_ || (y === by_ && m <= bm)) { out.push(y + '-' + String(m).padStart(2, '0')); m++; if (m > 12) { m = 1; y++; } } return out; };
+const qOf = (m) => { const [y, mo] = m.split('-').map(Number); return y + '-Q' + Math.ceil(mo / 3); };
+const qMonths = (q) => { const [y, n] = q.split('-Q').map(Number); return [1, 2, 3].map((k) => y + '-' + String((n - 1) * 3 + k).padStart(2, '0')); };
+const qName = (q) => { const [y, n] = q.split('-Q'); return ['JFM', 'AMJ', 'JAS', 'OND'][n - 1] + ' ' + y; };
+function renderGrowth() {
+  if (!DATA || !DATA.hist) { $('gov').replaceChildren(el('p', 'History loads with the next data refresh (within 15 minutes).', 'gnote')); return; }
+  const by = histAgg();
+  const tdy = today(), curM = tdy.slice(0, 7), dayN = Number(tdy.slice(8, 10));
+  // ---- before vs after governance: monthly average, completed months only ----
+  const lastDone = (() => { const [y, m] = curM.split('-').map(Number); return m === 1 ? (y - 1) + '-12' : y + '-' + String(m - 1).padStart(2, '0'); })();
+  const pre = monthsBetween('2025-01', '2026-09'), post = lastDone >= GOV_START ? monthsBetween(GOV_START, lastDone) : [];
+  const P = sumM(by, pre), A = sumM(by, post);
+  const avg = (o, n, k) => n ? o[k] / n : 0;
+  $('gov').replaceChildren(...Object.entries(G_MET).map(([k, [name, f]]) => {
+    const b = avg(P, pre.length, k), a = avg(A, post.length, k);
+    const c = el('div', null, 'gcard');
+    const head = el('div', null, 'gk'); head.append(name + ' per month', post.length ? gDelta(a, b) : el('span', '—', 'delta flat'));
+    const v = el('div', null, 'gv');
+    const d1 = el('div'); d1.append(el('small', 'Before governance'), el('b', f(b)));
+    const d2 = el('div', null, 'after'); d2.append(el('small', 'After governance'), el('b', post.length ? f(a) : '—'));
+    v.append(d1, d2);
+    c.append(head, v, el('div', 'Monthly average · before: Jan 2025 – Sep 2026 (' + pre.length + ' months) · after: ' + (post.length ? (post.length === 1 ? 'Oct 2026' : 'Oct 2026 – ' + M[Number(lastDone.slice(5)) - 1] + ' ' + lastDone.slice(0, 4)) + ' (' + post.length + ' month' + (post.length === 1 ? '' : 's') + ', completed only)' : 'no completed month yet'), 'gs'));
+    return c;
+  }));
+  // ---- QoQ ----
+  const curQ = qOf(curM); const qs = [];
+  for (let y = 2025; y <= Number(curM.slice(0, 4)); y++) for (let n = 1; n <= 4; n++) { const q = y + '-Q' + n; if (q <= curQ) qs.push(q); }
+  const qv = qs.map((q) => ({ q, ...sumM(by, qMonths(q)) }));
+  // same point last quarter
+  const qm = qMonths(curQ), idx = qm.indexOf(curM);
+  const prevQ = qs[qs.length - 2];
+  const samePrev = (() => { if (!prevQ) return null; const pm = qMonths(prevQ); const full = pm.slice(0, idx); const part = pm[idx]; const o = sumM(by, full);
+    (DATA.hist || []).forEach(([at, , amt, drr]) => { const d = istDay(at); if (d.slice(0, 7) === part && Number(d.slice(8, 10)) <= dayN) { o.deals++; o.rev += amt || 0; o.drr += drr || 0; } }); return o; })();
+  const cq = qv[qv.length - 1];
+  $('qoq-note').replaceChildren(qName(curQ) + ' is in progress, so its QoQ % compares it with the same point in the previous quarter. At this point in ' + (prevQ ? qName(prevQ) : '—') + ' the team had ',
+    el('b', fmtN(samePrev ? samePrev.deals : 0) + ' deals · ' + fmtINR(samePrev ? samePrev.rev : 0) + ' · DRR ' + fmtN(samePrev ? samePrev.drr : 0)),
+    '; ' + qName(curQ) + ' so far: ', el('b', fmtN(cq.deals) + ' deals · ' + fmtINR(cq.rev) + ' · DRR ' + fmtN(cq.drr)), ' (', ...[['deals'], ['rev'], ['drr']].map(([k], i) => { const sp = el('span'); if (i) sp.append(' '); sp.append(gDelta(cq[k], samePrev ? samePrev[k] : null) || '—'); return sp; }), ').');
+  const qt = $('qoq');
+  const hdr = el('thead'); const hr = el('tr');
+  ['Quarter', 'Deals closed', 'QoQ', 'Revenue', 'QoQ', 'DRR', 'QoQ'].forEach((t, i) => hr.append(el('th', t, i ? '' : 'l')));
+  hdr.append(hr);
+  const tb = el('tbody');
+  qv.forEach((r, i) => {
+    if (r.q === '2026-Q4') { const gl = el('tr', null, 'gline'); gl.append(Object.assign(el('td'), { colSpan: 7 })); tb.append(gl); }
+    const tr = el('tr', null, r.q >= '2026-Q4' ? 'post' : '');
+    const nm = el('td', qName(r.q), 'l'); if (r.q === '2026-Q4') nm.append(el('span', 'Governance', 'gtag')); if (r.q === curQ) nm.append(el('span', 'to date', 'gtag p'));
+    tr.append(nm);
+    const prev = r.q === curQ ? samePrev : (i ? qv[i - 1] : null);
+    for (const k of ['deals', 'rev', 'drr']) { tr.append(el('td', G_MET[k][1](r[k]))); const d = el('td'); const g = prev ? gDelta(r[k], prev[k]) : null; g ? d.append(g) : (d.textContent = '—', d.className = 'dim'); tr.append(d); }
+    tb.append(tr);
+  });
+  qt.replaceChildren(hdr, tb);
+  // ---- YoY monthly ----
+  const Y1 = String(Number(curM.slice(0, 4)) - 1), Y2 = curM.slice(0, 4);
+  $('yoy-chips').replaceChildren(...Object.entries(G_MET).map(([k, [n]]) => { const b = el('button', n, 'chipbtn' + (k === yoyMetric ? ' on' : '')); b.type = 'button'; b.onclick = () => { yoyMetric = k; renderGrowth(); }; return b; }));
+  const partLY = { deals: 0, rev: 0, drr: 0 }; (DATA.hist || []).forEach(([at, , amt, drr]) => { const d = istDay(at); if (d.slice(0, 7) === Y1 + curM.slice(4) && Number(d.slice(8, 10)) <= dayN) { partLY.deals++; partLY.rev += amt || 0; partLY.drr += drr || 0; } });
+  const rows = M.map((mn, i) => { const mm = String(i + 1).padStart(2, '0'); const a = Y2 + '-' + mm === curM ? partLY : (by[Y1 + '-' + mm] || { deals: 0, rev: 0, drr: 0 }), b = by[Y2 + '-' + mm] || { deals: 0, rev: 0, drr: 0 }; return { mn, m2: Y2 + '-' + mm, a, b, fut: Y2 + '-' + mm > curM }; });
+  const mx = Math.max(1, ...rows.flatMap((r) => [r.a[yoyMetric], r.fut ? 0 : r.b[yoyMetric]]));
+  const f = G_MET[yoyMetric][1];
+  const ch = $('ychart');
+  ch.replaceChildren(...rows.map((r) => { const m = el('div', null, 'm'); const bars = el('div', null, 'bars');
+    const i1 = el('i'); i1.style.height = (r.a[yoyMetric] / mx * 100) + '%'; i1.dataset.t = r.mn + ' ' + Y1 + ': ' + f(r.a[yoyMetric]);
+    const i2 = el('i', null, 'y2' + (r.m2 < GOV_START ? ' gov0' : '')); i2.style.height = r.fut ? '0' : (r.b[yoyMetric] / mx * 100) + '%'; i2.dataset.t = r.mn + ' ' + Y2 + ': ' + (r.fut ? '—' : f(r.b[yoyMetric])); if (r.fut) i2.style.minHeight = '0';
+    bars.append(i1, i2); m.append(bars, el('span', r.mn)); return m; }));
+  let lg = ch.nextElementSibling; if (!lg || !lg.classList.contains('ylegend')) { lg = el('div', null, 'ylegend'); ch.after(lg); }
+  lg.innerHTML = '<span><i style="background:#d4d4d8"></i>' + Y1 + '</span><span><i style="background:#8fb8ff"></i>' + Y2 + ' before governance</span><span><i style="background:#2f9e64"></i>' + Y2 + ' after governance (from Oct)</span>';
+  const yt = $('yoy');
+  const h2 = el('thead'); const g1 = el('tr', null, 'grp'); g1.append(el('th', '', 'l'));
+  for (const k of ['deals', 'rev', 'drr']) { const th = el('th', G_MET[k][0]); th.colSpan = 3; g1.append(th); }
+  const g2 = el('tr'); g2.append(el('th', 'Month', 'l')); for (let k = 0; k < 3; k++) g2.append(el('th', Y1), el('th', Y2), el('th', 'YoY'));
+  h2.append(g1, g2);
+  const b2 = el('tbody'); const tot = { a: { deals: 0, rev: 0, drr: 0 }, b: { deals: 0, rev: 0, drr: 0 } };
+  rows.forEach((r) => {
+    if (r.m2 === Y2 + '-10' && Y2 === '2026') { const gl = el('tr', null, 'gline'); gl.append(Object.assign(el('td'), { colSpan: 10 })); b2.append(gl); }
+    const tr = el('tr', null, r.m2 >= GOV_START ? 'post' : ''); const nm = el('td', r.mn, 'l'); if (r.m2 === curM) nm.append(el('span', '1–' + dayN + ' vs 1–' + dayN, 'gtag p')); tr.append(nm);
+    for (const k of ['deals', 'rev', 'drr']) {
+      tr.append(el('td', G_MET[k][1](r.a[k])));
+      if (r.fut) { tr.append(el('td', '—', 'dim'), el('td', '', 'dim')); continue; }
+      tr.append(el('td', G_MET[k][1](r.b[k]))); const d = el('td'); d.append(gDelta(r.b[k], r.a[k])); tr.append(d);
+    }
+    if (!r.fut) for (const k of ['deals', 'rev', 'drr']) { tot.a[k] += r.a[k]; tot.b[k] += r.b[k]; }
+    b2.append(tr);
+  });
+  const tt = el('tr', null, 'team'); tt.append(el('td', 'Year to date (Jan 1 – ' + M[Number(curM.slice(5)) - 1] + ' ' + dayN + ')', 'l'));
+  for (const k of ['deals', 'rev', 'drr']) { tt.append(el('td', G_MET[k][1](tot.a[k])), el('td', G_MET[k][1](tot.b[k]))); const d = el('td'); d.append(gDelta(tot.b[k], tot.a[k])); tt.append(d); }
+  b2.append(tt);
+  yt.replaceChildren(h2, b2);
+}
+function sheetGrowth() {
+  const by = histAgg(); const rows = [['Month', 'Deals closed', 'Revenue (₹)', 'DRR', 'Governance']];
+  monthsBetween('2025-01', today().slice(0, 7)).forEach((m) => { const o = by[m] || { deals: 0, rev: 0, drr: 0 }; rows.push([M[Number(m.slice(5)) - 1] + ' ' + m.slice(0, 4), o.deals, Math.round(o.rev), Math.round(o.drr), m >= GOV_START ? 'After' : 'Before']); });
+  rows.push([], ['Quarter', 'Deals closed', 'Revenue (₹)', 'DRR', 'Governance']);
+  const qs = [...new Set(monthsBetween('2025-01', today().slice(0, 7)).map(qOf))];
+  qs.forEach((q) => { const o = sumM(by, qMonths(q)); rows.push([qName(q), o.deals, Math.round(o.rev), Math.round(o.drr), q >= '2026-Q4' ? 'After' : 'Before']); });
+  return rows;
+}
 
 async function load() {
   try {

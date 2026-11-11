@@ -52,6 +52,13 @@ const lq = await search([...base, { propertyName: 'hs_v2_date_entered_qualifiedt
 const won = await search([...base, { propertyName: 'dealstage', operator: 'EQ', value: 'closedwon' }, { propertyName: 'closedate', operator: 'GTE', value: String(WON_FROM) }],
   ['dealname', 'hubspot_owner_id', 'closedate', 'drr', 'service_type', 'createdate']);
 
+// ---- History for YoY / QoQ: every Closed Won deal in the Sales Pipeline since Jan 2025 (any owner) ----
+const HIST_FROM = Date.UTC(2024, 11, 31, 18, 30); // 1 Jan 2025 00:00 IST
+const PAST_OWNERS = { '1576618867': 'Sumanth MN', '166079906': 'Alfiya Shaikh', '77921411': 'Nayana Kulkarni', '1525147780': 'Pranav Mishra', '75491096': 'Madhav Anand', '298150445': 'Subrat Kumar', '689771782': 'Ananya Bhatnagar' };
+const histWon = await search([{ propertyName: 'pipeline', operator: 'EQ', value: 'default' }, { propertyName: 'dealstage', operator: 'EQ', value: 'closedwon' }, { propertyName: 'closedate', operator: 'GTE', value: String(HIST_FROM) }],
+  ['hubspot_owner_id', 'closedate', 'amount', 'drr']);
+console.log(`History: ${histWon.length} closed won deals since Jan 2025`);
+
 // ---- Count each deal once: on the FIRST day it ever entered Lead Qualified ----
 // HubSpot's "date entered Lead Qualified" is overwritten when a deal is moved back
 // into the stage (e.g. to fill in DRR), so we read the full stage history instead.
@@ -115,6 +122,9 @@ const data = {
   updated_at: new Date().toISOString(),
   lq: counted,
   not_counted: notCounted,
+  // [close date, owner, amount, DRR] — aggregate-only history, no deal names
+  hist: histWon.filter((d) => d.properties.closedate).map((d) => [iso(d.properties.closedate), OWNERS[d.properties.hubspot_owner_id] || PAST_OWNERS[d.properties.hubspot_owner_id] || 'Other',
+    d.properties.amount == null || d.properties.amount === '' ? 0 : Number(d.properties.amount), d.properties.drr == null || d.properties.drr === '' ? 0 : Number(d.properties.drr)]),
   // [id, name, rep, close date, DRR, service type, first Lead Qualified (or created) time for TAT]
   won: won.map((d) => {
     const h = (hist[d.id] || []).slice().sort((a, b) => a.t - b.t);
