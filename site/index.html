@@ -628,7 +628,7 @@
 
       <section class="view" id="v-growth">
         <h2 class="vh">YoY &amp; QoQ growth</h2>
-        <p class="cmp-sub">Every Closed Won deal in the HubSpot Sales Pipeline (all owners), by close date. Team governance started in <b>October 2026</b>.</p>
+        <p class="cmp-sub">Every Closed Won deal in the HubSpot Sales Pipeline (all owners), by close date.</p>
         <div class="gov" id="gov"></div>
         <div class="panel">
           <h3>Quarter on quarter</h3>
@@ -655,7 +655,7 @@
           <div class="dl"><div class="ic" style="--c: var(--rose)"><svg viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/></svg></div><b>Closed won deals</b><p>All Closed Won deals this quarter: rep, close date, DRR, service type and days from Lead Qualified to close.</p><button class="btn" type="button" data-report="won"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 19h16"/></svg>Download .xlsx</button></div>
           <div class="dl"><div class="ic" style="--c: var(--lav)"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div><b>Weekly comparison</b><p>Week-by-week leads, closures and DRR per rep for the whole quarter.</p><button class="btn" type="button" data-report="weekly"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 19h16"/></svg>Download .xlsx</button></div>
           <div class="dl"><div class="ic" style="--c: var(--peach)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></svg></div><b>Not counted as new</b><p>Deals moved back into Lead Qualified or reopened, with the reason they weren’t counted again.</p><button class="btn" type="button" data-report="notcounted"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 19h16"/></svg>Download .xlsx</button></div>
-          <div class="dl"><div class="ic" style="--c: var(--mint)"><svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></div><b>YoY &amp; QoQ growth</b><p>Closed Won deals, revenue and DRR for the Sales Pipeline by month and quarter since Jan 2025, marked before and after governance.</p><button class="btn" type="button" data-report="growth"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 19h16"/></svg>Download .xlsx</button></div>
+          <div class="dl"><div class="ic" style="--c: var(--mint)"><svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></div><b>YoY &amp; QoQ growth</b><p>Closed Won deals, revenue and DRR for the Sales Pipeline by month and quarter since Jan 2025.</p><button class="btn" type="button" data-report="growth"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 19h16"/></svg>Download .xlsx</button></div>
         </div>
         <p class="dl-status" id="dl-status"></p>
       </section>
@@ -1693,7 +1693,7 @@ function renderGrowth() {
   if (!DATA || !DATA.hist) { $('gov').replaceChildren(el('p', 'History loads with the next data refresh (within 15 minutes).', 'gnote')); return; }
   const by = histAgg();
   const tdy = today(), curM = tdy.slice(0, 7), dayN = Number(tdy.slice(8, 10));
-  // ---- before vs after governance: monthly average, completed months only ----
+  // ---- Jan 2025–Sep 2026 vs Oct 2026 onwards: monthly average, completed months only ----
   const lastDone = (() => { const [y, m] = curM.split('-').map(Number); return m === 1 ? (y - 1) + '-12' : y + '-' + String(m - 1).padStart(2, '0'); })();
   const pre = monthsBetween('2025-01', '2026-09'), post = lastDone >= GOV_START ? monthsBetween(GOV_START, lastDone) : [];
   const P = sumM(by, pre), A = sumM(by, post);
@@ -1703,10 +1703,10 @@ function renderGrowth() {
     const c = el('div', null, 'gcard');
     const head = el('div', null, 'gk'); head.append(name + ' per month', post.length ? gDelta(a, b) : el('span', '—', 'delta flat'));
     const v = el('div', null, 'gv');
-    const d1 = el('div'); d1.append(el('small', 'Before governance'), el('b', f(b)));
-    const d2 = el('div', null, 'after'); d2.append(el('small', 'After governance'), el('b', post.length ? f(a) : '—'));
+    const d1 = el('div'); d1.append(el('small', 'Jan 2025 – Sep 2026'), el('b', f(b)));
+    const d2 = el('div', null, 'after'); d2.append(el('small', post.length ? (post.length === 1 ? 'Oct 2026' : 'Oct 2026 – ' + M[Number(lastDone.slice(5)) - 1] + ' ' + lastDone.slice(0, 4)) : 'Oct 2026'), el('b', post.length ? f(a) : '—'));
     v.append(d1, d2);
-    c.append(head, v, el('div', 'Monthly average · before: Jan 2025 – Sep 2026 (' + pre.length + ' months) · after: ' + (post.length ? (post.length === 1 ? 'Oct 2026' : 'Oct 2026 – ' + M[Number(lastDone.slice(5)) - 1] + ' ' + lastDone.slice(0, 4)) + ' (' + post.length + ' month' + (post.length === 1 ? '' : 's') + ', completed only)' : 'no completed month yet'), 'gs'));
+    c.append(head, v, el('div', 'Monthly average · ' + pre.length + ' months vs ' + post.length + ' completed month' + (post.length === 1 ? '' : 's'), 'gs'));
     return c;
   }));
   // ---- QoQ ----
@@ -1730,7 +1730,7 @@ function renderGrowth() {
   qv.forEach((r, i) => {
     if (r.q === '2026-Q4') { const gl = el('tr', null, 'gline'); gl.append(Object.assign(el('td'), { colSpan: 7 })); tb.append(gl); }
     const tr = el('tr', null, r.q >= '2026-Q4' ? 'post' : '');
-    const nm = el('td', qName(r.q), 'l'); if (r.q === '2026-Q4') nm.append(el('span', 'Governance', 'gtag')); if (r.q === curQ) nm.append(el('span', 'to date', 'gtag p'));
+    const nm = el('td', qName(r.q), 'l'); if (r.q === curQ) nm.append(el('span', 'to date', 'gtag p'));
     tr.append(nm);
     const prev = r.q === curQ ? samePrev : (i ? qv[i - 1] : null);
     for (const k of ['deals', 'rev', 'drr']) { tr.append(el('td', G_MET[k][1](r[k]))); const d = el('td'); const g = prev ? gDelta(r[k], prev[k]) : null; g ? d.append(g) : (d.textContent = '—', d.className = 'dim'); tr.append(d); }
@@ -1750,7 +1750,7 @@ function renderGrowth() {
     const i2 = el('i', null, 'y2' + (r.m2 < GOV_START ? ' gov0' : '')); i2.style.height = r.fut ? '0' : (r.b[yoyMetric] / mx * 100) + '%'; i2.dataset.t = r.mn + ' ' + Y2 + ': ' + (r.fut ? '—' : f(r.b[yoyMetric])); if (r.fut) i2.style.minHeight = '0';
     bars.append(i1, i2); m.append(bars, el('span', r.mn)); return m; }));
   let lg = ch.nextElementSibling; if (!lg || !lg.classList.contains('ylegend')) { lg = el('div', null, 'ylegend'); ch.after(lg); }
-  lg.innerHTML = '<span><i style="background:#d4d4d8"></i>' + Y1 + '</span><span><i style="background:#8fb8ff"></i>' + Y2 + ' before governance</span><span><i style="background:#2f9e64"></i>' + Y2 + ' after governance (from Oct)</span>';
+  lg.innerHTML = '<span><i style="background:#d4d4d8"></i>' + Y1 + '</span><span><i style="background:#8fb8ff"></i>Jan – Sep ' + Y2 + '</span><span><i style="background:#2f9e64"></i>Oct – Dec ' + Y2 + '</span>';
   const yt = $('yoy');
   const h2 = el('thead'); const g1 = el('tr', null, 'grp'); g1.append(el('th', '', 'l'));
   for (const k of ['deals', 'rev', 'drr']) { const th = el('th', G_MET[k][0]); th.colSpan = 3; g1.append(th); }
@@ -1774,11 +1774,11 @@ function renderGrowth() {
   yt.replaceChildren(h2, b2);
 }
 function sheetGrowth() {
-  const by = histAgg(); const rows = [['Month', 'Deals closed', 'Revenue (₹)', 'DRR', 'Governance']];
-  monthsBetween('2025-01', today().slice(0, 7)).forEach((m) => { const o = by[m] || { deals: 0, rev: 0, drr: 0 }; rows.push([M[Number(m.slice(5)) - 1] + ' ' + m.slice(0, 4), o.deals, Math.round(o.rev), Math.round(o.drr), m >= GOV_START ? 'After' : 'Before']); });
-  rows.push([], ['Quarter', 'Deals closed', 'Revenue (₹)', 'DRR', 'Governance']);
+  const by = histAgg(); const rows = [['Month', 'Deals closed', 'Revenue (₹)', 'DRR']];
+  monthsBetween('2025-01', today().slice(0, 7)).forEach((m) => { const o = by[m] || { deals: 0, rev: 0, drr: 0 }; rows.push([M[Number(m.slice(5)) - 1] + ' ' + m.slice(0, 4), o.deals, Math.round(o.rev), Math.round(o.drr)]); });
+  rows.push([], ['Quarter', 'Deals closed', 'Revenue (₹)', 'DRR']);
   const qs = [...new Set(monthsBetween('2025-01', today().slice(0, 7)).map(qOf))];
-  qs.forEach((q) => { const o = sumM(by, qMonths(q)); rows.push([qName(q), o.deals, Math.round(o.rev), Math.round(o.drr), q >= '2026-Q4' ? 'After' : 'Before']); });
+  qs.forEach((q) => { const o = sumM(by, qMonths(q)); rows.push([qName(q), o.deals, Math.round(o.rev), Math.round(o.drr)]); });
   return rows;
 }
 
