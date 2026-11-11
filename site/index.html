@@ -474,7 +474,7 @@
       <section class="view" id="v-overview">
         <div class="hello-row">
         <div class="hello">
-          <h2>November Sales Contest</h2>
+          <h2>OND Sales Contest</h2>
           <p>Here's how the team is tracking today.</p>
         </div>
         <a class="spot" id="spot" href="#winners" hidden>
@@ -1405,7 +1405,7 @@ async function download(key) {
     ws['!cols'] = rows[0].map((_, i) => ({ wch: Math.min(48, Math.max(10, ...rows.map((r) => String(r[i] == null ? '' : r[i]).length + 2))) }));
     XLSX.utils.book_append_sheet(wb, ws, REPORTS[k][0].slice(0, 31));
   }
-  const info = XLSX.utils.aoa_to_sheet([['Blitz November Sales Contest & OND 2026 OKRs'], ['Data synced from HubSpot', istStr(DATA.updated_at) + ' IST'], ['Period used for period-based sheets', periodLabel()], ['Qualified leads sheet filter', dealScope()], ['Downloaded', istStr(new Date().toISOString()) + ' IST']]);
+  const info = XLSX.utils.aoa_to_sheet([['Blitz OND Sales Contest & OND 2026 OKRs'], ['Data synced from HubSpot', istStr(DATA.updated_at) + ' IST'], ['Period used for period-based sheets', periodLabel()], ['Qualified leads sheet filter', dealScope()], ['Downloaded', istStr(new Date().toISOString()) + ' IST']]);
   info['!cols'] = [{ wch: 40 }, { wch: 30 }];
   XLSX.utils.book_append_sheet(wb, info, 'About');
   const name = 'Blitz_' + (key === 'all' ? 'Full_Report' : REPORTS[key][0].replace(/\W+/g, '_')) + '_' + today() + '.xlsx';
