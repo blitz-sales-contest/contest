@@ -689,7 +689,7 @@
           <p class="empty" id="deal-empty" hidden>No deals qualified in this period yet.</p>
           <div class="scroll tw">
             <table>
-              <thead><tr><th class="l">Deal</th><th class="l">Rep</th><th class="l">Current stage</th><th>DRR</th><th>Qualified (IST)</th></tr></thead>
+              <thead><tr><th class="l">Deal</th><th class="l">Rep</th><th class="l">Current stage</th><th>DRR</th><th id="deal-when">Qualified (IST)</th></tr></thead>
               <tbody id="deal-rows"></tbody>
             </table>
           </div>
@@ -1029,8 +1029,9 @@ function render() {
 
   // deals
   renderDealFilters();
-  const list = DATA._lq.filter((d) => dealFilter(d.at, d.owner, d.stage)).sort((a, b) => (a.at < b.at ? 1 : -1));
-  { const sm = $('deal-sum'); sm.replaceChildren(el('b', String(list.length)), ' qualified lead' + (list.length === 1 ? '' : 's') + ' · DRR ', el('b', fmtN(list.reduce((t, d) => t + (d.drr || 0), 0)))); }
+  const list = dealList();
+  $('deal-when').textContent = dealStage === 'won' ? 'Closed won (IST)' : 'Qualified (IST)';
+  { const sm = $('deal-sum'); sm.replaceChildren(el('b', String(list.length)), (dealStage === 'won' ? ' closed won deal' : ' qualified lead') + (list.length === 1 ? '' : 's') + ' · DRR ', el('b', fmtN(list.reduce((t, d) => t + (d.drr || 0), 0)))); }
   $('deal-empty').hidden = list.length > 0;
   const drrTotal = list.reduce((t, d) => t + (d.drr || 0), 0);
   $('deal-rows').replaceChildren(...list.map((d) => {
@@ -1051,6 +1052,8 @@ const dealFilter = (iso, owner, stage) => {
   if (dealMonth === 'q') return day >= '2026-10-01' && day <= '2026-12-31';
   return day.slice(0, 7) === dealMonth;
 };
+// Closed Won filter shows every deal closed won in the period (by HubSpot close date), qualified in the contest or not.
+const dealList = () => (dealStage === 'won' ? DATA._won.filter((d) => dealFilter(d.at, d.owner)).map((d) => ({ ...d, stage: 'closedwon' })) : DATA._lq.filter((d) => dealFilter(d.at, d.owner, d.stage))).sort((a, b) => (a.at < b.at ? 1 : -1));
 const dealScope = () => (dealMonth === 'period' ? (WEEKLY.find((r) => r.owner === 'Team' && r.period === period) || {}).label : $('deal-month').selectedOptions[0].textContent) + (dealRep === 'All' ? ' · all reps' : ' · ' + dealRep) + (dealStage === 'all' ? '' : ' · ' + $('deal-stage').selectedOptions[0].textContent);
 function renderDealFilters() {
   $('deal-reps').replaceChildren(...['All', ...REPS].map((o) => {
@@ -1343,8 +1346,8 @@ function sheetOKR() {
   return rows;
 }
 function sheetLeads() {
-  const rows = [['Deal', 'Rep', 'First Lead Qualified (IST)', 'Week starting', 'Current stage', 'DRR']];
-  DATA._lq.filter((d) => dealFilter(d.at, d.owner, d.stage)).sort((a, b) => (a.at < b.at ? 1 : -1)).forEach((d) => rows.push([d.deal, d.owner, istStr(d.at), weekOf(istDay(d.at)), STAGE_LABEL[d.stage] || d.stage, d.drr == null ? '' : r1(d.drr)]));
+  const rows = [['Deal', 'Rep', dealStage === 'won' ? 'Closed won (IST)' : 'First Lead Qualified (IST)', 'Week starting', 'Current stage', 'DRR']];
+  dealList().forEach((d) => rows.push([d.deal, d.owner, istStr(d.at), weekOf(istDay(d.at)), STAGE_LABEL[d.stage] || d.stage, d.drr == null ? '' : r1(d.drr)]));
   return rows;
 }
 function sheetDaily() {
