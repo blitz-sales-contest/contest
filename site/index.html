@@ -229,6 +229,20 @@
       linear-gradient(#6b4527, #4f321c);
     box-shadow: inset 0 3px 0 rgba(255,255,255,.12), inset 0 -10px 18px rgba(0,0,0,.35), 0 -6px 14px rgba(0,0,0,.18); }
   .floor { height: 36px; background: linear-gradient(#3a2414, #24160c); transform-origin: top; }
+  .sign { text-align: center; margin: 0 auto 46px; }
+  .sign-stars { display: flex; justify-content: center; align-items: flex-end; gap: 22px; margin-bottom: 6px; }
+  .sign-stars i { display: block; width: 30px; height: 30px; filter: drop-shadow(0 1px 0 #8a5f12) drop-shadow(0 2px 0 #7a5410) drop-shadow(0 3px 0 #6a480c) drop-shadow(0 8px 6px rgba(70,45,10,.35)); }
+  .sign-stars i.big { width: 42px; height: 42px; margin-bottom: 6px; }
+  .sign-stars svg { width: 100%; height: 100%; display: block; }
+  .sign-t { position: relative; display: inline-block; font-family: Cinzel, Georgia, serif; font-weight: 700; font-size: clamp(30px, 3.6vw, 48px); letter-spacing: 3px; line-height: 1.1; color: #17171a;
+    text-shadow: 0 1px 0 #303035, 0 2px 0 #2b2b30, 0 3px 0 #26262a, 0 4px 0 #202024, 0 5px 0 #1b1b1e, 0 6px 1px rgba(0,0,0,.35), 0 9px 6px rgba(70,45,20,.35), 0 16px 18px rgba(70,45,20,.28), 0 26px 30px rgba(70,45,20,.18); }
+  .sign-t::after { content: attr(data-t); position: absolute; inset: 0; color: transparent; text-shadow: none;
+    background: linear-gradient(172deg, rgba(255,255,255,.62) 0%, rgba(255,255,255,.18) 40%, rgba(255,255,255,0) 41%, rgba(255,255,255,0) 82%, rgba(255,255,255,.12) 100%);
+    -webkit-background-clip: text; background-clip: text; }
+  .sign-rule { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 14px; }
+  .sign-rule span { width: min(160px, 22vw); height: 2px; background: linear-gradient(90deg, transparent, #c9a24b); box-shadow: 0 2px 2px rgba(70,45,20,.25); }
+  .sign-rule span:last-child { background: linear-gradient(90deg, #c9a24b, transparent); }
+  .sign-rule b { width: 9px; height: 9px; transform: rotate(45deg); background: linear-gradient(135deg, #f3d27a, #a8771a); box-shadow: 1px 3px 3px rgba(70,45,20,.35); }
   .wall-empty { text-align: center; color: #7a6650; font-size: 15px; margin: 90px 0; }
   .wall-sec h3 { font-family: Cinzel, Georgia, serif; font-size: 20px; letter-spacing: 6px; text-transform: uppercase; color: rgba(70,50,30,.55); text-shadow: 0 1px 0 rgba(255,255,255,.7), 0 -1px 0 rgba(0,0,0,.12); text-align: left; margin: 0 0 34px; font-weight: 700; }
   .wall-sec + .wall-sec { margin-top: 30px; }
@@ -595,9 +609,13 @@
 
       <section class="view" id="v-winners">
         <h2 class="sr">Wall of Fame</h2>
-        <img class="wof-head" src="img/wall-of-fame-header.jpg" alt="Wall of Fame">
         <div class="room">
           <div class="room-wall">
+            <div class="sign" aria-hidden="true">
+              <div class="sign-stars"><i><svg viewBox="0 0 24 24"><defs><linearGradient id="SG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe9a3"/><stop offset=".5" stop-color="#e0ad35"/><stop offset="1" stop-color="#a8771a"/></linearGradient></defs><path d="M12 1.8l3 6.9 7.5.7-5.7 5 1.7 7.4L12 17.9l-6.5 3.9 1.7-7.4-5.7-5 7.5-.7z" fill="url(#SG)" stroke="#8a5f12" stroke-width=".5"/></svg></i><i class="big"><svg viewBox="0 0 24 24"><defs><linearGradient id="SG2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe9a3"/><stop offset=".5" stop-color="#e0ad35"/><stop offset="1" stop-color="#a8771a"/></linearGradient></defs><path d="M12 1.8l3 6.9 7.5.7-5.7 5 1.7 7.4L12 17.9l-6.5 3.9 1.7-7.4-5.7-5 7.5-.7z" fill="url(#SG2)" stroke="#8a5f12" stroke-width=".5"/></svg></i><i><svg viewBox="0 0 24 24"><defs><linearGradient id="SG3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe9a3"/><stop offset=".5" stop-color="#e0ad35"/><stop offset="1" stop-color="#a8771a"/></linearGradient></defs><path d="M12 1.8l3 6.9 7.5.7-5.7 5 1.7 7.4L12 17.9l-6.5 3.9 1.7-7.4-5.7-5 7.5-.7z" fill="url(#SG3)" stroke="#8a5f12" stroke-width=".5"/></svg></i></div>
+              <div class="sign-t" data-t="Wall of Fame">Wall of Fame</div>
+              <div class="sign-rule"><span></span><b></b><span></span></div>
+            </div>
             <p class="wall-empty" id="wall-empty" hidden>No winners announced yet. The first Weekly Star will hang here.</p>
             <div id="wall"></div>
           </div>
