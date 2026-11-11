@@ -207,6 +207,7 @@
   .adm-list .it { display: flex; align-items: center; gap: 12px; padding: 10px; border: 1px solid #f0f0f2; border-radius: 12px; }
   .adm-list .it img, .adm-list .it .ph { width: 48px; height: 48px; border-radius: 10px; object-fit: cover; background: #f2f2f4; flex: none; }
   .adm-list .it div { flex: 1; min-width: 0; font-size: 13px; } .adm-list .it b { display: block; font-size: 14px; }
+  .adm-list .it button.ed { border-color: var(--line); color: var(--fg); }
   .adm-list .it button { font: inherit; font-size: 12.5px; border: 1px solid #f1c4bd; color: var(--bad-fg); background: #fff; border-radius: 8px; padding: 6px 10px; cursor: pointer; }
   .adm .help { font-size: 12.5px; color: var(--muted); line-height: 1.55; margin: 0; }
   .adm .help code { background: #f4f4f6; padding: 1px 5px; border-radius: 4px; }
@@ -563,7 +564,7 @@
           </div></div>
         </div>
         <div class="adm" id="adm-main" hidden>
-          <div class="panel"><h3>Announce a winner</h3>
+          <div class="panel"><h3 id="w-head">Announce a winner</h3>
             <div class="fields">
               <div class="two-col">
                 <label>Contest<select id="w-type"><option value="weekly">Weekly Star</option><option value="monthly">Monthly Star</option><option value="quarterly">Quarterly Champion</option></select></label>
@@ -571,10 +572,9 @@
               </div>
               <label>Winner<select id="w-rep"></select></label>
               <label>Award title<input type="text" id="w-title" maxlength="60" placeholder="e.g. Pipeline Powerhouse"></label>
-              <label>Description<textarea id="w-desc" maxlength="280" placeholder="e.g. 18 qualified leads and hit 3+ every single day of Week 1."></textarea></label>
               <label>Photo<input type="file" id="w-photo" accept="image/*"></label>
               <div class="prev"><img id="w-prev" alt="" hidden><div class="ph" id="w-prev-ph"></div><p class="help" id="w-stats">Pick a contest, period and winner to see their numbers.</p></div>
-              <button class="btn" type="button" id="w-publish">Publish winner</button>
+              <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn" type="button" id="w-publish">Publish winner</button><button class="btn ghost" type="button" id="w-cancel" hidden>Cancel edit</button></div>
               <div class="msg" id="w-msg"></div>
             </div>
           </div>
@@ -1373,7 +1373,7 @@ function renderWinners() {
     $('spot-k').textContent = '🏆 ' + shortBadge(sp);
     $('spot-name').textContent = sp.rep;
     $('spot-title').textContent = sp.title || '';
-    $('spot-desc').textContent = sp.desc || '';
+    $('spot-desc').textContent = '';
   }
   // wall
   const wall = $('wall');
@@ -1389,7 +1389,6 @@ function renderWinners() {
       body.append(el('span', shortBadge(w) + (t === 'weekly' ? ' · ' + periodName(w).split(' · ')[1] : ''), 'badge'));
       if (w.title) body.append(el('div', w.title, 'ttl'));
       body.append(el('div', w.rep, 'nm'));
-      if (w.desc) body.append(el('p', w.desc, 'ds'));
       const st = el('div', null, 'stats'); winnerStats(w).forEach((x) => st.append(el('span', x))); body.append(st);
       c.append(pic, body); g.append(c);
     });
@@ -1437,12 +1436,27 @@ function renderAdminList() {
     const it = el('div', null, 'it');
     const im = w.photo ? (() => { const i = el('img'); i.src = w.photo + '?v=' + (w.v || ''); return i; })() : el('div', null, 'ph');
     const tx = el('div'); tx.append(el('b', w.rep), shortBadge(w) + (w.title ? ' · ' + w.title : ''));
+    const ed = el('button', 'Edit'); ed.type = 'button'; ed.className = 'ed';
+    ed.onclick = () => startEdit(w);
     const del = el('button', 'Remove'); del.type = 'button';
     del.onclick = () => removeWinner(w.id);
-    it.append(im, tx, del); return it;
+    it.append(im, tx, ed, del); return it;
   }) : [el('p', 'Nothing published yet.', 'help')]));
 }
-let photoData = null;
+let photoData = null, editing = null;
+function startEdit(w) {
+  editing = w;
+  $('w-type').value = w.type; fillAdminSelects();
+  $('w-period').value = w.period; $('w-rep').value = w.rep; $('w-title').value = w.title || '';
+  photoData = null; $('w-photo').value = '';
+  if (w.photo) { $('w-prev').src = w.photo + '?v=' + (w.v || ''); $('w-prev').hidden = false; $('w-prev-ph').hidden = true; } else { $('w-prev').hidden = true; $('w-prev-ph').hidden = false; }
+  adminStats();
+  $('w-head').textContent = 'Edit winner: ' + w.rep;
+  $('w-publish').textContent = 'Save changes';
+  $('w-cancel').hidden = false;
+  $('w-msg').textContent = 'Change anything above. Leave the photo empty to keep the current one.'; $('w-msg').className = 'msg';
+  $('w-head').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
 $('w-photo').addEventListener('change', (e) => {
   const f = e.target.files[0]; photoData = null; if (!f) return;
   const img = new Image(); const url = URL.createObjectURL(f);
@@ -1466,7 +1480,7 @@ async function currentWinners() {
 }
 $('w-publish').addEventListener('click', async () => {
   const msg = $('w-msg'); msg.className = 'msg';
-  const w = { type: $('w-type').value, period: $('w-period').value, rep: $('w-rep').value, title: $('w-title').value.trim(), desc: $('w-desc').value.trim() };
+  const w = { type: $('w-type').value, period: $('w-period').value, rep: $('w-rep').value, title: $('w-title').value.trim() };
   if (!w.rep || !w.period) { msg.textContent = 'Pick a contest, period and winner.'; msg.className = 'msg bad'; return; }
   const btn = $('w-publish'); btn.disabled = true; msg.textContent = 'Publishing…';
   try {
@@ -1478,14 +1492,15 @@ $('w-publish').addEventListener('click', async () => {
       await gh('contents/' + path, { method: 'PUT', body: JSON.stringify({ message: 'Winner photo: ' + w.rep + ' (' + w.id + ') [skip ci]', content: photoData.split(',')[1], branch: GH.branch, ...(ex ? { sha: ex.sha } : {}) }) });
       w.photo = 'winners/' + w.id + '.jpg';
     }
-    const list = (await currentWinners()).filter((x) => x.id !== w.id);
-    const old = WINNERS.find((x) => x.id === w.id);
+    const list = (await currentWinners()).filter((x) => x.id !== w.id && (!editing || x.id !== editing.id));
+    const old = (editing && WINNERS.find((x) => x.id === editing.id)) || WINNERS.find((x) => x.id === w.id);
     if (!w.photo && old && old.photo) w.photo = old.photo;
     list.push(w);
     await saveWinners(list, 'Announce ' + W_TYPES[w.type] + ' ' + periodName(w) + ': ' + w.rep);
+    const wasEdit = !!editing;
     WINNERS = list; renderWinners();
-    msg.textContent = 'Published! It will be live for everyone in about 1–2 minutes.'; msg.className = 'msg ok';
-    $('w-title').value = ''; $('w-desc').value = ''; $('w-photo').value = ''; photoData = null; $('w-prev').hidden = true; $('w-prev-ph').hidden = false;
+    msg.textContent = (wasEdit ? 'Saved!' : 'Published!') + ' It will be live for everyone in about 1–2 minutes.'; msg.className = 'msg ok';
+    $('w-title').value = ''; editing = null; $('w-cancel').hidden = true; $('w-publish').textContent = 'Publish winner'; $('w-head').textContent = 'Announce a winner'; $('w-photo').value = ''; photoData = null; $('w-prev').hidden = true; $('w-prev-ph').hidden = false;
   } catch (e) {
     msg.textContent = (/401|403|Bad credentials|Resource not accessible/.test(e.message) ? "GitHub didn't accept the key. Check it has Contents: Read and write on blitz-sales-contest/contest. " : "Couldn't publish: ") + e.message; msg.className = 'msg bad';
   } finally { btn.disabled = false; }
@@ -1509,6 +1524,7 @@ $('adm-save').addEventListener('click', async () => {
     $('adm-token').value = ''; m.textContent = ''; adminShow(); fillAdminSelects();
   } catch (e) { tokenSet(''); m.textContent = "That key didn't work: " + e.message; m.className = 'msg bad'; }
 });
+$('w-cancel').addEventListener('click', () => { editing = null; $('w-cancel').hidden = true; $('w-publish').textContent = 'Publish winner'; $('w-head').textContent = 'Announce a winner'; $('w-title').value = ''; $('w-photo').value = ''; photoData = null; $('w-prev').hidden = true; $('w-prev-ph').hidden = false; $('w-msg').textContent = ''; });
 $('adm-forget').addEventListener('click', () => { tokenSet(''); adminShow(); location.hash = 'winners'; });
 ['w-type'].forEach((id) => $(id).addEventListener('change', fillAdminSelects));
 ['w-period', 'w-rep'].forEach((id) => $(id).addEventListener('change', adminStats));
