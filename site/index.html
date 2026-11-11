@@ -230,10 +230,10 @@
     box-shadow: inset 0 3px 0 rgba(255,255,255,.12), inset 0 -10px 18px rgba(0,0,0,.35), 0 -6px 14px rgba(0,0,0,.18); }
   .floor { height: 36px; background: linear-gradient(#3a2414, #24160c); transform-origin: top; }
   .wall-empty { text-align: center; color: #7a6650; font-size: 15px; margin: 90px 0; }
-  .wall-sec h3 { font-family: Cinzel, Georgia, serif; font-size: 20px; letter-spacing: 6px; text-transform: uppercase; color: rgba(70,50,30,.55); text-shadow: 0 1px 0 rgba(255,255,255,.7), 0 -1px 0 rgba(0,0,0,.12); text-align: center; margin: 0 0 34px; font-weight: 700; }
+  .wall-sec h3 { font-family: Cinzel, Georgia, serif; font-size: 20px; letter-spacing: 6px; text-transform: uppercase; color: rgba(70,50,30,.55); text-shadow: 0 1px 0 rgba(255,255,255,.7), 0 -1px 0 rgba(0,0,0,.12); text-align: left; margin: 0 0 34px; font-weight: 700; }
   .wall-sec + .wall-sec { margin-top: 30px; }
-  .wall { display: flex; flex-wrap: wrap; justify-content: center; gap: 58px 46px; margin-bottom: 20px; }
-  .hang { position: relative; width: 220px; padding-top: 34px; transform-style: preserve-3d; }
+  .wall { display: flex; flex-wrap: wrap; justify-content: flex-start; gap: 58px 30px; margin-bottom: 20px; }
+  .hang { position: relative; width: 200px; padding-top: 34px; transform-style: preserve-3d; }
   .hang::before { content: ""; position: absolute; left: 50%; top: 0; width: 9px; height: 9px; margin-left: -4.5px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #f3e3b3, #8a6a2a 70%); box-shadow: 0 2px 2px rgba(0,0,0,.4); z-index: 2; }
   .hang::after { content: ""; position: absolute; left: 22%; right: 22%; top: 4px; height: 34px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 30' preserveAspectRatio='none'%3E%3Cpath d='M0 30 L50 1 L100 30' stroke='%23574a3a' stroke-width='1.4' fill='none' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E") no-repeat; background-size: 100% 100%; }
   .glow { position: absolute; left: -40px; right: -40px; top: -10px; height: 260px; background: radial-gradient(50% 55% at 50% 30%, rgba(255,236,190,.65), transparent 70%); pointer-events: none; }
@@ -1438,8 +1438,9 @@ function renderWinners() {
   wall.replaceChildren(...secs.filter(([t]) => WINNERS.some((w) => w.type === t)).map(([t, name]) => {
     const sec = el('div', null, 'wall-sec'); sec.append(el('h3', name));
     const g = el('div', null, 'wall');
-    WINNERS.filter((w) => w.type === t).sort(sortW).forEach((w, i) => {
-      const h = el('div', null, 'hang ' + t + (t === 'weekly' && i === 0 ? ' featured' : ''));
+    const list = WINNERS.filter((w) => w.type === t).sort(sortW).reverse();
+    list.forEach((w, i) => {
+      const h = el('div', null, 'hang ' + t + (t === 'weekly' && i === list.length - 1 ? ' featured' : ''));
       const fr = el('div', null, 'frame'); fr.style.setProperty('--tilt', TILT[(i + t.length) % TILT.length] + 'deg');
       const mat = el('div', null, 'mat'); const ph = el('div', null, 'ph-in'); ph.append(photoEl(w)); mat.append(ph); fr.append(mat);
       const pl = el('div', null, 'plaque');
