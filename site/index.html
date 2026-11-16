@@ -1539,7 +1539,7 @@ async function loadWinners() {
 const tokenGet = () => { try { return localStorage.getItem('nc-gh-token') || ''; } catch (e) { return ''; } };
 const tokenSet = (t) => { try { t ? localStorage.setItem('nc-gh-token', t) : localStorage.removeItem('nc-gh-token'); } catch (e) {} };
 const gh = async (path, opts = {}) => {
-  const r = await fetch('https://api.github.com/repos/' + GH.owner + '/' + GH.repo + (path ? '/' + path : ''), { ...opts, headers: { Authorization: 'Bearer ' + tokenGet(), Accept: 'application/vnd.github+json', ...(opts.headers || {}) } });
+  const r = await fetch('https://api.github.com/repos/' + GH.owner + '/' + GH.repo + (path ? '/' + path : '') + ((opts.method || 'GET') === 'GET' ? (path.includes('?') ? '&' : '?') + '_=' + Date.now() : ''), { cache: 'no-store', ...opts, headers: { Authorization: 'Bearer ' + tokenGet(), Accept: 'application/vnd.github+json', ...(opts.headers || {}) } });
   if (!r.ok && r.status !== 404) { const t = await r.text(); throw new Error(r.status + ' ' + (JSON.parse(t || '{}').message || t).slice(0, 160)); }
   return r.status === 404 ? null : r.json();
 };
@@ -1603,8 +1603,11 @@ $('w-photo').addEventListener('change', (e) => {
   img.src = url;
 });
 async function saveWinners(list, message) {
-  const cur = await gh('contents/' + GH.file + '?ref=' + GH.branch);
-  await gh('contents/' + GH.file, { method: 'PUT', body: JSON.stringify({ message, content: b64(JSON.stringify(list, null, 2) + '\n'), branch: GH.branch, ...(cur ? { sha: cur.sha } : {}) }) });
+  for (let attempt = 0; ; attempt++) {
+    const cur = await gh('contents/' + GH.file + '?ref=' + GH.branch);
+    try { await gh('contents/' + GH.file, { method: 'PUT', body: JSON.stringify({ message, content: b64(JSON.stringify(list, null, 2) + '\n'), branch: GH.branch, ...(cur ? { sha: cur.sha } : {}) }) }); return; }
+    catch (e) { if (attempt < 2 && /^409/.test(e.message)) { await new Promise((r) => setTimeout(r, 1500)); continue; } throw e; }
+  }
 }
 async function currentWinners() {
   const cur = await gh('contents/' + GH.file + '?ref=' + GH.branch);
