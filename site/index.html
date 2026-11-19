@@ -1939,7 +1939,7 @@ function renderSDRTasks(tbl, tr, pct, istDay) {
   }
   err.hidden = true;
   const tasks = DATA.sdr_tasks.map(([id, subject, rep, status, created, due, done]) => ({
-    id, subject: subject.replace(/^Virtual SDR:\s*/i, ''), rep, done: status === 'COMPLETED', day: created ? istDay(created) : '', created,
+    id, subject: subject.replace(/^Virtual SDR:\s*(email \+ call\s*)?/i, ''), rep, done: status === 'COMPLETED', day: created ? istDay(created) : '', created,
   }));
   const esms = [...new Set(tasks.map((t) => t.rep))].sort();
   const cell = (a, d) => (a ? a + '/' + d : '—');
