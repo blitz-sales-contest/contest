@@ -118,8 +118,55 @@ for (const d of lq) {
   }
 }
 
+// ---- Virtual SDR pilot: every deal whose Source is "Virtual SDR" (any owner) ----
+let sdr = null, sdrError = null, sdrRealised = null;
+try {
+  const s = await search([{ propertyName: 'source', operator: 'EQ', value: 'Virtual SDR' }],
+    ['dealname', 'hubspot_owner_id', 'dealstage', 'hs_priority', 'category', 'pitch_line', 'email_variant', 'org_id', 'createdate', 'closedate', 'drr']);
+  // [id, name, rep, stage, priority, category, pitch line, email variant, org id, created, closed, expected DRR]
+  sdr = s.map((d) => {
+    const p = d.properties;
+    return [d.id, p.dealname || '', OWNERS[p.hubspot_owner_id] || PAST_OWNERS[p.hubspot_owner_id] || p.hubspot_owner_id || '', p.dealstage || '', p.hs_priority || '', p.category || '',
+      p.pitch_line || '', p.email_variant || '', p.org_id || null, iso(p.createdate), iso(p.closedate), p.drr == null || p.drr === '' ? null : Number(p.drr)];
+  });
+  console.log(`Virtual SDR: ${sdr.length} deals`);
+} catch (e) {
+  sdrError = String(e.message || e).slice(0, 200);
+  console.log('Virtual SDR pull failed: ' + sdrError);
+}
+
+// Realised DRR from Metabase pickups (optional: needs METABASE_URL and METABASE_API_KEY secrets).
+// Average daily pickups over the last 30 days for each Virtual SDR deal's Org ID.
+const mbUrl = process.env.METABASE_URL, mbKey = process.env.METABASE_API_KEY;
+const sdrOrgs = sdr ? [...new Set(sdr.map((r) => r[8]).filter(Boolean))] : [];
+if (mbUrl && mbKey && sdrOrgs.length) {
+  try {
+    const res = await fetch(mbUrl.replace(/\/$/, '') + '/api/dataset', {
+      method: 'POST',
+      headers: { 'x-api-key': mbKey, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ database: 9, type: 'query', query: {
+        'source-table': 1816,
+        aggregation: [['sum', ['field', 36074, null]]],
+        breakout: [['field', 36087, null]],
+        filter: ['and', ['time-interval', ['field', 36068, null], -30, 'day'], ['=', ['field', 36087, null], ...sdrOrgs.map(Number)]],
+      } }),
+    });
+    if (!res.ok) throw new Error('Metabase ' + res.status + ': ' + (await res.text()).slice(0, 200));
+    const j = await res.json();
+    sdrRealised = {};
+    for (const [org, pickups] of (j.data && j.data.rows) || []) sdrRealised[String(org)] = Math.round(Number(pickups) / 30);
+    console.log(`Realised DRR for ${Object.keys(sdrRealised).length} Virtual SDR orgs`);
+  } catch (e) {
+    console.log('Metabase pull failed: ' + String(e.message || e).slice(0, 200));
+  }
+}
+
 const data = {
   updated_at: new Date().toISOString(),
+  sdr,
+  sdr_error: sdrError,
+  sdr_realised: sdrRealised,
+  sdr_realised_on: !!(mbUrl && mbKey),
   lq: counted,
   not_counted: notCounted,
   // [close date, owner, amount, DRR] — aggregate-only history, no deal names

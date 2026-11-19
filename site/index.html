@@ -479,6 +479,8 @@
       <a href="#compare" data-v="compare"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Weekly Comparison</a>
       <a href="#deals" data-v="deals"><svg viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>Qualified Deals</a>
       <a href="#winners" data-v="winners"><svg viewBox="0 0 24 24"><path d="M12 15a6 6 0 1 0 0-12 6 6 0 0 0 0 12z"/><path d="M8.2 13.9 7 22l5-3 5 3-1.2-8.1"/></svg>Wall of Fame</a>
+          <div class="grp" style="padding-left:12px">VIRTUAL SDR</div>
+      <a href="#sdr" data-v="sdr"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/><path d="M19 3l2 2-2 2"/></svg>SDR Pipeline</a>
           <div class="grp" style="padding-left:12px">OKRS · OND 2026</div>
       <a href="#okr" data-v="okr"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></svg>OKR View</a>
       <a href="#growth" data-v="growth"><svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>YoY &amp; QoQ</a>
@@ -712,6 +714,64 @@
         </div>
       </section>
 
+      <section class="view" id="v-sdr">
+        <h2 class="vh">Virtual SDR</h2>
+        <p class="cmp-sub" id="sdr-sub">Leads the Virtual SDR created in HubSpot (deal Source = Virtual SDR): how far they have moved, which pitch line and email got them there, and the DRR they bring.</p>
+        <div class="err" id="sdr-err" hidden></div>
+        <div class="cards">
+          <div class="sc" style="--c: var(--lav)"><div class="top"><div class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a6 6 0 0 1 6-6h4a6 6 0 0 1 6 6v1"/></svg></div><span class="tag"><i class="dot"></i>LIVE</span>
+            <div class="num" id="sdr-leads">—</div><div class="lbl">Leads created</div></div>
+            <div class="bot">This week <b id="sdr-leads-wk">—</b></div></div>
+          <div class="sc" style="--c: var(--sky)"><div class="top"><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></svg></div><span class="tag"><i class="dot"></i>LIVE</span>
+            <div class="num" id="sdr-moved">—</div><div class="lbl">Moved past first stage</div></div>
+            <div class="bot">Left Appointment to be scheduled, not lost · <b id="sdr-moved-pct">—</b></div></div>
+          <div class="sc" style="--c: var(--mint)"><div class="top"><div class="ic"><svg viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/></svg></div><span class="tag"><i class="dot"></i>LIVE</span>
+            <div class="num" id="sdr-won">—</div><div class="lbl">Closed Won</div></div>
+            <div class="bot">Lost so far <b id="sdr-lost">—</b></div></div>
+          <div class="sc" style="--c: var(--peach)"><div class="top"><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 4h18l-7 8v6l-4 2v-8z"/></svg></div><span class="tag"><i class="dot"></i>LIVE</span>
+            <div class="num" id="sdr-drr">—</div><div class="lbl">DRR from won deals</div></div>
+            <div class="bot" id="sdr-drr-note">—</div></div>
+        </div>
+        <div class="panel">
+          <h3>Where the leads are now</h3>
+          <div class="tw"><table class="gt">
+            <thead><tr><th class="l">Stage</th><th>Leads</th><th>Share</th></tr></thead>
+            <tbody id="sdr-stage"></tbody>
+          </table></div>
+        </div>
+        <div class="two">
+          <div class="panel"><h3>By pitch line (subject)</h3>
+            <div class="tw"><table class="gt">
+              <thead><tr><th class="l">Pitch line</th><th>Leads</th><th>Moved</th><th>Won</th><th>Moved %</th></tr></thead>
+              <tbody id="sdr-pitch"></tbody>
+            </table></div></div>
+          <div class="panel"><h3>By email variant</h3>
+            <div class="tw"><table class="gt">
+              <thead><tr><th class="l">Email variant</th><th>Leads</th><th>Moved</th><th>Won</th><th>Moved %</th></tr></thead>
+              <tbody id="sdr-variant"></tbody>
+            </table></div></div>
+        </div>
+        <div class="two">
+          <div class="panel"><h3>By owner</h3>
+            <div class="tw"><table class="gt">
+              <thead><tr><th class="l">Owner</th><th>Leads</th><th>Moved</th><th>Won</th><th>DRR</th></tr></thead>
+              <tbody id="sdr-owner"></tbody>
+            </table></div></div>
+          <div class="panel"><h3>By priority</h3>
+            <div class="tw"><table class="gt">
+              <thead><tr><th class="l">Priority</th><th>Leads</th><th>Moved</th><th>Won</th><th>Moved %</th></tr></thead>
+              <tbody id="sdr-prio"></tbody>
+            </table></div></div>
+        </div>
+        <div class="panel">
+          <h3>Every Virtual SDR lead</h3>
+          <div class="tw"><table class="gt">
+            <thead><tr><th class="l">Deal</th><th class="l">Owner</th><th class="l">Priority</th><th class="l">Category</th><th class="l">Stage</th><th class="l">Pitch line</th><th class="l">Email</th><th>Created</th><th>DRR</th></tr></thead>
+            <tbody id="sdr-rows"></tbody>
+          </table></div>
+        </div>
+      </section>
+
       <section class="view" id="v-deals">
         <h2 class="vh">Qualified Deals</h2>
         <div class="dfil">
@@ -845,7 +905,7 @@ function compute() {
 const initials = (n) => n.split(' ').map((x) => x[0]).join('').slice(0, 2).toUpperCase();
 const AV = ['#c9c3f5', '#bcd3fb', '#bfe8d2', '#f9d3b5'];
 const avatar = (name) => { const a = el('div', initials(name), 'avatar'); const i = REPS.indexOf(name); a.style.background = AV[i % AV.length]; a.style.color = '#222'; return a; };
-const VIEWS = ['overview', 'tracker', 'pipeline', 'leaderboard', 'compare', 'deals', 'okr', 'growth', 'download', 'winners', 'admin'];
+const VIEWS = ['overview', 'tracker', 'pipeline', 'leaderboard', 'compare', 'deals', 'okr', 'growth', 'download', 'winners', 'admin', 'sdr'];
 let cmpRep = 'Team';
 
 function show() {
@@ -1078,6 +1138,7 @@ function render() {
   renderOKR();
   renderWinners();
   renderGrowth();
+  renderSDR();
   if (tokenGet()) { if (!$('w-period').options.length) fillAdminSelects(); else adminStats(); }
   $('dl-sub').textContent = 'Excel files built from the latest numbers on this page. Period-based sheets use: ' + periodLabel() + ' (change it with the menu at the top).';
 
@@ -1783,6 +1844,67 @@ function sheetGrowth() {
   const qs = [...new Set(monthsBetween('2025-01', today().slice(0, 7)).map(qOf))];
   qs.forEach((q) => { const o = sumM(by, qMonths(q)); rows.push([qName(q), o.deals, Math.round(o.rev), Math.round(o.drr)]); });
   return rows;
+}
+
+const SDR_STAGE = { appointmentscheduled: 'Appointment to be scheduled', qualifiedtobuy: 'Lead Qualified', '48215108': 'Lead Nurture & Follow up', presentationscheduled: 'Proposal Sent', decisionmakerboughtin: 'Negotiation & Review', '1014542596': 'Agreement and Activation', contractsent: 'Contract sent', closedwon: 'Closed Won', closedlost: 'Closed Lost', '1016858950': 'Churned', '49708155': 'Details Missing' };
+const SDR_ORDER = ['appointmentscheduled', 'qualifiedtobuy', '48215108', 'presentationscheduled', 'decisionmakerboughtin', 'contractsent', '1014542596', 'closedwon', 'closedlost', '1016858950', '49708155'];
+const SDR_PRIO = { high: 'Hot', medium: 'Medium', low: 'Cold' };
+function renderSDR() {
+  const err = $('sdr-err');
+  if (!DATA || !Array.isArray(DATA.sdr)) {
+    err.textContent = DATA && DATA.sdr_error ? "Couldn't read Virtual SDR deals from HubSpot this sync." : 'Virtual SDR numbers load with the next data refresh (within 15 minutes).';
+    err.hidden = false;
+    return;
+  }
+  err.hidden = true;
+  const real = DATA.sdr_realised || null;
+  const rows = DATA.sdr.map(([id, name, rep, stage, prio, cat, pitch, variant, org, created, closed, drr]) => ({
+    id, name, rep, stage, prio: SDR_PRIO[prio] || prio || '', cat: (cat || '').replace(/&amp;/g, '&'), pitch, variant, org, created, closed,
+    drr: real && org && real[org] != null ? real[org] : drr,
+  }));
+  const moved = (s) => s !== 'appointmentscheduled' && s !== 'closedlost';
+  const won = rows.filter((r) => r.stage === 'closedwon');
+  const wk = weekOf(today());
+  const istDay = (t) => new Date(Date.parse(t) + 19800000).toISOString().slice(0, 10);
+  const nMoved = rows.filter((r) => moved(r.stage)).length;
+  $('sdr-leads').textContent = rows.length;
+  $('sdr-leads-wk').textContent = rows.filter((r) => r.created && weekOf(istDay(r.created)) === wk).length;
+  $('sdr-moved').textContent = nMoved;
+  $('sdr-moved-pct').textContent = rows.length ? Math.round((nMoved / rows.length) * 100) + '%' : '—';
+  $('sdr-won').textContent = won.length;
+  $('sdr-lost').textContent = rows.filter((r) => r.stage === 'closedlost').length;
+  $('sdr-drr').textContent = won.reduce((s, r) => s + (r.drr || 0), 0).toLocaleString('en-IN');
+  $('sdr-drr-note').textContent = real ? 'Actual average daily pickups, last 30 days (Metabase)' : 'Expected DRR from the HubSpot deal';
+
+  const tbl = (id, list) => $(id).replaceChildren(...list);
+  const tr = (cells) => { const t = el('tr'); cells.forEach(([v, c]) => t.append(el('td', String(v), c || ''))); return t; };
+  const pct = (a, b) => (b ? Math.round((a / b) * 100) + '%' : '—');
+  const group = (key) => {
+    const m = new Map();
+    for (const r of rows) {
+      const k = r[key] || 'Not set';
+      const a = m.get(k) || { k, leads: 0, moved: 0, won: 0, drr: 0 };
+      a.leads++; if (moved(r.stage)) a.moved++; if (r.stage === 'closedwon') { a.won++; a.drr += r.drr || 0; }
+      m.set(k, a);
+    }
+    return [...m.values()];
+  };
+
+  const byStage = new Map();
+  rows.forEach((r) => byStage.set(r.stage, (byStage.get(r.stage) || 0) + 1));
+  const stages = [...byStage.keys()].sort((a, b) => (SDR_ORDER.indexOf(a) + 99 * (SDR_ORDER.indexOf(a) < 0)) - (SDR_ORDER.indexOf(b) + 99 * (SDR_ORDER.indexOf(b) < 0)));
+  tbl('sdr-stage', rows.length ? stages.map((s) => tr([[SDR_STAGE[s] || s, 'l'], [byStage.get(s)], [pct(byStage.get(s), rows.length)]])) : [tr([['No Virtual SDR leads yet', 'l dim'], [''], ['']])]);
+
+  const split = (id, key) => tbl(id, group(key).sort((a, b) => (a.k < b.k ? -1 : 1)).map((a) => tr([[a.k, 'l'], [a.leads], [a.moved], [a.won], [pct(a.moved, a.leads)]])));
+  split('sdr-pitch', 'pitch');
+  split('sdr-variant', 'variant');
+  const pOrder = ['Hot', 'Medium', 'Cold'];
+  tbl('sdr-prio', group('prio').sort((a, b) => pOrder.indexOf(a.k) - pOrder.indexOf(b.k)).map((a) => tr([[a.k, 'l'], [a.leads], [a.moved], [a.won], [pct(a.moved, a.leads)]])));
+  tbl('sdr-owner', group('rep').sort((a, b) => b.leads - a.leads).map((a) => tr([[a.k, 'l'], [a.leads], [a.moved], [a.won], [a.drr.toLocaleString('en-IN')]])));
+
+  const list = rows.slice().sort((a, b) => ((a.created || '') < (b.created || '') ? 1 : -1));
+  tbl('sdr-rows', list.map((r) => tr([[r.name, 'l'], [r.rep, 'l'], [r.prio, 'l'], [r.cat, 'l'], [SDR_STAGE[r.stage] || r.stage, 'l'], [r.pitch, 'l'], [r.variant, 'l'],
+    [r.created ? fmtD(Date.parse(r.created) + 19800000) : ''], [r.drr == null ? '' : r.drr.toLocaleString('en-IN')]])));
 }
 
 async function load() {
