@@ -733,6 +733,27 @@
             <div class="bot" id="sdr-drr-note">—</div></div>
         </div>
         <div class="panel">
+          <h3>Lilly's tasks: assigned / called, by day</h3>
+          <p class="cmp-sub" id="sdr-task-sub">Each lead Lilly creates is an email + call task for the ESM. Shown as assigned / completed (e.g. 40/35 means 35 of 40 tasks were closed).</p>
+          <div class="err" id="sdr-task-err" hidden></div>
+          <div class="tw"><table class="gt">
+            <thead id="sdr-task-head"></thead>
+            <tbody id="sdr-task-days"></tbody>
+          </table></div>
+        </div>
+        <div class="two">
+          <div class="panel"><h3>By ESM (all time)</h3>
+            <div class="tw"><table class="gt">
+              <thead><tr><th class="l">ESM</th><th>Assigned</th><th>Called</th><th>Not called</th><th>Done %</th></tr></thead>
+              <tbody id="sdr-task-esm"></tbody>
+            </table></div></div>
+          <div class="panel"><h3>Not called yet</h3>
+            <div class="tw"><table class="gt">
+              <thead><tr><th class="l">Task</th><th class="l">ESM</th><th>Assigned</th><th>Days open</th></tr></thead>
+              <tbody id="sdr-task-open"></tbody>
+            </table></div></div>
+        </div>
+        <div class="panel">
           <h3>Where the leads are now</h3>
           <div class="tw"><table class="gt">
             <thead><tr><th class="l">Stage</th><th>Leads</th><th>Share</th></tr></thead>
@@ -1902,9 +1923,42 @@ function renderSDR() {
   tbl('sdr-prio', group('prio').sort((a, b) => pOrder.indexOf(a.k) - pOrder.indexOf(b.k)).map((a) => tr([[a.k, 'l'], [a.leads], [a.moved], [a.won], [pct(a.moved, a.leads)]])));
   tbl('sdr-owner', group('rep').sort((a, b) => b.leads - a.leads).map((a) => tr([[a.k, 'l'], [a.leads], [a.moved], [a.won], [a.drr.toLocaleString('en-IN')]])));
 
+  renderSDRTasks(tbl, tr, pct, istDay);
+
   const list = rows.slice().sort((a, b) => ((a.created || '') < (b.created || '') ? 1 : -1));
   tbl('sdr-rows', list.map((r) => tr([[r.name, 'l'], [r.rep, 'l'], [r.prio, 'l'], [r.cat, 'l'], [SDR_STAGE[r.stage] || r.stage, 'l'], [r.pitch, 'l'], [r.variant, 'l'],
     [r.created ? fmtD(Date.parse(r.created) + 19800000) : ''], [r.drr == null ? '' : r.drr.toLocaleString('en-IN')]])));
+}
+
+function renderSDRTasks(tbl, tr, pct, istDay) {
+  const err = $('sdr-task-err');
+  if (!Array.isArray(DATA.sdr_tasks)) {
+    err.textContent = DATA.sdr_tasks_error ? "Couldn't read Lilly's tasks from HubSpot this sync." : "Task numbers load with the next data refresh (within 15 minutes).";
+    err.hidden = false;
+    return;
+  }
+  err.hidden = true;
+  const tasks = DATA.sdr_tasks.map(([id, subject, rep, status, created, due, done]) => ({
+    id, subject: subject.replace(/^Virtual SDR:\s*/i, ''), rep, done: status === 'COMPLETED', day: created ? istDay(created) : '', created,
+  }));
+  const esms = [...new Set(tasks.map((t) => t.rep))].sort();
+  const cell = (a, d) => (a ? a + '/' + d : '—');
+  const head = el('tr'); head.append(el('th', 'Day', 'l'), el('th', 'Team'), ...esms.map((e) => el('th', e.split(' ')[0])));
+  $('sdr-task-head').replaceChildren(head);
+  const days = [...new Set(tasks.map((t) => t.day))].filter(Boolean).sort().reverse();
+  tbl('sdr-task-days', days.length ? days.map((d) => {
+    const dt = tasks.filter((t) => t.day === d);
+    return tr([[fmtD(Date.parse(d + 'T00:00:00Z')), 'l'], [cell(dt.length, dt.filter((t) => t.done).length)],
+      ...esms.map((e) => { const x = dt.filter((t) => t.rep === e); return [cell(x.length, x.filter((t) => t.done).length)]; })]);
+  }) : [tr([['No tasks from Lilly yet', 'l dim'], ['']])]);
+  tbl('sdr-task-esm', esms.map((e) => {
+    const x = tasks.filter((t) => t.rep === e); const d = x.filter((t) => t.done).length;
+    return tr([[e, 'l'], [x.length], [d], [x.length - d], [pct(d, x.length)]]);
+  }));
+  const now = Date.now();
+  const open = tasks.filter((t) => !t.done).sort((a, b) => ((a.created || '') < (b.created || '') ? -1 : 1));
+  tbl('sdr-task-open', open.length ? open.map((t) => tr([[t.subject, 'l'], [t.rep, 'l'], [t.day ? fmtD(Date.parse(t.day + 'T00:00:00Z')) : ''],
+    [t.created ? Math.max(0, Math.floor((now - Date.parse(t.created)) / 86400000)) : '']])) : [tr([['Every task is closed. Nice.', 'l dim'], [''], [''], ['']])]);
 }
 
 async function load() {

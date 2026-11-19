@@ -22,13 +22,13 @@ const iso = (v) => {
   return Number.isNaN(t) ? null : new Date(t).toISOString();
 };
 
-async function search(filters, properties) {
+async function search(filters, properties, object = 'deals') {
   const rows = [];
   let after;
   for (let page = 0; page < 20; page++) {
     const body = { filterGroups: [{ filters }], properties, limit: 200 };
     if (after) body.after = after;
-    const res = await fetch('https://api.hubapi.com/crm/v3/objects/deals/search', {
+    const res = await fetch('https://api.hubapi.com/crm/v3/objects/' + object + '/search', {
       method: 'POST',
       headers: { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
@@ -136,6 +136,23 @@ try {
 }
 
 // Realised DRR from Metabase pickups (optional: needs METABASE_URL and METABASE_API_KEY secrets).
+// Lilly's (Virtual SDR) daily email + call tasks: assigned vs completed per ESM per day.
+let sdrTasks = null, sdrTasksError = null;
+try {
+  const t = await search([
+    { propertyName: 'hs_task_subject', operator: 'CONTAINS_TOKEN', value: 'SDR' },
+    { propertyName: 'hubspot_owner_id', operator: 'IN', values: OWNER_IDS },
+  ], ['hs_task_subject', 'hs_task_status', 'hubspot_owner_id', 'hs_createdate', 'hs_timestamp', 'hs_task_completion_date'], 'tasks');
+  sdrTasks = t.filter((r) => /virtual sdr/i.test(r.properties.hs_task_subject || '')).map((r) => {
+    const p = r.properties;
+    return [r.id, p.hs_task_subject || '', OWNERS[p.hubspot_owner_id] || p.hubspot_owner_id, p.hs_task_status || '', iso(p.hs_createdate), iso(p.hs_timestamp), iso(p.hs_task_completion_date)];
+  });
+  console.log(`Virtual SDR tasks: ${sdrTasks.length}`);
+} catch (e) {
+  sdrTasksError = String(e.message || e).slice(0, 200);
+  console.log('Virtual SDR task pull failed: ' + sdrTasksError);
+}
+
 // Average daily pickups over the last 30 days for each Virtual SDR deal's Org ID.
 const mbUrl = process.env.METABASE_URL, mbKey = process.env.METABASE_API_KEY;
 const sdrOrgs = sdr ? [...new Set(sdr.map((r) => r[8]).filter(Boolean))] : [];
@@ -165,6 +182,8 @@ const data = {
   updated_at: new Date().toISOString(),
   sdr,
   sdr_error: sdrError,
+  sdr_tasks: sdrTasks,
+  sdr_tasks_error: sdrTasksError,
   sdr_realised: sdrRealised,
   sdr_realised_on: !!(mbUrl && mbKey),
   lq: counted,
