@@ -1,6 +1,6 @@
 {
  "through": "2026-11-19",
- "rule": "Brands closed won in HubSpot from 1 Oct 2026 (team reps), matched to Metabase shipping accounts (metrics_user_service_city_zone.user_name); orders created per month, all service types. Existing accounts that shipped before the deal (e.g. HealthKart NDD) are not matched.",
+ "rule": "Brands closed won in HubSpot from 1 Oct 2026 (team reps), plus brands owned by a team rep (KAM in Metabase potential_map_final) whose first-ever order came on or after 1 Oct 2026 even if the deal closed earlier. Orders created per month from Metabase (metrics_user_service_city_zone), all service types. Accounts that were already shipping before the deal (e.g. HealthKart NDD) are not counted.",
  "brands": [
   {
    "deal": "Maiz - RE+LM",
@@ -264,6 +264,59 @@
    "signed": "2026-11-20",
    "accounts": [],
    "orders": {}
+  },
+  {
+   "deal": "CREPDOG_CREW",
+   "deal_id": null,
+   "rep": "Prathush Nair",
+   "signed": "2026-10-19",
+   "accounts": [
+    "CREPDOG_CREW"
+   ],
+   "orders": {
+    "2026-10": 2,
+    "2026-11": 91
+   },
+   "via": "first order this quarter"
+  },
+  {
+   "deal": "Zivore Apparel Private Limited",
+   "deal_id": null,
+   "rep": "Noor Mohammed",
+   "signed": "2026-11-05",
+   "accounts": [
+    "Zivore Apparel Private Limited"
+   ],
+   "orders": {
+    "2026-11": 23
+   },
+   "via": "first order this quarter"
+  },
+  {
+   "deal": "Partnr",
+   "deal_id": null,
+   "rep": "Noor Mohammed",
+   "signed": "2026-11-02",
+   "accounts": [
+    "Partnr"
+   ],
+   "orders": {
+    "2026-11": 3
+   },
+   "via": "first order this quarter"
+  },
+  {
+   "deal": "Top 10",
+   "deal_id": null,
+   "rep": "Noor Mohammed",
+   "signed": "2026-11-18",
+   "accounts": [
+    "Top 10"
+   ],
+   "orders": {
+    "2026-11": 1
+   },
+   "via": "first order this quarter"
   }
  ]
 }
