@@ -79,8 +79,12 @@
    "deal_id": "323517788871",
    "rep": "Noor Mohammed",
    "signed": "2026-10-23",
-   "accounts": [],
-   "orders": {}
+   "accounts": [
+    "Zivore Apparel Private Limited"
+   ],
+   "orders": {
+    "2026-11": 23
+   }
   },
   {
    "deal": "Kraus Jeans SDD and NDD",
@@ -276,19 +280,6 @@
    "orders": {
     "2026-10": 2,
     "2026-11": 91
-   },
-   "via": "first order this quarter"
-  },
-  {
-   "deal": "Zivore Apparel Private Limited",
-   "deal_id": null,
-   "rep": "Noor Mohammed",
-   "signed": "2026-11-05",
-   "accounts": [
-    "Zivore Apparel Private Limited"
-   ],
-   "orders": {
-    "2026-11": 23
    },
    "via": "first order this quarter"
   },
