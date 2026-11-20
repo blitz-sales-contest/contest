@@ -1,147 +1,269 @@
 {
  "through": "2026-11-19",
- "source": "Metabase: orders created per brand (metrics_user_service_city_zone); brand owner = KAM in potential_map_final",
+ "rule": "Brands closed won in HubSpot from 1 Oct 2026 (team reps), matched to Metabase shipping accounts (metrics_user_service_city_zone.user_name); orders created per month, all service types. Existing accounts that shipped before the deal (e.g. HealthKart NDD) are not matched.",
  "brands": [
   {
-   "brand": "Banana Club",
+   "deal": "Maiz - RE+LM",
+   "deal_id": "352939694820",
+   "rep": "Noor Mohammed",
+   "signed": "2026-10-08",
+   "accounts": [
+    "Maiz Hospitality Pvt Ltd"
+   ],
+   "orders": {
+    "2026-10": 83,
+    "2026-11": 4
+   }
+  },
+  {
+   "deal": "Banana Club",
+   "deal_id": "338922301156",
    "rep": "Krutika Pawar",
-   "first": "2026-10-12",
+   "signed": "2026-10-12",
+   "accounts": [
+    "Banana Club"
+   ],
    "orders": {
     "2026-10": 2035,
     "2026-11": 2694
    }
   },
   {
-   "brand": "BLUORNG RETAIL PRIVATE LIMITED",
+   "deal": "WearADHD",
+   "deal_id": "353406691015",
    "rep": "Prathush Nair",
-   "first": "2026-11-18",
-   "orders": {
-    "2026-11": 85
-   }
-  },
-  {
-   "brand": "CREPDOG_CREW",
-   "rep": "Prathush Nair",
-   "first": "2026-10-19",
-   "orders": {
-    "2026-10": 2,
-    "2026-11": 91
-   }
-  },
-  {
-   "brand": "Dr Veda",
-   "rep": "Prathush Nair",
-   "first": "2026-10-19",
-   "orders": {
-    "2026-10": 1986,
-    "2026-11": 1047
-   }
-  },
-  {
-   "brand": "EDT",
-   "rep": "Krutika Pawar",
-   "first": "2026-11-05",
-   "orders": {
-    "2026-11": 4
-   }
-  },
-  {
-   "brand": "FitFeast",
-   "rep": "Prathush Nair",
-   "first": "2026-11-11",
-   "orders": {
-    "2026-11": 1
-   }
-  },
-  {
-   "brand": "Kraus Jeans",
-   "rep": "Krutika Pawar",
-   "first": "2026-10-22",
-   "orders": {
-    "2026-10": 249,
-    "2026-11": 681
-   }
-  },
-  {
-   "brand": "Label jenn",
-   "rep": "Pritam Mazumdar",
-   "first": "2026-11-06",
-   "orders": {
-    "2026-11": 387
-   }
-  },
-  {
-   "brand": "Partnr",
-   "rep": "Noor Mohammed",
-   "first": "2026-11-02",
-   "orders": {
-    "2026-11": 3
-   }
-  },
-  {
-   "brand": "Saturday Club by Marvikids",
-   "rep": "Krutika Pawar",
-   "first": "2026-11-10",
-   "orders": {
-    "2026-11": 730
-   }
-  },
-  {
-   "brand": "Tailoraedge",
-   "rep": "Prathush Nair",
-   "first": "2026-11-03",
-   "orders": {
-    "2026-11": 47
-   }
-  },
-  {
-   "brand": "Thefreshmeat",
-   "rep": "Noor Mohammed",
-   "first": "2026-11-11",
-   "orders": {
-    "2026-11": 2
-   }
-  },
-  {
-   "brand": "The Pant Project",
-   "rep": "Prathush Nair",
-   "first": "2026-11-05",
-   "orders": {
-    "2026-11": 1583
-   }
-  },
-  {
-   "brand": "Top 10",
-   "rep": "Noor Mohammed",
-   "first": "2026-11-18",
-   "orders": {
-    "2026-11": 1
-   }
-  },
-  {
-   "brand": "WearADHD",
-   "rep": "Prathush Nair",
-   "first": "2026-10-23",
+   "signed": "2026-10-12",
+   "accounts": [
+    "WearADHD"
+   ],
    "orders": {
     "2026-10": 264,
     "2026-11": 215
    }
   },
   {
-   "brand": "Wow! Momo",
+   "deal": "Logistos (Aggregator)",
+   "deal_id": "351101885156",
+   "rep": "Prathush Nair",
+   "signed": "2026-10-14",
+   "accounts": [
+    "LoGISTOS"
+   ],
+   "orders": {
+    "2026-10": 4
+   }
+  },
+  {
+   "deal": "Dr. Veda",
+   "deal_id": "353525590765",
+   "rep": "Prathush Nair",
+   "signed": "2026-10-22",
+   "accounts": [
+    "Dr Veda"
+   ],
+   "orders": {
+    "2026-10": 1986,
+    "2026-11": 1047
+   }
+  },
+  {
+   "deal": "Healthkart (DS+LM)",
+   "deal_id": "342655728320",
    "rep": "Noor Mohammed",
-   "first": "2026-11-03",
+   "signed": "2026-10-23",
+   "accounts": [],
+   "orders": {}
+  },
+  {
+   "deal": "Libas - RE+ LM",
+   "deal_id": "323517788871",
+   "rep": "Noor Mohammed",
+   "signed": "2026-10-23",
+   "accounts": [],
+   "orders": {}
+  },
+  {
+   "deal": "Kraus Jeans SDD and NDD",
+   "deal_id": "352940392178",
+   "rep": "Krutika Pawar",
+   "signed": "2026-10-23",
+   "accounts": [
+    "Kraus Jeans"
+   ],
+   "orders": {
+    "2026-10": 249,
+    "2026-11": 681
+   }
+  },
+  {
+   "deal": "Cai Store",
+   "deal_id": "355034098386",
+   "rep": "Krutika Pawar",
+   "signed": "2026-10-28",
+   "accounts": [
+    "The Cai Store"
+   ],
+   "orders": {
+    "2026-10": 47,
+    "2026-11": 1261
+   }
+  },
+  {
+   "deal": "Bergner",
+   "deal_id": "343186406079",
+   "rep": "Prathush Nair",
+   "signed": "2026-10-30",
+   "accounts": [
+    "BERGNER IMPEX (INDIA) PRIVATE LIMITED"
+   ],
+   "orders": {
+    "2026-10": 1,
+    "2026-11": 1
+   }
+  },
+  {
+   "deal": "The Meat Club - RE+LM",
+   "deal_id": "360617086700",
+   "rep": "Noor Mohammed",
+   "signed": "2026-10-30",
+   "accounts": [
+    "Thefreshmeat"
+   ],
+   "orders": {
+    "2026-11": 2
+   }
+  },
+  {
+   "deal": "EDT Life",
+   "deal_id": "358325990075",
+   "rep": "Krutika Pawar",
+   "signed": "2026-11-06",
+   "accounts": [
+    "EDT"
+   ],
+   "orders": {
+    "2026-11": 4
+   }
+  },
+  {
+   "deal": "Comet",
+   "deal_id": "348946478812",
+   "rep": "Pritam Mazumdar",
+   "signed": "2026-11-06",
+   "accounts": [
+    "Comet"
+   ],
+   "orders": {
+    "2026-11": 9
+   }
+  },
+  {
+   "deal": "Marvi kids",
+   "deal_id": "364182641363",
+   "rep": "Krutika Pawar",
+   "signed": "2026-11-09",
+   "accounts": [
+    "Saturday Club by Marvikids"
+   ],
+   "orders": {
+    "2026-11": 730
+   }
+  },
+  {
+   "deal": "Tailoraedge",
+   "deal_id": "358151938781",
+   "rep": "Prathush Nair",
+   "signed": "2026-11-10",
+   "accounts": [
+    "Tailoraedge"
+   ],
+   "orders": {
+    "2026-11": 47
+   }
+  },
+  {
+   "deal": "WOW MOMO RE+LM",
+   "deal_id": "347392478913",
+   "rep": "Noor Mohammed",
+   "signed": "2026-11-10",
+   "accounts": [
+    "Wow! Momo"
+   ],
    "orders": {
     "2026-11": 52
    }
   },
   {
-   "brand": "Zivore Apparel Private Limited",
-   "rep": "Noor Mohammed",
-   "first": "2026-11-05",
+   "deal": "The Pant Project",
+   "deal_id": "351101874900",
+   "rep": "Prathush Nair",
+   "signed": "2026-11-10",
+   "accounts": [
+    "The Pant Project"
+   ],
    "orders": {
-    "2026-11": 23
+    "2026-11": 1583
    }
+  },
+  {
+   "deal": "The Label Jenn",
+   "deal_id": "349500897999",
+   "rep": "Pritam Mazumdar",
+   "signed": "2026-11-11",
+   "accounts": [
+    "Label jenn"
+   ],
+   "orders": {
+    "2026-11": 387
+   }
+  },
+  {
+   "deal": "Instamart - RE+Qcomm",
+   "deal_id": "319637025471",
+   "rep": "Noor Mohammed",
+   "signed": "2026-11-17",
+   "accounts": [],
+   "orders": {}
+  },
+  {
+   "deal": "Bluorng",
+   "deal_id": "358645324477",
+   "rep": "Prathush Nair",
+   "signed": "2026-11-19",
+   "accounts": [
+    "BLUORNG RETAIL PRIVATE LIMITED"
+   ],
+   "orders": {
+    "2026-11": 85
+   }
+  },
+  {
+   "deal": "Clove Dental",
+   "deal_id": "352922618585",
+   "rep": "Krutika Pawar",
+   "signed": "2026-11-20",
+   "accounts": [],
+   "orders": {}
+  },
+  {
+   "deal": "FitFeast",
+   "deal_id": "347378311869",
+   "rep": "Prathush Nair",
+   "signed": "2026-11-20",
+   "accounts": [
+    "FitFeast"
+   ],
+   "orders": {
+    "2026-11": 1
+   }
+  },
+  {
+   "deal": "Just In Time",
+   "deal_id": "339242127080",
+   "rep": "Krutika Pawar",
+   "signed": "2026-11-20",
+   "accounts": [],
+   "orders": {}
   }
  ]
 }
