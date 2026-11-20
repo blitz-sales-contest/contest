@@ -39,3 +39,4 @@ try {
 } catch (e) { console.log('News fetch failed: ' + e.message); items = []; }
 writeFileSync('site/news.json', JSON.stringify({ updated_at: new Date().toISOString(), items: items.slice(0, 6) }));
 console.log(`News: ${items.length} headlines`);
+items.slice(0, 6).forEach((n, i) => console.log(`  ${i + 1}. ${n.title} — ${n.source} (${n.at.slice(0, 10)})`));
