@@ -25,6 +25,22 @@ async function get(q, d) {
   return parse(await r.text());
 }
 
+// One pick per weekday (IST). Saturday and Sunday keep Friday's pick.
+const ist = new Date(Date.now() + 19800000);
+const back = { 6: 1, 0: 2 }[ist.getUTCDay()] || 0;
+const DAY = new Date(ist.getTime() - back * 864e5).toISOString().slice(0, 10);
+try {
+  const r = await fetch('https://blitz-sales-contest.github.io/contest/news.json?t=' + Date.now());
+  if (r.ok) {
+    const live = await r.json();
+    if (live.day === DAY && live.items && live.items.length) {
+      writeFileSync('site/news.json', JSON.stringify(live));
+      console.log(`News: keeping today's pick (${DAY})`);
+      process.exit(0);
+    }
+  }
+} catch (e) { console.log('Could not read live news: ' + e.message); }
+
 let items = [];
 try {
   for (const d of ['2d', '7d']) {
@@ -37,6 +53,6 @@ try {
     if (items.length >= 3) break;
   }
 } catch (e) { console.log('News fetch failed: ' + e.message); items = []; }
-writeFileSync('site/news.json', JSON.stringify({ updated_at: new Date().toISOString(), items: items.slice(0, 6) }));
-console.log(`News: ${items.length} headlines`);
+writeFileSync('site/news.json', JSON.stringify({ day: DAY, updated_at: new Date().toISOString(), items: items.slice(0, 6) }));
+console.log(`News: new pick for ${DAY}, ${items.length} headlines`);
 items.slice(0, 6).forEach((n, i) => console.log(`  ${i + 1}. ${n.title} — ${n.source} (${n.at.slice(0, 10)})`));
