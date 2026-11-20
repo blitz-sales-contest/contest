@@ -1,0 +1,147 @@
+{
+ "through": "2026-11-19",
+ "source": "Metabase: orders created per brand (metrics_user_service_city_zone); brand owner = KAM in potential_map_final",
+ "brands": [
+  {
+   "brand": "Banana Club",
+   "rep": "Krutika Pawar",
+   "first": "2026-10-12",
+   "orders": {
+    "2026-10": 2035,
+    "2026-11": 2694
+   }
+  },
+  {
+   "brand": "BLUORNG RETAIL PRIVATE LIMITED",
+   "rep": "Prathush Nair",
+   "first": "2026-11-18",
+   "orders": {
+    "2026-11": 85
+   }
+  },
+  {
+   "brand": "CREPDOG_CREW",
+   "rep": "Prathush Nair",
+   "first": "2026-10-19",
+   "orders": {
+    "2026-10": 2,
+    "2026-11": 91
+   }
+  },
+  {
+   "brand": "Dr Veda",
+   "rep": "Prathush Nair",
+   "first": "2026-10-19",
+   "orders": {
+    "2026-10": 1986,
+    "2026-11": 1047
+   }
+  },
+  {
+   "brand": "EDT",
+   "rep": "Krutika Pawar",
+   "first": "2026-11-05",
+   "orders": {
+    "2026-11": 4
+   }
+  },
+  {
+   "brand": "FitFeast",
+   "rep": "Prathush Nair",
+   "first": "2026-11-11",
+   "orders": {
+    "2026-11": 1
+   }
+  },
+  {
+   "brand": "Kraus Jeans",
+   "rep": "Krutika Pawar",
+   "first": "2026-10-22",
+   "orders": {
+    "2026-10": 249,
+    "2026-11": 681
+   }
+  },
+  {
+   "brand": "Label jenn",
+   "rep": "Pritam Mazumdar",
+   "first": "2026-11-06",
+   "orders": {
+    "2026-11": 387
+   }
+  },
+  {
+   "brand": "Partnr",
+   "rep": "Noor Mohammed",
+   "first": "2026-11-02",
+   "orders": {
+    "2026-11": 3
+   }
+  },
+  {
+   "brand": "Saturday Club by Marvikids",
+   "rep": "Krutika Pawar",
+   "first": "2026-11-10",
+   "orders": {
+    "2026-11": 730
+   }
+  },
+  {
+   "brand": "Tailoraedge",
+   "rep": "Prathush Nair",
+   "first": "2026-11-03",
+   "orders": {
+    "2026-11": 47
+   }
+  },
+  {
+   "brand": "Thefreshmeat",
+   "rep": "Noor Mohammed",
+   "first": "2026-11-11",
+   "orders": {
+    "2026-11": 2
+   }
+  },
+  {
+   "brand": "The Pant Project",
+   "rep": "Prathush Nair",
+   "first": "2026-11-05",
+   "orders": {
+    "2026-11": 1583
+   }
+  },
+  {
+   "brand": "Top 10",
+   "rep": "Noor Mohammed",
+   "first": "2026-11-18",
+   "orders": {
+    "2026-11": 1
+   }
+  },
+  {
+   "brand": "WearADHD",
+   "rep": "Prathush Nair",
+   "first": "2026-10-23",
+   "orders": {
+    "2026-10": 264,
+    "2026-11": 215
+   }
+  },
+  {
+   "brand": "Wow! Momo",
+   "rep": "Noor Mohammed",
+   "first": "2026-11-03",
+   "orders": {
+    "2026-11": 52
+   }
+  },
+  {
+   "brand": "Zivore Apparel Private Limited",
+   "rep": "Noor Mohammed",
+   "first": "2026-11-05",
+   "orders": {
+    "2026-11": 23
+   }
+  }
+ ]
+}

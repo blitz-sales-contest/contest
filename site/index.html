@@ -300,6 +300,7 @@
   .gcard .gv b { font-size: 22px; font-weight: 600; letter-spacing: -.5px; }
   .gcard .gs { font-size: 12px; color: var(--muted); margin-top: 10px; }
   .gnote { font-size: 13px; color: var(--muted); margin: -6px 0 14px; }
+  td.real { font-weight: 600; color: #1f7a4a; cursor: help; }
   .gt { width: 100%; border-collapse: collapse; font-size: 13.5px; }
   .gt th { font-size: 11.5px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; padding: 8px 10px; text-align: right; border-bottom: 1px solid var(--line); white-space: nowrap; }
   .gt th.l, .gt td.l { text-align: left; }
@@ -636,8 +637,8 @@
           <div class="chips" id="okr-mchips" style="margin:-4px 0 18px"></div>
           <div class="tw"><table class="mt">
             <thead>
-              <tr class="grp2"><th></th><th colspan="3">DRR signed</th><th colspan="3">Leads qualified</th><th colspan="3">Closures</th><th colspan="2">Lead closure TAT</th></tr>
-              <tr><th class="l">Owner</th><th>Target</th><th>Achieved</th><th>%</th><th>Target</th><th>Achieved</th><th>%</th><th>Target</th><th>Achieved</th><th>%</th><th>Target</th><th>Avg days</th></tr>
+              <tr class="grp2"><th></th><th colspan="4">DRR</th><th colspan="3">Leads qualified</th><th colspan="3">Closures</th><th colspan="2">Lead closure TAT</th></tr>
+              <tr><th class="l">Owner</th><th>Target</th><th>Signed</th><th title="Actual orders per day from brands that started shipping from Oct 2026">Realised</th><th>%</th><th>Target</th><th>Achieved</th><th>%</th><th>Target</th><th>Achieved</th><th>%</th><th>Target</th><th>Avg days</th></tr>
             </thead>
             <tbody id="okr-mrows"></tbody>
           </table></div>
@@ -1339,9 +1340,9 @@ function monthRows(m) {
   const rows = REPS.map((o) => {
     const w = won.filter((d) => d.owner === o);
     const cl = w.filter((d) => o !== OKR.QCOM_REP || OKR.QCOM.includes(d.svc));
-    return { owner: o, drrT: MT.DRR, drr: w.reduce((t, d) => t + (d.drr || 0), 0), lqT: MT.LQ, lq: lq.filter((d) => d.owner === o).length, clT: MT.CLOSE, cl: cl.length, tat: tat(w) };
+    return { owner: o, drrT: MT.DRR, drr: w.reduce((t, d) => t + (d.drr || 0), 0), real: realised(m, o), lqT: MT.LQ, lq: lq.filter((d) => d.owner === o).length, clT: MT.CLOSE, cl: cl.length, tat: tat(w) };
   });
-  const team = { owner: 'Team (Sumanth)', drrT: MT.DRR * REPS.length, drr: rows.reduce((t, r) => t + r.drr, 0), lqT: OKR.TEAM_LQ / 3, lq: rows.reduce((t, r) => t + r.lq, 0), clT: OKR.TEAM_WON / 3, cl: won.length, tat: tat(won), team: true };
+  const team = { owner: 'Team (Sumanth)', drrT: MT.DRR * REPS.length, drr: rows.reduce((t, r) => t + r.drr, 0), real: realised(m), lqT: OKR.TEAM_LQ / 3, lq: rows.reduce((t, r) => t + r.lq, 0), clT: OKR.TEAM_WON / 3, cl: won.length, tat: tat(won), team: true };
   return [...rows, team];
 }
 function renderOKRMonth() {
@@ -1360,13 +1361,13 @@ function renderOKRMonth() {
     const tatTd = el('td', r.tat == null ? '—' : (Math.round(r.tat * 10) / 10) + ''); if (r.tat != null) tatTd.style.color = r.tat <= OKR.TAT ? 'var(--ok-fg)' : 'var(--bad-fg)'; tatTd.style.fontWeight = '600';
     const clLabel = r.owner === OKR.QCOM_REP ? ' (Qcom)' : '';
     tr.append(nm,
-      el('td', fmtN(r.drrT), 'sep'), el('td', fmtN(r.drr)), isFuture ? el('td', '') : pc(r.drr, r.drrT),
+      el('td', fmtN(r.drrT), 'sep'), el('td', fmtN(r.drr)), realTd(r.real, isFuture), isFuture ? el('td', '') : pc(r.drr, r.drrT),
       el('td', fmtN(r.lqT), 'sep'), el('td', String(r.lq)), isFuture ? el('td', '') : pc(r.lq, r.lqT),
       el('td', fmtN(r.clT) + clLabel, 'sep'), el('td', String(r.cl)), isFuture ? el('td', '') : pc(r.cl, r.clT),
       el('td', '≤ ' + OKR.TAT, 'sep'), tatTd);
     return tr;
   }));
-  $('okr-mnote').textContent = 'Monthly targets are one third of the quarter: each rep 3,600 DRR signed, 60 leads qualified (15 a week) and 12 closures (3 a week); the team row adds up the reps (14,400 DRR) and uses one third of your quarterly KRs (240 leads, 48 closures). Achieved counts use the first Lead Qualified date for leads and the HubSpot close date for closures and DRR. TAT is for deals closed in that month.' + (okrMonth === cur ? ' This month is still in progress.' : '');
+  $('okr-mnote').textContent = 'Monthly targets are one third of the quarter: each rep 3,600 DRR signed, 60 leads qualified (15 a week) and 12 closures (3 a week); the team row adds up the reps (14,400 DRR) and uses one third of your quarterly KRs (240 leads, 48 closures). Achieved counts use the first Lead Qualified date for leads and the HubSpot close date for closures and signed DRR. Realised DRR is actual orders per day, from Metabase, for brands that placed their first order on or after 1 Oct 2026, credited to the brand\'s owner; for the month in progress it is orders so far divided by days so far (data up to ' + fmtD(Date.parse(REAL.through + 'T00:00:00Z')) + '). Hover a realised number to see the brands. TAT is for deals closed in that month.' + (okrMonth === cur ? ' This month is still in progress.' : '');
 }
 function renderOKR() {
   const tday = today(), thisWeek = weekOf(tday), month = tday.slice(0, 7);
@@ -1540,9 +1541,9 @@ function sheetNotCounted() {
   return rows;
 }
 function sheetMonthly() {
-  const rows = [['Month', 'Owner', 'DRR target', 'DRR achieved', 'DRR %', 'Leads target', 'Leads achieved', 'Leads %', 'Closures target', 'Closures achieved', 'Closures %', 'TAT target (days)', 'Avg TAT (days)']];
+  const rows = [['Month', 'Owner', 'DRR target', 'DRR signed', 'Realised DRR', 'DRR %', 'Leads target', 'Leads achieved', 'Leads %', 'Closures target', 'Closures achieved', 'Closures %', 'TAT target (days)', 'Avg TAT (days)']];
   const cur = today().slice(0, 7);
-  for (const [m, n] of MONTHS) { if (m > cur) continue; for (const r of monthRows(m)) rows.push([n + ' 2026' + (m === cur ? ' (so far)' : ''), r.owner + (r.owner === OKR.QCOM_REP ? ' (Qcom closures)' : ''), r.drrT, Math.round(r.drr), Math.round(r.drr / r.drrT * 100), r.lqT, r.lq, Math.round(r.lq / r.lqT * 100), r.clT, r.cl, Math.round(r.cl / r.clT * 100), OKR.TAT, r.tat == null ? '' : Math.round(r.tat * 10) / 10]); }
+  for (const [m, n] of MONTHS) { if (m > cur) continue; for (const r of monthRows(m)) rows.push([n + ' 2026' + (m === cur ? ' (so far)' : ''), r.owner + (r.owner === OKR.QCOM_REP ? ' (Qcom closures)' : ''), r.drrT, Math.round(r.drr), Math.round(r.real.v), Math.round(r.drr / r.drrT * 100), r.lqT, r.lq, Math.round(r.lq / r.lqT * 100), r.clT, r.cl, Math.round(r.cl / r.clT * 100), OKR.TAT, r.tat == null ? '' : Math.round(r.tat * 10) / 10]); }
   return rows;
 }
 const REPORTS = {
@@ -1995,6 +1996,25 @@ async function loadNews() {
   $('news-more').replaceChildren(...rest.slice(0, 2).map((x) => { const li = el('li'); const l = el('a'); l.href = x.link; l.target = '_blank'; l.rel = 'noopener'; l.append(x.title + ' ', el('span', '· ' + (x.source || ''))); li.append(l); return li; }));
 }
 
+
+// ---------------- Realised DRR (Metabase) ----------------
+let REAL = { through: '2026-10-01', brands: [] };
+const realised = (m, owner) => {
+  const [y, mo] = m.split('-').map(Number);
+  const dim = new Date(Date.UTC(y, mo, 0)).getUTCDate();
+  const days = REAL.through.slice(0, 7) === m ? Number(REAL.through.slice(8, 10)) : REAL.through.slice(0, 7) < m ? 0 : dim;
+  const list = REAL.brands.filter((b) => (!owner ? REPS.includes(b.rep) : b.rep === owner) && b.orders[m]).map((b) => ({ brand: b.brand, n: b.orders[m], drr: days ? b.orders[m] / days : 0 })).sort((a, b) => b.n - a.n);
+  return { v: list.reduce((t, b) => t + b.drr, 0), list, days };
+};
+const realTd = (r, fut) => {
+  const td = el('td', fut || !r.days ? '' : fmtN(Math.round(r.v)), 'real');
+  if (r.list.length) td.title = r.list.map((b) => b.brand + ': ' + fmtN(Math.round(b.drr)) + '/day (' + fmtN(b.n) + ' orders)').join('\n');
+  return td;
+};
+async function loadRealised() {
+  try { const r = await fetch('realised.json?t=' + Date.now(), { cache: 'no-store' }); if (r.ok) REAL = await r.json(); } catch (e) {}
+}
+
 async function load() {
   try {
     const res = await fetch('data.json?t=' + Date.now(), { cache: 'no-store' });
@@ -2031,6 +2051,7 @@ window.addEventListener('hashchange', show);
 show();
 loadWinners();
 loadNews();
+loadRealised().then(() => { if (DATA) renderOKR(); });
 load();
 setInterval(load, 5 * 60 * 1000);
 setInterval(loadNews, 15 * 60 * 1000);
