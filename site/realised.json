@@ -1,5 +1,5 @@
 {
- "through": "2026-11-19",
+ "through": "2026-11-20",
  "rule": "Brands closed won in HubSpot from 1 Oct 2026 (team reps), plus brands owned by a team rep (KAM in Metabase potential_map_final) whose first-ever order came on or after 1 Oct 2026 even if the deal closed earlier. Orders created per month from Metabase (metrics_user_service_city_zone), all service types. Accounts that were already shipping before the deal (e.g. HealthKart NDD) are not counted.",
  "brands": [
   {
@@ -25,7 +25,7 @@
    ],
    "orders": {
     "2026-10": 2035,
-    "2026-11": 2694
+    "2026-11": 2814
    }
   },
   {
@@ -71,8 +71,12 @@
    "deal_id": "342655728320",
    "rep": "Noor Mohammed",
    "signed": "2026-10-23",
-   "accounts": [],
-   "orders": {}
+   "accounts": [
+    "HK"
+   ],
+   "orders": {
+    "2026-11": 1
+   }
   },
   {
    "deal": "Libas - RE+ LM",
@@ -96,7 +100,7 @@
    ],
    "orders": {
     "2026-10": 249,
-    "2026-11": 681
+    "2026-11": 711
    }
   },
   {
@@ -109,7 +113,7 @@
    ],
    "orders": {
     "2026-10": 47,
-    "2026-11": 1261
+    "2026-11": 1346
    }
   },
   {
@@ -146,7 +150,7 @@
     "EDT"
    ],
    "orders": {
-    "2026-11": 4
+    "2026-11": 5
    }
   },
   {
@@ -170,7 +174,7 @@
     "Saturday Club by Marvikids"
    ],
    "orders": {
-    "2026-11": 730
+    "2026-11": 771
    }
   },
   {
@@ -182,7 +186,7 @@
     "Tailoraedge"
    ],
    "orders": {
-    "2026-11": 47
+    "2026-11": 51
    }
   },
   {
@@ -194,7 +198,7 @@
     "Wow! Momo"
    ],
    "orders": {
-    "2026-11": 52
+    "2026-11": 60
    }
   },
   {
@@ -206,7 +210,7 @@
     "The Pant Project"
    ],
    "orders": {
-    "2026-11": 1583
+    "2026-11": 1711
    }
   },
   {
@@ -218,7 +222,7 @@
     "Label jenn"
    ],
    "orders": {
-    "2026-11": 387
+    "2026-11": 405
    }
   },
   {
@@ -238,7 +242,7 @@
     "BLUORNG RETAIL PRIVATE LIMITED"
    ],
    "orders": {
-    "2026-11": 85
+    "2026-11": 122
    }
   },
   {
@@ -258,7 +262,7 @@
     "FitFeast"
    ],
    "orders": {
-    "2026-11": 1
+    "2026-11": 64
    }
   },
   {
@@ -279,7 +283,20 @@
    ],
    "orders": {
     "2026-10": 2,
-    "2026-11": 91
+    "2026-11": 98
+   },
+   "via": "first order this quarter"
+  },
+  {
+   "deal": "Nykaa Fashion Hyper Local",
+   "deal_id": null,
+   "rep": "Noor Mohammed",
+   "signed": "2026-10-13",
+   "accounts": [
+    "Nykaa Fashion Hyper Local"
+   ],
+   "orders": {
+    "2026-10": 33
    },
    "via": "first order this quarter"
   },
@@ -292,7 +309,7 @@
     "Partnr"
    ],
    "orders": {
-    "2026-11": 3
+    "2026-11": 5
    },
    "via": "first order this quarter"
   },
@@ -305,7 +322,7 @@
     "Top 10"
    ],
    "orders": {
-    "2026-11": 1
+    "2026-11": 3
    },
    "via": "first order this quarter"
   }
