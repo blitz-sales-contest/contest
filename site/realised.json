@@ -1,5 +1,5 @@
 {
- "through": "2026-11-20",
+ "through": "2026-11-21",
  "rule": "Brands closed won in HubSpot from 1 Oct 2026 (team reps), plus brands owned by a team rep (KAM in Metabase potential_map_final) whose first-ever order came on or after 1 Oct 2026 even if the deal closed earlier. Orders created per month from Metabase (metrics_user_service_city_zone), all service types. Accounts that were already shipping before the deal (e.g. HealthKart NDD) are not counted.",
  "brands": [
   {
@@ -25,7 +25,7 @@
    ],
    "orders": {
     "2026-10": 2035,
-    "2026-11": 2814
+    "2026-11": 2923
    }
   },
   {
@@ -100,7 +100,7 @@
    ],
    "orders": {
     "2026-10": 249,
-    "2026-11": 711
+    "2026-11": 752
    }
   },
   {
@@ -113,7 +113,7 @@
    ],
    "orders": {
     "2026-10": 47,
-    "2026-11": 1346
+    "2026-11": 1536
    }
   },
   {
@@ -150,7 +150,7 @@
     "EDT"
    ],
    "orders": {
-    "2026-11": 5
+    "2026-11": 10
    }
   },
   {
@@ -174,7 +174,7 @@
     "Saturday Club by Marvikids"
    ],
    "orders": {
-    "2026-11": 771
+    "2026-11": 772
    }
   },
   {
@@ -186,7 +186,7 @@
     "Tailoraedge"
    ],
    "orders": {
-    "2026-11": 51
+    "2026-11": 52
    }
   },
   {
@@ -198,7 +198,7 @@
     "Wow! Momo"
    ],
    "orders": {
-    "2026-11": 60
+    "2026-11": 64
    }
   },
   {
@@ -210,7 +210,7 @@
     "The Pant Project"
    ],
    "orders": {
-    "2026-11": 1711
+    "2026-11": 1890
    }
   },
   {
@@ -242,7 +242,7 @@
     "BLUORNG RETAIL PRIVATE LIMITED"
    ],
    "orders": {
-    "2026-11": 122
+    "2026-11": 157
    }
   },
   {
@@ -262,7 +262,7 @@
     "FitFeast"
    ],
    "orders": {
-    "2026-11": 64
+    "2026-11": 137
    }
   },
   {
@@ -274,6 +274,18 @@
    "orders": {}
   },
   {
+   "deal": "Top-10 RE+LM",
+   "deal_id": "362768692952",
+   "rep": "Noor Mohammed",
+   "signed": "2026-11-21",
+   "accounts": [
+    "Top 10"
+   ],
+   "orders": {
+    "2026-11": 4
+   }
+  },
+  {
    "deal": "CREPDOG_CREW",
    "deal_id": null,
    "rep": "Prathush Nair",
@@ -283,7 +295,7 @@
    ],
    "orders": {
     "2026-10": 2,
-    "2026-11": 98
+    "2026-11": 102
    },
    "via": "first order this quarter"
   },
@@ -310,19 +322,6 @@
    ],
    "orders": {
     "2026-11": 5
-   },
-   "via": "first order this quarter"
-  },
-  {
-   "deal": "Top 10",
-   "deal_id": null,
-   "rep": "Noor Mohammed",
-   "signed": "2026-11-18",
-   "accounts": [
-    "Top 10"
-   ],
-   "orders": {
-    "2026-11": 3
    },
    "via": "first order this quarter"
   }
