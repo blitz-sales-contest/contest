@@ -1,5 +1,5 @@
 {
- "through": "2026-11-23",
+ "through": "2026-11-24",
  "rule": "Brands closed won in HubSpot from 1 Oct 2026 (team reps), plus brands owned by a team rep (KAM in Metabase potential_map_final) whose first-ever order came on or after 1 Oct 2026 even if the deal closed earlier. Orders created per month from Metabase (metrics_user_service_city_zone), all service types. Accounts that were already shipping before the deal (e.g. HealthKart NDD) are not counted.",
  "brands": [
   {
@@ -25,7 +25,7 @@
    ],
    "orders": {
     "2026-10": 2035,
-    "2026-11": 3229
+    "2026-11": 3462
    }
   },
   {
@@ -38,7 +38,7 @@
    ],
    "orders": {
     "2026-10": 264,
-    "2026-11": 231
+    "2026-11": 277
    }
   },
   {
@@ -75,7 +75,7 @@
     "HK"
    ],
    "orders": {
-    "2026-11": 62
+    "2026-11": 136
    }
   },
   {
@@ -100,7 +100,7 @@
    ],
    "orders": {
     "2026-10": 249,
-    "2026-11": 801
+    "2026-11": 848
    }
   },
   {
@@ -113,7 +113,7 @@
    ],
    "orders": {
     "2026-10": 47,
-    "2026-11": 1952
+    "2026-11": 2212
    }
   },
   {
@@ -174,7 +174,7 @@
     "Saturday Club by Marvikids"
    ],
    "orders": {
-    "2026-11": 791
+    "2026-11": 1371
    }
   },
   {
@@ -186,7 +186,7 @@
     "Tailoraedge"
    ],
    "orders": {
-    "2026-11": 61
+    "2026-11": 66
    }
   },
   {
@@ -198,7 +198,7 @@
     "Wow! Momo"
    ],
    "orders": {
-    "2026-11": 78
+    "2026-11": 83
    }
   },
   {
@@ -210,7 +210,7 @@
     "The Pant Project"
    ],
    "orders": {
-    "2026-11": 2265
+    "2026-11": 2438
    }
   },
   {
@@ -222,7 +222,7 @@
     "Label jenn"
    ],
    "orders": {
-    "2026-11": 467
+    "2026-11": 492
    }
   },
   {
@@ -242,7 +242,7 @@
     "BLUORNG RETAIL PRIVATE LIMITED"
    ],
    "orders": {
-    "2026-11": 246
+    "2026-11": 307
    }
   },
   {
@@ -262,7 +262,7 @@
     "FitFeast"
    ],
    "orders": {
-    "2026-11": 247
+    "2026-11": 303
    }
   },
   {
@@ -270,8 +270,12 @@
    "deal_id": "339242127080",
    "rep": "Krutika Pawar",
    "signed": "2026-11-20",
-   "accounts": [],
-   "orders": {}
+   "accounts": [
+    "Just In Time"
+   ],
+   "orders": {
+    "2026-11": 5
+   }
   },
   {
    "deal": "Top-10 RE+LM",
@@ -282,7 +286,7 @@
     "Top 10"
    ],
    "orders": {
-    "2026-11": 4
+    "2026-11": 5
    }
   },
   {
@@ -303,7 +307,7 @@
    ],
    "orders": {
     "2026-10": 2,
-    "2026-11": 107
+    "2026-11": 114
    },
    "via": "first order this quarter"
   },
@@ -330,6 +334,19 @@
    ],
    "orders": {
     "2026-11": 8
+   },
+   "via": "first order this quarter"
+  },
+  {
+   "deal": "Wenova Brands Private Limited",
+   "deal_id": null,
+   "rep": "Prathush Nair",
+   "signed": "2026-11-24",
+   "accounts": [
+    "Wenova Brands Private Limited"
+   ],
+   "orders": {
+    "2026-11": 10
    },
    "via": "first order this quarter"
   }
