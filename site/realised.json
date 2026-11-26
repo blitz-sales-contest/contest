@@ -1,5 +1,5 @@
 {
- "through": "2026-11-24",
+ "through": "2026-11-25",
  "rule": "Brands closed won in HubSpot from 1 Oct 2026 (team reps), plus brands owned by a team rep (KAM in Metabase potential_map_final) whose first-ever order came on or after 1 Oct 2026 even if the deal closed earlier. Orders created per month from Metabase (metrics_user_service_city_zone), all service types. Accounts that were already shipping before the deal (e.g. HealthKart NDD) are not counted.",
  "brands": [
   {
@@ -25,7 +25,7 @@
    ],
    "orders": {
     "2026-10": 2035,
-    "2026-11": 3462
+    "2026-11": 3661
    }
   },
   {
@@ -75,7 +75,7 @@
     "HK"
    ],
    "orders": {
-    "2026-11": 136
+    "2026-11": 188
    }
   },
   {
@@ -87,7 +87,7 @@
     "Zivore Apparel Private Limited"
    ],
    "orders": {
-    "2026-11": 24
+    "2026-11": 27
    }
   },
   {
@@ -100,7 +100,7 @@
    ],
    "orders": {
     "2026-10": 249,
-    "2026-11": 848
+    "2026-11": 924
    }
   },
   {
@@ -113,7 +113,7 @@
    ],
    "orders": {
     "2026-10": 47,
-    "2026-11": 2212
+    "2026-11": 2432
    }
   },
   {
@@ -174,7 +174,7 @@
     "Saturday Club by Marvikids"
    ],
    "orders": {
-    "2026-11": 1371
+    "2026-11": 1404
    }
   },
   {
@@ -186,7 +186,7 @@
     "Tailoraedge"
    ],
    "orders": {
-    "2026-11": 66
+    "2026-11": 70
    }
   },
   {
@@ -198,7 +198,7 @@
     "Wow! Momo"
    ],
    "orders": {
-    "2026-11": 83
+    "2026-11": 97
    }
   },
   {
@@ -210,7 +210,7 @@
     "The Pant Project"
    ],
    "orders": {
-    "2026-11": 2438
+    "2026-11": 2592
    }
   },
   {
@@ -222,7 +222,7 @@
     "Label jenn"
    ],
    "orders": {
-    "2026-11": 492
+    "2026-11": 560
    }
   },
   {
@@ -242,7 +242,7 @@
     "BLUORNG RETAIL PRIVATE LIMITED"
    ],
    "orders": {
-    "2026-11": 307
+    "2026-11": 372
    }
   },
   {
@@ -262,7 +262,7 @@
     "FitFeast"
    ],
    "orders": {
-    "2026-11": 303
+    "2026-11": 371
    }
   },
   {
@@ -274,7 +274,7 @@
     "Just In Time"
    ],
    "orders": {
-    "2026-11": 5
+    "2026-11": 8
    }
   },
   {
@@ -286,7 +286,7 @@
     "Top 10"
    ],
    "orders": {
-    "2026-11": 5
+    "2026-11": 6
    }
   },
   {
@@ -307,7 +307,7 @@
    ],
    "orders": {
     "2026-10": 2,
-    "2026-11": 114
+    "2026-11": 116
    },
    "via": "first order this quarter"
   },
