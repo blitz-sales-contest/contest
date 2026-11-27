@@ -1,5 +1,5 @@
 {
- "through": "2026-11-25",
+ "through": "2026-11-26",
  "rule": "Brands closed won in HubSpot from 1 Oct 2026 (team reps), plus brands owned by a team rep (KAM in Metabase potential_map_final) whose first-ever order came on or after 1 Oct 2026 even if the deal closed earlier. Orders created per month from Metabase (metrics_user_service_city_zone), all service types. Accounts that were already shipping before the deal (e.g. HealthKart NDD) are not counted.",
  "brands": [
   {
@@ -25,7 +25,7 @@
    ],
    "orders": {
     "2026-10": 2035,
-    "2026-11": 3661
+    "2026-11": 3892
    }
   },
   {
@@ -38,7 +38,7 @@
    ],
    "orders": {
     "2026-10": 264,
-    "2026-11": 277
+    "2026-11": 284
    }
   },
   {
@@ -75,7 +75,7 @@
     "HK"
    ],
    "orders": {
-    "2026-11": 188
+    "2026-11": 222
    }
   },
   {
@@ -87,7 +87,7 @@
     "Zivore Apparel Private Limited"
    ],
    "orders": {
-    "2026-11": 27
+    "2026-11": 28
    }
   },
   {
@@ -100,7 +100,7 @@
    ],
    "orders": {
     "2026-10": 249,
-    "2026-11": 924
+    "2026-11": 949
    }
   },
   {
@@ -113,7 +113,7 @@
    ],
    "orders": {
     "2026-10": 47,
-    "2026-11": 2432
+    "2026-11": 2697
    }
   },
   {
@@ -126,7 +126,7 @@
    ],
    "orders": {
     "2026-10": 1,
-    "2026-11": 1
+    "2026-11": 2
    }
   },
   {
@@ -150,7 +150,7 @@
     "EDT"
    ],
    "orders": {
-    "2026-11": 10
+    "2026-11": 13
    }
   },
   {
@@ -174,7 +174,7 @@
     "Saturday Club by Marvikids"
    ],
    "orders": {
-    "2026-11": 1404
+    "2026-11": 1428
    }
   },
   {
@@ -186,7 +186,7 @@
     "Tailoraedge"
    ],
    "orders": {
-    "2026-11": 70
+    "2026-11": 74
    }
   },
   {
@@ -198,7 +198,7 @@
     "Wow! Momo"
    ],
    "orders": {
-    "2026-11": 97
+    "2026-11": 109
    }
   },
   {
@@ -210,7 +210,7 @@
     "The Pant Project"
    ],
    "orders": {
-    "2026-11": 2592
+    "2026-11": 2728
    }
   },
   {
@@ -222,7 +222,7 @@
     "Label jenn"
    ],
    "orders": {
-    "2026-11": 560
+    "2026-11": 611
    }
   },
   {
@@ -242,7 +242,7 @@
     "BLUORNG RETAIL PRIVATE LIMITED"
    ],
    "orders": {
-    "2026-11": 372
+    "2026-11": 414
    }
   },
   {
@@ -262,7 +262,7 @@
     "FitFeast"
    ],
    "orders": {
-    "2026-11": 371
+    "2026-11": 433
    }
   },
   {
@@ -274,7 +274,7 @@
     "Just In Time"
    ],
    "orders": {
-    "2026-11": 8
+    "2026-11": 15
    }
   },
   {
@@ -286,7 +286,7 @@
     "Top 10"
    ],
    "orders": {
-    "2026-11": 6
+    "2026-11": 7
    }
   },
   {
@@ -295,6 +295,26 @@
    "rep": "Krutika Pawar",
    "signed": "2026-11-23",
    "accounts": [],
+   "orders": {}
+  },
+  {
+   "deal": "Play Blue (RE + LM)",
+   "deal_id": "353405973209",
+   "accounts": [
+    "Play Blue NDD/SDD"
+   ],
+   "rep": "Pritam Mazumdar",
+   "signed": "2026-11-26",
+   "orders": {
+    "2026-11": 6
+   }
+  },
+  {
+   "deal": "Forever New",
+   "deal_id": "334063562469",
+   "accounts": [],
+   "rep": "Krutika Pawar",
+   "signed": "2026-11-26",
    "orders": {}
   },
   {
@@ -307,7 +327,7 @@
    ],
    "orders": {
     "2026-10": 2,
-    "2026-11": 116
+    "2026-11": 124
    },
    "via": "first order this quarter"
   },
