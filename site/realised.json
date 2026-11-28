@@ -1,5 +1,5 @@
 {
- "through": "2026-11-26",
+ "through": "2026-11-27",
  "rule": "Brands closed won in HubSpot from 1 Oct 2026 (team reps), plus brands owned by a team rep (KAM in Metabase potential_map_final) whose first-ever order came on or after 1 Oct 2026 even if the deal closed earlier. Orders created per month from Metabase (metrics_user_service_city_zone), all service types. Accounts that were already shipping before the deal (e.g. HealthKart NDD) are not counted.",
  "brands": [
   {
@@ -25,7 +25,7 @@
    ],
    "orders": {
     "2026-10": 2035,
-    "2026-11": 3892
+    "2026-11": 4207
    }
   },
   {
@@ -38,7 +38,7 @@
    ],
    "orders": {
     "2026-10": 264,
-    "2026-11": 284
+    "2026-11": 317
    }
   },
   {
@@ -75,7 +75,7 @@
     "HK"
    ],
    "orders": {
-    "2026-11": 222
+    "2026-11": 266
    }
   },
   {
@@ -87,7 +87,7 @@
     "Zivore Apparel Private Limited"
    ],
    "orders": {
-    "2026-11": 28
+    "2026-11": 29
    }
   },
   {
@@ -100,7 +100,7 @@
    ],
    "orders": {
     "2026-10": 249,
-    "2026-11": 949
+    "2026-11": 992
    }
   },
   {
@@ -113,7 +113,7 @@
    ],
    "orders": {
     "2026-10": 47,
-    "2026-11": 2697
+    "2026-11": 2934
    }
   },
   {
@@ -150,7 +150,7 @@
     "EDT"
    ],
    "orders": {
-    "2026-11": 13
+    "2026-11": 18
    }
   },
   {
@@ -174,7 +174,7 @@
     "Saturday Club by Marvikids"
    ],
    "orders": {
-    "2026-11": 1428
+    "2026-11": 1436
    }
   },
   {
@@ -186,7 +186,7 @@
     "Tailoraedge"
    ],
    "orders": {
-    "2026-11": 74
+    "2026-11": 92
    }
   },
   {
@@ -198,7 +198,7 @@
     "Wow! Momo"
    ],
    "orders": {
-    "2026-11": 109
+    "2026-11": 122
    }
   },
   {
@@ -210,7 +210,7 @@
     "The Pant Project"
    ],
    "orders": {
-    "2026-11": 2728
+    "2026-11": 2913
    }
   },
   {
@@ -222,7 +222,7 @@
     "Label jenn"
    ],
    "orders": {
-    "2026-11": 611
+    "2026-11": 721
    }
   },
   {
@@ -242,7 +242,7 @@
     "BLUORNG RETAIL PRIVATE LIMITED"
    ],
    "orders": {
-    "2026-11": 414
+    "2026-11": 471
    }
   },
   {
@@ -262,7 +262,7 @@
     "FitFeast"
    ],
    "orders": {
-    "2026-11": 433
+    "2026-11": 545
    }
   },
   {
@@ -274,7 +274,7 @@
     "Just In Time"
    ],
    "orders": {
-    "2026-11": 15
+    "2026-11": 25
    }
   },
   {
@@ -286,7 +286,7 @@
     "Top 10"
    ],
    "orders": {
-    "2026-11": 7
+    "2026-11": 8
    }
   },
   {
@@ -318,6 +318,26 @@
    "orders": {}
   },
   {
+   "deal": "Wolfglassi - RE+LM",
+   "deal_id": "360616393440",
+   "rep": "Noor Mohammed",
+   "signed": "2026-11-27",
+   "accounts": [],
+   "orders": {}
+  },
+  {
+   "deal": "TRSNA EATS RE+LM",
+   "deal_id": "353524182732",
+   "rep": "Noor Mohammed",
+   "signed": "2026-11-27",
+   "accounts": [
+    "TrsnaEats"
+   ],
+   "orders": {
+    "2026-11": 2
+   }
+  },
+  {
    "deal": "CREPDOG_CREW",
    "deal_id": null,
    "rep": "Prathush Nair",
@@ -327,7 +347,7 @@
    ],
    "orders": {
     "2026-10": 2,
-    "2026-11": 124
+    "2026-11": 133
    },
    "via": "first order this quarter"
   },
@@ -340,7 +360,8 @@
     "Nykaa Fashion Hyper Local"
    ],
    "orders": {
-    "2026-10": 33
+    "2026-10": 33,
+    "2026-11": 13
    },
    "via": "first order this quarter"
   },
